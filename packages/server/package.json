@@ -2,5 +2,13 @@
   "name": "@memorize/server",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "lint": "eslint src --ext .ts --fix"
+  },
+  "dependencies": {
+    "fastify": "^4.26.0",
+    "@prisma/client": "^5.9.0"
+  }
 }
