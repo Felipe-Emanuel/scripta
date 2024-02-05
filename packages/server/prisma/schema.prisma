@@ -21,16 +21,15 @@ model User {
 }
 
 model Book {
-  id                String      @id @default(uuid())
-  title             String
-  description       String
-  publishedUrl      String
-  userId            String
-  author            User        @relation(fields: [userId], references: [id])
-  heroPathUrl       String
-  characters        Character[]
-  wordsWrittedToday Int?
-  conclued          Boolean     @default(false)
+  id           String      @id @default(uuid())
+  title        String
+  description  String
+  publishedUrl String
+  userId       String
+  author       User        @relation(fields: [userId], references: [id])
+  heroPathUrl  String
+  characters   Character[]
+  conclued     Boolean     @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
