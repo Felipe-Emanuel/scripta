@@ -8,7 +8,70 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(uuid())
-  name  String
-  email String @unique
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  picture   String
+  rule      String
+  books     Book[]
+  feedbacks Feedback[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Book {
+  id           String      @id @default(uuid())
+  title        String
+  description  String
+  publishedUrl String
+  userId       String
+  author       User        @relation(fields: [userId], references: [id])
+  heroPathUrl  String
+  characters   Character[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Character {
+  id                String         @id @default(uuid())
+  name              String
+  heroPathUrl       String
+  description       String
+  age               Int
+  hairColor         String
+  sexuality         String
+  race              String
+  lifeStatus        String
+  lifeStatusDetails String
+  relationships     Relationship[]
+  book              Book           @relation(fields: [bookId], references: [id])
+  bookId            String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Relationship {
+  id               String    @id @default(uuid())
+  characterId      String
+  characters       Character @relation(fields: [characterId], references: [id])
+  relationshipType String
+  intention        String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Feedback {
+  id         String @id @default(uuid())
+  user       User   @relation(fields: [userId], references: [id])
+  userId     String
+  type       String
+  feedback   String
+  screenshot String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
