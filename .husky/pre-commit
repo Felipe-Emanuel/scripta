@@ -1,2 +1,1 @@
-npm test
-npx eslint packages/**/*.ts(tsx)
+yarn eslint:server; yarn eslint:web; yarn test
