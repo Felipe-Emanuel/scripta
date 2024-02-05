@@ -1,2 +1,3 @@
 export * from './bookEntitieMock'
-export * from './bookWithCharactersMocked'
+export * from './bookWithCharactersMock'
+export * from './updateBookMock'

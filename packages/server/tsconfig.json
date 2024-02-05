@@ -6,8 +6,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "@constants/*": ["src/shared/utils/constants/*"],
       "@utils": ["src/shared/utils/index.ts"],
       "@types": ["src/shared/types/index.ts"]
     }
-  },
+  }
 }

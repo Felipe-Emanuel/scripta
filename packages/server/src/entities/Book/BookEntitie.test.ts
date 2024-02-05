@@ -1,7 +1,10 @@
 import { BookEntitie } from './BookEntitie'
-import { todo } from 'node:test'
-import { isAnyAttributeUndefined, isBase64, isLink } from '../../shared/utils'
-import { bookEntitieMock, bookWithCharactersMocked } from './mocks'
+import { isAllAttributeFilled, isBase64, isLink } from '../../shared/utils'
+import {
+  bookEntitieMock,
+  bookWithCharactersMock,
+  updateBookMock,
+} from './mocks'
 import { throwMessages } from './utils'
 
 it('should create a new book entity', async () => {
@@ -29,7 +32,7 @@ it('should check if required fields are valid', () => {
 })
 
 it('should create a book with all fields filled', () => {
-  const areAllFieldsFilled = isAnyAttributeUndefined(bookEntitieMock)
+  const areAllFieldsFilled = isAllAttributeFilled(bookEntitieMock)
 
   expect(areAllFieldsFilled).toBeTruthy()
 })
@@ -49,9 +52,9 @@ it('should able to contais a base64 at heroPathUrl', () => {
 it('should return a book with character', async () => {
   const { getBookWithCharacters } = BookEntitie(bookEntitieMock)
 
-  const sut = await getBookWithCharacters(bookWithCharactersMocked)
+  const sut = await getBookWithCharacters(bookWithCharactersMock)
 
-  expect(bookWithCharactersMocked).toEqual(sut)
+  expect(bookWithCharactersMock).toEqual(sut)
 })
 
 it('should not return a book with character', async () => {
@@ -65,5 +68,21 @@ it('should not return a book with character', async () => {
   expect(sut).rejects.toThrow(throwMessages.bookWithoutCharacters)
 })
 
-todo('test if updatedAt will be updated')
-todo('test if createdAt is updated when book is edited')
+it('should update a book', async () => {
+  const { updatedBook } = BookEntitie(bookEntitieMock)
+
+  const sut = await updatedBook(updateBookMock)
+
+  expect(sut).toEqual(updateBookMock)
+})
+
+it('should return a throw error by required filds', async () => {
+  const { updatedBook } = BookEntitie(bookEntitieMock)
+
+  const sut = updatedBook({
+    ...updateBookMock,
+    title: '',
+  })
+
+  expect(sut).rejects.toThrow(throwMessages.areAllFieldsFilled)
+})

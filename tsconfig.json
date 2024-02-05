@@ -8,7 +8,7 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "paths": {
-          "baseUrl": ["./packages/*"],
+          "baseUrl": ["./packages/*"]
         }
     }
 }

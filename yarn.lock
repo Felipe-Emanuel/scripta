@@ -3347,7 +3347,7 @@ jest-resolve-dependencies@^29.7.0:
 
 jest-resolve@^29.7.0:
   version "29.7.0"
-  resolved "https://registry.npmjs.org/jest-resolve/-/jest-resolve-29.7.0.tgz"
+  resolved "https://registry.yarnpkg.com/jest-resolve/-/jest-resolve-29.7.0.tgz#64d6a8992dd26f635ab0c01e5eef4399c6bcbc30"
   integrity sha512-IOVhZSrg+UvVAshDSDtHyFCCBUl/Q3AAJv8iZ6ZjnZ74xzvwuzLXid9IIIPgTnY62SJjfuupMKZsZQRsCvxEgA==
   dependencies:
     chalk "^4.0.0"

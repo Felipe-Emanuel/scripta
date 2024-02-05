@@ -1,8 +1,9 @@
 import { TBookWithCharacters } from '@types'
 import { randomUUID } from 'crypto'
 import { bookEntitieMock } from './bookEntitieMock'
+import { fakeBase64 } from '@constants/fakeBase64'
 
-export const bookWithCharactersMocked: TBookWithCharacters = {
+export const bookWithCharactersMock: TBookWithCharacters = {
   book: {
     ...bookEntitieMock,
   },
@@ -13,7 +14,7 @@ export const bookWithCharactersMocked: TBookWithCharacters = {
       createdAt: new Date(),
       description: 'character description Fake',
       hairColor: 'black',
-      heroPathUrl: 'OGyClxpf/dddCn6S8yobkg==',
+      heroPathUrl: fakeBase64,
       id: randomUUID(),
       lifeStatus: 'alive',
       lifeStatusDetails: 'lifeStatusDetails',
