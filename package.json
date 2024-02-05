@@ -5,7 +5,9 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "test": "jest --watch",
+    "test:server": "yarn workspace @memorize/server jest",
+    "test:web": "yarn workspace @memorize/web jest"
   },
   "workspaces": {
     "packages": [
@@ -17,9 +19,12 @@
   "devDependencies": {
     "@memorize/eslint-config": "*",
     "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.16",
     "jest": "^29.7.0",
     "prettier": "^3.2.5",
+    "prisma": "^5.9.1",
     "ts-jest": "^29.1.2",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   }
 }
