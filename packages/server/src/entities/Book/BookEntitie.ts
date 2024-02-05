@@ -1,26 +1,24 @@
-import { Book, Character } from '@prisma/client'
-
-type TBookWithCharacters = {
-  book: Book
-  characters: Character[]
-}
+import { Book } from '@prisma/client'
+import { TBookWithCharacters } from '@types'
+import { throwMessages } from './utils'
 
 export const BookEntitie = (book: Book) => {
-  const setBook = () => {
-    if (!book.userId)
-      throw new Error('Um livro não pode estar sem um usuário relacionado')
+  const setBook = async () => {
+    if (!book.userId) throw new Error(throwMessages.bookWithoutUserId)
 
     return book
   }
 
-  const getBookCharacters = (bookWithCharacters: TBookWithCharacters) => {
-    if (bookWithCharacters.characters.length) return book
+  const getBookWithCharacters = async (
+    bookWithCharacters: TBookWithCharacters,
+  ) => {
+    if (bookWithCharacters.characters.length) return bookWithCharacters
 
-    throw new Error('Este livro ainda não contém nenhum personagem registrado')
+    throw new Error(throwMessages.bookWithoutCharacters)
   }
 
   return {
     setBook,
-    getBookCharacters,
+    getBookWithCharacters,
   }
 }

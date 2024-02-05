@@ -4,8 +4,10 @@
     "./src/**/*"
   ],
   "compilerOptions": {
+    "baseUrl": "./",
     "paths": {
-      "@utils": ["./src/utils/index.ts"]
+      "@utils": ["src/shared/utils/index.ts"],
+      "@types": ["src/shared/types/index.ts"]
     }
   },
 }

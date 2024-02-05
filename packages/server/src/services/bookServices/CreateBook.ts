@@ -41,7 +41,7 @@ export const CreateBookService = async ({
     title,
     userId,
   })
-  const newBook = setBook()
+  const newBook = await setBook()
 
   await createBook(newBook)
 
