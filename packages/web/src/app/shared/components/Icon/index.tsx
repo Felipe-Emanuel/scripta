@@ -4,8 +4,9 @@ import { VariantProps } from 'tailwind-variants'
 
 interface IconProps extends VariantProps<typeof iconTv> {
   icon: ElementType
+  testid?: string
 }
 
-export function Icon({ icon: Icon }: IconProps) {
-  return <Icon className={iconTv()} />
+export function Icon({ icon: Icon, testid }: IconProps) {
+  return <Icon className={iconTv()} data-testid={testid} />
 }

@@ -7,11 +7,14 @@ import { Icon } from '@shared/components'
 import { useTheme } from '@shared/hooks/contexts/useTheme'
 
 export function ChangeThemeIcon() {
-  const { IsSystem, theme } = useTheme()
+  const { isSystem, theme } = useTheme()
 
   const themeIcon = theme === 'dark' ? BsFillMoonStarsFill : IoMdSunny
 
-  const iconToBeUsed = IsSystem ? RiComputerLine : themeIcon
+  const iconToBeUsed = isSystem ? RiComputerLine : themeIcon
 
-  return <Icon icon={iconToBeUsed} size="md" />
+  const themeTestId = theme === 'dark' ? 'dark' : 'light'
+  const testId = isSystem ? 'system' : themeTestId
+
+  return <Icon icon={iconToBeUsed} size="md" testid={`testid=${testId}`} />
 }

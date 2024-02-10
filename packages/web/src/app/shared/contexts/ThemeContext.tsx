@@ -9,7 +9,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import { TTheme } from '@shared/types'
 
 interface ThemeContextProps {
-  IsSystem: boolean
+  isSystem: boolean
   theme: TTheme
   changeTheme: () => void
 }
@@ -25,7 +25,7 @@ export const ThemeContext = createContext({} as ThemeContextProps)
 export function AppThemeProvider({ children }: AppThemeProviderProps) {
   const { setLocalStorage, getLocalStorage } = useLocalStorage()
   const [theme, setTheme] = useState<TTheme>('')
-  const [IsSystem, setIsSystem] = useState(false)
+  const [isSystem, setIsSystem] = useState(false)
 
   const changeTheme = () => {
     setIsSystem(false)
@@ -52,7 +52,7 @@ export function AppThemeProvider({ children }: AppThemeProviderProps) {
   return (
     <ThemeContext.Provider
       value={{
-        IsSystem,
+        isSystem,
         theme,
         changeTheme,
       }}
