@@ -14,10 +14,15 @@
         "name": "next"
       }
     ],
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "@global/*": ["./src/global/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@features/*": ["./src/app/features/*"],
+      "@assets/*": ["./src/app/assets/*"],
+      "@hooks/*": ["./src/app/shared/hooks/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/features/changeTheme/__tests__/ChangeTheme.test.jsx", "src/app/features/changeTheme/__tests__/changeTheme.test.js", "jest.config.js"],
   "exclude": ["node_modules"]
 }

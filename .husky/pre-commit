@@ -1,1 +1,1 @@
-yarn eslint:server; yarn eslint:web; yarn test
+yarn eslint:server; yarn eslint:web; yarn test:server; yarn test:web
