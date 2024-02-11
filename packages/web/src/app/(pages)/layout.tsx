@@ -4,7 +4,7 @@ import '@global/globals.css'
 import { Main } from '@shared/components/Main'
 
 export const metadata: Metadata = {
-  title: 'Memorize',
+  title: 'Memorize | Novos',
   description: 'Memorize personagens',
 }
 
@@ -14,8 +14,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className="scroll-smooth w-screen h-screen">
+    <html lang="pt-br">
+      <body>
         <Providers>
           <Main overflow="hidden">{children}</Main>
         </Providers>

@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const titleTv = tv({
-  base: 'font-inter duration-500 text-black dark:text-white m-0',
+  base: 'font-inter duration-500 m-0',
   variants: {
     fontFamily: {
       inter: 'font-inter',
@@ -21,14 +21,19 @@ export const titleTv = tv({
       black: 'font-black',
     },
     color: {
-      secondary: 'light-secondary dark:dark-tertiary',
+      secondary: 'text-green-400',
+      gray: 'text-gray-400',
       black: 'text-black',
       white: 'text-white',
+    },
+    align: {
+      center: 'text-center',
     },
   },
   defaultVariants: {
     size: 'lg',
     weight: 'normal',
     fontFamily: 'inter',
+    color: 'white',
   },
 })

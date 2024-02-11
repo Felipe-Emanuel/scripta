@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 // import { sessionToken } from '@shared/utils/constants/cookies'
 import { TSessionCustomer } from '@shared/types'
 
-const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
 export const api = axios.create({
   baseURL,

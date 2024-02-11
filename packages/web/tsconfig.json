@@ -19,7 +19,7 @@
       "@global/*": ["./src/global/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@features/*": ["./src/app/features/*"],
-      "@assets/*": ["./src/app/assets/*"],
+      "@assets/*": ["./src/assets/*"],
       "@hooks/*": ["./src/app/shared/hooks/*"]
     }
   },

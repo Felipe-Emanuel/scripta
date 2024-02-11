@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const iconTv = tv({
-  base: 'duration-500 text-black dark:text-white',
+  base: 'duration-500 text-primary',
   variants: {
     size: {
       xs: 'w-3 h-2', // w-12px h-8px
@@ -10,7 +10,7 @@ export const iconTv = tv({
       lg: 'w-6 h-6', // w-24px h-24px
     },
     color: {
-      secondary: 'light-secondary dark:dark-tertiary',
+      secondary: 'text-green-400',
       black: 'text-black',
       white: 'text-white',
     },

@@ -6,7 +6,6 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'class',
   theme: {
     fontFamily: {
       inter: '"Inter", sans-serif',
@@ -26,21 +25,35 @@ const config: Config = {
       black: '#000000',
       white: '#ffffff',
 
-      light: {
-        primary: '#eeeeee',
-        secondary: '#847d7d',
+      primary: '#0075FF',
+      error: '#F53C2B',
+
+      green: {
+        400: '#05CD99',
       },
 
-      dark: {
-        primary: '#04032f',
-        secondary: '#45436d',
-        tertiary: '#d9d9d9',
+      gray: {
+        400: '#A0AEC0',
       },
     },
-    boxShadow: {
-      base: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+    extend: {
+      backgroundImage: {
+        'primary-backgroung':
+          'linear-gradient(159.02deg, #272F9D 14.25%, #0D123A 56.45%, #020515 86.14%)',
+        'secondary-backgroung':
+          'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)',
+      },
     },
-    extend: {},
+    keyframes: {
+      'single-animate-ping': {
+        '0%': { scale: '1.2', opacity: '1' },
+        '50%': { scale: '1.5', opacity: '0.5' },
+        '100%': { scale: '1.7', opacity: '0' },
+      },
+    },
+    animation: {
+      'single-animate-ping': 'single-animate-ping 500ms linear forwards',
+    },
   },
   plugins: [],
 }

@@ -16,13 +16,21 @@ export function Title({
   color,
   weight,
   fontFamily,
+  align,
   ...props
 }: TitleProps) {
   const Comp = as ?? 'h1'
   return (
     <Comp
       {...props}
-      className={titleTv({ size, className, color, weight, fontFamily })}
+      className={titleTv({
+        size,
+        align,
+        className,
+        color,
+        weight,
+        fontFamily,
+      })}
     >
       {title}
     </Comp>

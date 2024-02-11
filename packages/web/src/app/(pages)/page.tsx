@@ -4,7 +4,7 @@ import { Text } from '@shared/components'
 export default function ClientContent() {
   return (
     <>
-      <Text text="página em construção" />
+      <Text text="página de novos construção" />
       <ChangeTheme.root>
         <ChangeTheme.icon />
       </ChangeTheme.root>

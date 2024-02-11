@@ -1,12 +1,30 @@
-import { rootButtonTv } from '@shared/components/Button/ButtonTV'
+import { VariantProps } from 'tailwind-variants'
+import { ButtonHTMLAttributes } from 'react'
+import { buttonRootTv } from '@shared/components/Button/ButtonTV'
 import { TRootComponent } from '@shared/types'
-import { HTMLAttributes } from 'react'
 
-type IButtonRoot = TRootComponent & HTMLAttributes<HTMLButtonElement>
+type ButtonRootProps = {
+  disabled?: boolean
+  isLoading?: boolean
+  className?: string
+  type?: HTMLButtonElement['type']
+  onClick?: () => void
+} & VariantProps<typeof buttonRootTv> &
+  TRootComponent &
+  ButtonHTMLAttributes<HTMLButtonElement>
 
-export function ButtonRoot({ children, ...proos }: IButtonRoot) {
+export function ButtonRoot({
+  children,
+  disabled,
+  className,
+  ...props
+}: ButtonRootProps) {
   return (
-    <button className={rootButtonTv()} {...proos}>
+    <button
+      {...props}
+      disabled={disabled}
+      className={buttonRootTv({ className })}
+    >
       {children}
     </button>
   )

@@ -1,11 +1,20 @@
 export const APP_ROUTES = {
   private: {
-    'client-content': {
-      name: '/',
+    dashboard: {
+      name: '/dashboard',
+    },
+    characters: {
+      name: '/characters',
+    },
+    books: {
+      name: '/books',
     },
   },
   public: {
-    home: {
+    news: {
+      name: '/',
+    },
+    auth: {
       name: '/auth',
     },
   },
