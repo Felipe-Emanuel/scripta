@@ -5,7 +5,7 @@ import {
   bookWithCharactersMock,
   updateBookMock,
 } from './mocks'
-import { throwMessages } from './utils'
+import { throwBookMessages } from './utils'
 
 it('should create a new book entity', async () => {
   const { setBook } = BookEntitie(bookEntitieMock)
@@ -24,7 +24,7 @@ it('should not create a new book entity', async () => {
 
   const sut = setBook()
 
-  expect(sut).rejects.toThrow(throwMessages.bookWithoutUserId)
+  expect(sut).rejects.toThrow(throwBookMessages.bookWithoutUserId)
 })
 
 it('should check if required fields are valid', () => {
@@ -65,7 +65,7 @@ it('should not return a book with character', async () => {
     characters: [],
   })
 
-  expect(sut).rejects.toThrow(throwMessages.bookWithoutCharacters)
+  expect(sut).rejects.toThrow(throwBookMessages.bookWithoutCharacters)
 })
 
 it('should update a book', async () => {
@@ -84,5 +84,5 @@ it('should return a throw error by required filds', async () => {
     title: '',
   })
 
-  expect(sut).rejects.toThrow(throwMessages.areAllFieldsFilled)
+  expect(sut).rejects.toThrow(throwBookMessages.areAllFieldsFilled)
 })

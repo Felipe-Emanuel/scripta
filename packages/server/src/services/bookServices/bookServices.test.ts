@@ -19,9 +19,9 @@ describe('Create Book', () => {
       updatedAt: new Date(),
     }
 
-    const recived = await CreateBookService(newBook)
+    const sut = await CreateBookService(newBook)
 
-    expect(recived.title).toEqual(expected.title)
+    expect(sut.title).toEqual(expected.title)
   })
 
   it('should not create a new book with a existing title', async () => {
