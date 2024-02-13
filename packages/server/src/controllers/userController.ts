@@ -1,4 +1,3 @@
-import { User } from '@prisma/client'
 import { FastifyInstance } from 'fastify'
 import { throwUserMessages } from 'src/entities/User/utils'
 import { databaseUserRepository } from 'src/repositories/database/databaseUserRepository'
