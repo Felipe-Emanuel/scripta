@@ -34,6 +34,8 @@ describe('Create User', () => {
       expirationTime,
       picture: '',
       rule: 'client',
+      accessToken:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBQDIxMTFhLmNvbSIsImlhdCI6MTcwNzc4Nzc3MSwiZXhwIjoxNzA3NzkxMzcxfQ.sKCOMzclUWkUm5NIAtn6bqo19bZCKPiyld5RBAICTtw',
     }
     const sut = await CreateUserService(body)
 

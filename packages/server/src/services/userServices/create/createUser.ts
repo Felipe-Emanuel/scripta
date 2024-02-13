@@ -2,6 +2,7 @@ import { User } from '@prisma/client'
 import { UserEntitie } from 'src/entities/User/UserEntitie'
 import { throwUserMessages } from 'src/entities/User/utils'
 import { IUserRepository } from 'src/repositories/UserRepository'
+import { generateToken } from 'src/shared/utils/tokens'
 import { v4 as uuidv4 } from 'uuid'
 
 export type TCreateUserServiceRequest = {
@@ -28,6 +29,10 @@ export const CreateUserService = async ({
 
   if (existingUser) throw new Error(throwUserMessages.userAlreadyExist)
 
+  const payload = {
+    sub: email,
+  }
+
   const { setUser } = UserEntitie({
     id: uuidv4(),
     email,
@@ -38,6 +43,7 @@ export const CreateUserService = async ({
     picture: '',
     rule: 'client',
     expirationTime,
+    accessToken: generateToken(payload),
   })
 
   const newUser = await setUser()

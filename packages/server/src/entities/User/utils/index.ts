@@ -13,4 +13,5 @@ export const throwUserMessages = {
   unexpected: 'Ocorreu um erro inexperado.',
   invalidEmail: 'O Email informado é inválido.',
   invalidName: 'Por favor, informe o nome completo.',
+  invalidJWT: 'Acesso negado.',
 }

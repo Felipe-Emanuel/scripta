@@ -6,7 +6,6 @@ import {
   CreateUserService,
   TCreateUserServiceRequest,
 } from 'src/services/userServices/create/createUser'
-import { GetByEmailService } from 'src/services/userServices/getByEmail/getByEmail'
 import { z } from 'zod'
 
 export async function userController(app: FastifyInstance): Promise<void> {
@@ -18,29 +17,6 @@ export async function userController(app: FastifyInstance): Promise<void> {
     getUserByEmail,
     patchUserPicture,
   }
-
-  app.post('/auth', async (req, apply) => {
-    const { email, password } = req.body as User
-
-    const user = await GetByEmailService({
-      email,
-      action: {
-        getUserByEmail,
-      },
-    })
-
-    if (email !== user.email || password !== user.password) {
-      return apply
-        .status(401)
-        .send({ message: throwUserMessages.wrongEmailOrPassword })
-    }
-
-    if (!user) {
-      return apply.status(401).send({ message: throwUserMessages.userNotFound })
-    }
-
-    return apply.send(user)
-  })
 
   app.post('/users', async (req, apply) => {
     const { name, password } = req.body as TCreateUserServiceRequest

@@ -14,6 +14,7 @@ model User {
   picture        String?
   rule           String
   password       String
+  accessToken    String
   books          Book[]
   feedbacks      Feedback[]
   expirationTime DateTime

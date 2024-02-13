@@ -19,6 +19,7 @@ describe('GetByEmailService', () => {
       ...userMock,
       actions,
     })
+
     const sut = await GetByEmailService({
       email: userMock.email,
       action: {
