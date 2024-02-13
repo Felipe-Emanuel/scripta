@@ -38,9 +38,10 @@ const config: Config = {
     },
     extend: {
       backgroundImage: {
-        'primary-backgroung':
+        'hero-pattern': "url('/assets/images/background.png')",
+        'primary-background':
           'linear-gradient(159.02deg, #272F9D 14.25%, #0D123A 56.45%, #020515 86.14%)',
-        'secondary-backgroung':
+        'secondary-background':
           'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)',
       },
     },

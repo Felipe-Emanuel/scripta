@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const authRootTv = tv({
-  base: 'flex size-full bg-primary-backgroung',
+  base: 'flex size-full bg-primary-background',
 })
 
 export const textLinkTV = tv({

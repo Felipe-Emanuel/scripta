@@ -1,4 +1,3 @@
 export type TSessionCustomer = {
-  refreshToken: string
-  sesstionToken: string
+  accessToken: string
 }

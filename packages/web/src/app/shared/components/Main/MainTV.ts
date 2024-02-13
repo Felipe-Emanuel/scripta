@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const mainTv = tv({
-  base: 'size-full relative',
+  base: 'size-full relative w-screen h-screen bg-primary-background',
   variants: {
     overflow: {
       hidden: 'overflow-hidden',
