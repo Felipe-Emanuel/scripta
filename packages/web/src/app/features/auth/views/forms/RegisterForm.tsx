@@ -1,4 +1,5 @@
 import { textLinkTV, formRootTV } from '@features/auth/AuthTV'
+import { ProviderButtons } from '@features/auth/views/nextAuthProviders/ProviderButtons'
 import { Button, Input, Motion, Text, Title } from '@shared/components'
 
 interface TRegisterForm {
@@ -6,26 +7,37 @@ interface TRegisterForm {
   strongPasswordMessage: string
 }
 
+let id = 0
+
 export function RegisterForm({
   changeAuthPageContent,
   strongPasswordMessage,
 }: TRegisterForm) {
   const registerComponents = [
     {
-      id: 0,
+      id: id++,
       component: <Title size="xl" title="Bem vindo!" align="center" />,
     },
     {
-      id: 1,
+      id: id++,
+      component: <Text text="Continue com" align="center" color="gray" />,
+    },
+    {
+      id: id++,
+      component: <ProviderButtons />,
+    },
+    {
+      id: id++,
       component: (
         <Text
           text="Registre-se e use o dashboard do escritor gratuitamente!"
           align="center"
+          color="gray"
         />
       ),
     },
     {
-      id: 2,
+      id: id++,
       component: (
         <Input.root>
           <Input.label text="Nome Completo" />
@@ -35,7 +47,7 @@ export function RegisterForm({
       ),
     },
     {
-      id: 3,
+      id: id++,
       component: (
         <Input.root>
           <Input.label text="E-mail" />
@@ -49,7 +61,7 @@ export function RegisterForm({
       ),
     },
     {
-      id: 4,
+      id: id++,
       component: (
         <Input.root>
           <Input.label text="Senha" />
@@ -65,7 +77,7 @@ export function RegisterForm({
       ),
     },
     {
-      id: 5,
+      id: id++,
       component: (
         <Button.root>
           <Button.label label="Registrar" />
@@ -73,11 +85,11 @@ export function RegisterForm({
       ),
     },
     {
-      id: 6,
+      id: id++,
       component: <Text text="Já tem uma conta?" align="center" />,
     },
     {
-      id: 7,
+      id: id++,
       component: (
         <Text
           text="Entre"

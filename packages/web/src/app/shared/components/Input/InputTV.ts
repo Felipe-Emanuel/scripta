@@ -5,5 +5,5 @@ export const inputRootTV = tv({
 })
 
 export const inputFieldTV = tv({
-  base: 'text-white p-4 placeholder:text-gray-400 bg-white/10 border-white/25 rounded-2xl outline-none',
+  base: 'text-white font-inter p-4 placeholder:text-gray-400 bg-white/10 border-white/25 rounded-2xl outline-none',
 })

@@ -5,9 +5,10 @@ import { AnimationProps, motion } from 'framer-motion'
 
 type TMotion = {
   components: TArrayComponents[]
+  className?: string
 } & AnimationProps
 
-export function Motion({ components, ...props }: TMotion) {
+export function Motion({ components, className, ...props }: TMotion) {
   const baseDelay = 0.1
 
   return components.map((item, i) => {
@@ -15,6 +16,7 @@ export function Motion({ components, ...props }: TMotion) {
 
     return (
       <motion.div
+        className={className}
         key={item.id}
         {...props}
         initial={{ opacity: 0, scale: 0.5 }}

@@ -17,13 +17,14 @@ export function ButtonRoot({
   children,
   disabled,
   className,
+  variant,
   ...props
 }: ButtonRootProps) {
   return (
     <button
       {...props}
       disabled={disabled}
-      className={buttonRootTv({ className })}
+      className={buttonRootTv({ className, variant })}
     >
       {children}
     </button>

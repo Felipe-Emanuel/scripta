@@ -9,11 +9,11 @@ export const APP_ROUTES = {
     books: {
       name: '/books',
     },
-  },
-  public: {
     news: {
       name: '/',
     },
+  },
+  public: {
     auth: {
       name: '/auth',
     },

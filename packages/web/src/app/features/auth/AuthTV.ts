@@ -31,3 +31,7 @@ export const animatedHeroTextWrapperTV = tv({
 export const authRightSideRootTV = tv({
   base: 'relative flex items-center justify-center w-full md:w-1/2',
 })
+
+export const buttonsProvidersTV = tv({
+  base: 'flex items-center justify-center gap-4 w-full',
+})
