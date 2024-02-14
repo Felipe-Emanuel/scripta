@@ -30,7 +30,8 @@ export const ProviderButtons = () => {
         <Button.root
           variant="provider"
           type="button"
-          onClick={() => logInWithProviders('facebook')}
+          disabled
+          // onClick={() => logInWithProviders('facebook')}
         >
           <Button.icon icon={BsFacebook} color="white" />
         </Button.root>
