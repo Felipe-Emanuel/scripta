@@ -1,4 +1,5 @@
 import { throwUserMessages } from 'src/entities/User/utils'
+import { IUserRepository } from 'src/repositories/UserRepository'
 import { inMemomoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
 import { CreateUserService } from 'src/services/userServices/create/createUser'
 import { GetByEmailService } from 'src/services/userServices/getByEmail/getByEmail'
@@ -9,7 +10,7 @@ describe('GetByEmailService', () => {
     inMemomoryUserRepository()
 
   it('should be able to return an exists user by ID', async () => {
-    const actions = {
+    const actions: IUserRepository = {
       createUser,
       getUserByEmail,
       patchUserPicture,

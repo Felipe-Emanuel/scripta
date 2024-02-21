@@ -1,7 +1,7 @@
-import { User } from '@prisma/client'
 import { FastifyInstance } from 'fastify'
 import { throwUserMessages } from 'src/entities/User/utils'
 import { databaseUserRepository } from 'src/repositories/database/databaseUserRepository'
+import { TCreateUserServiceRequest } from 'src/services/userServices/create/createUser'
 import { GetByEmailService } from 'src/services/userServices/getByEmail/getByEmail'
 import { generateToken } from 'src/shared/utils/tokens'
 
@@ -9,7 +9,7 @@ export async function authController(app: FastifyInstance): Promise<void> {
   const { getUserByEmail } = databaseUserRepository()
 
   app.post('/auth', async (req, apply) => {
-    const { email, password } = req.body as User
+    const { email, password } = req.body as Partial<TCreateUserServiceRequest>
 
     const user = await GetByEmailService({
       email,

@@ -8,12 +8,12 @@ export type TGetByEmailRequest = {
   action: Pick<IUserRepository, 'getUserByEmail'>
 }
 
-type TGerByEmailResponse = User
+type TGetByEmailResponse = User
 
 export const GetByEmailService = async ({
   email,
   action,
-}: TGetByEmailRequest): Promise<TGerByEmailResponse> => {
+}: TGetByEmailRequest): Promise<TGetByEmailResponse> => {
   const { getUserByEmail } = action
   if (!email) throw new Error(throwUserMessages.wrongEmailOrPassword)
 
