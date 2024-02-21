@@ -13,7 +13,7 @@
 
 A versão mínima viável (MVP) do Memorize se concentrará em funcionalidades básicas para garantir uma experiência de usuário sólida e iniciar a coleta de feedback crucial.
 
-* **Autenticação segura:** Proteja seus dados com autenticação via JWT, Google ou Facebook.
+* **Autenticação segura:** Proteja seus dados com autenticação via JWT ou Google.
 * **Feed de atividades:** Mantenha-se atualizado sobre os novos livros e personagens da comunidade Memorize.
 * **Dashboard pessoal:** Acesse seu painel individual para visualizar seus projetos, estatísticas e ferramentas.
 * **Envio de feedback:** Ajude a moldar o futuro do Memorize, compartilhando suas ideias e sugestões.
