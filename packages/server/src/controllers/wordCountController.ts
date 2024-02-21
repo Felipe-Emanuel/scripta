@@ -10,7 +10,7 @@ import { globalErrorMessage } from 'src/shared/utils/globalErrorMessage'
 import { verifyToken } from 'src/shared/utils/tokens'
 
 interface IWordCountController {
-  provider?: 'google' | 'facebook'
+  provider?: 'google'
 }
 
 type TBody = IWordCountController & TCreateWordCountRequest
