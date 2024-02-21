@@ -32,8 +32,11 @@ export async function authController(app: FastifyInstance): Promise<void> {
       sub: email,
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: pass, ...userWithoutPassword } = user
+
     return apply.send({
-      ...user,
+      ...userWithoutPassword,
       accessToken: generateToken(payload),
     })
   })

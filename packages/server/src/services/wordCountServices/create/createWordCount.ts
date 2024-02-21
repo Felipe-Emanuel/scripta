@@ -5,7 +5,7 @@ import { IWordCountRepository } from 'src/repositories/WordCountRepository'
 import { v4 as uuidv4 } from 'uuid'
 
 export type TCreateWordCountRequest = {
-  userId: string
+  email: string
   words: number
   actions: IWordCountRepository
 }
@@ -13,25 +13,25 @@ export type TCreateWordCountRequest = {
 type TCreateWordCountResponse = WordCount
 
 export const CreateWordCountService = async ({
-  userId,
+  email,
   words,
   actions,
 }: TCreateWordCountRequest): Promise<TCreateWordCountResponse> => {
-  const { createWordCount, getWordCountByUserId } = actions
+  const { createWordCount, getWordCountByUserEmail } = actions
 
-  const WordCount = await getWordCountByUserId(userId)
+  const WordCount = await getWordCountByUserEmail(email)
 
   if (WordCount) throw new Error(throwWordCountMessages.wordCountAlreadyExist)
 
   const { setWordCount } = WordCountEntitie(
     {
       id: uuidv4(),
-      userId,
+      email,
       words,
       updatedAt: new Date(),
       createdAt: new Date(),
     },
-    userId,
+    email,
   )
 
   const newWordCount = await setWordCount()

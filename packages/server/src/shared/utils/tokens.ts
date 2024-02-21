@@ -21,7 +21,6 @@ export const verifyToken = async (token: string) => {
 
     return decoded
   } catch (error) {
-    console.log('Error: ', error)
     throw new Error(throwUserMessages.invalidJWT)
   }
 }

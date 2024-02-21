@@ -7,18 +7,18 @@ import { throwWordCountMessages } from 'src/entities/WordCountEntitie/utils'
 describe('setWordCount', () => {
   beforeEach(() => jest.clearAllMocks())
 
-  it('should throw a exception about userId reference missing', () => {
+  it('should throw a exception about email reference missing', () => {
     const { setWordCount } = WordCountEntitie(WordCountEntitieMock, '')
 
     const sut = setWordCount()
 
-    expect(sut).rejects.toThrow(throwWordCountMessages.userIdReferenceMissing)
+    expect(sut).rejects.toThrow(throwWordCountMessages.emailReferenceMissing)
   })
 
   it('should throw a exception about word count not found', () => {
     const { setWordCount } = WordCountEntitie(
       WordCountEntitieMock,
-      'unexistentUserId',
+      'unexistentEmail',
     )
 
     const sut = setWordCount()
@@ -34,7 +34,7 @@ describe('setWordCount', () => {
 
     const { setWordCount } = WordCountEntitie(
       wordCountWithWordMissing,
-      userEntitieMock.id,
+      userEntitieMock.email,
     )
 
     const sut = setWordCount()
@@ -45,7 +45,7 @@ describe('setWordCount', () => {
   it('should be able to create a new WordCount', () => {
     const { setWordCount } = WordCountEntitie(
       WordCountEntitieMock,
-      userEntitieMock.id,
+      userEntitieMock.email,
     )
 
     const sut = setWordCount()
@@ -54,44 +54,37 @@ describe('setWordCount', () => {
   })
 })
 
-describe('getWordCountByUserId', () => {
-  it('should throw a exception about userId reference missing when get a word count', () => {
-    const { getWordCountByUserId } = WordCountEntitie(WordCountEntitieMock, '')
-
-    const sut = getWordCountByUserId()
-
-    expect(sut).rejects.toThrow(throwWordCountMessages.userIdReferenceMissing)
-  })
-
-  it('should throw a exception about user not found when get a word count', () => {
-    const { getWordCountByUserId } = WordCountEntitie(
+describe('getWordCountByUserEmail', () => {
+  it('should throw a exception about email reference missing when get a word count', () => {
+    const { getWordCountByUserEmail } = WordCountEntitie(
       WordCountEntitieMock,
-      'unexistentUserId',
+      '',
     )
-
-    const sut = getWordCountByUserId()
-
+    const sut = getWordCountByUserEmail()
+    expect(sut).rejects.toThrow(throwWordCountMessages.emailReferenceMissing)
+  })
+  it('should throw a exception about user not found when get a word count', () => {
+    const { getWordCountByUserEmail } = WordCountEntitie(
+      WordCountEntitieMock,
+      'unexistentEmail',
+    )
+    const sut = getWordCountByUserEmail()
     expect(sut).rejects.toThrow(throwWordCountMessages.wordCountNotFound)
   })
-
   it('should throw a exception about wrong date', () => {
-    const { getWordCountByUserId } = WordCountEntitie(
+    const { getWordCountByUserEmail } = WordCountEntitie(
       WordCountEntitieMock,
-      userEntitieMock.id,
+      userEntitieMock.email,
     )
-    const sut = getWordCountByUserId(new Date(Date.now(), -1))
-
+    const sut = getWordCountByUserEmail(new Date(Date.now(), -1))
     expect(sut).rejects.toThrow(throwWordCountMessages.wrongDate)
   })
-
   it('should be able to get a existent WordCount', () => {
-    const { getWordCountByUserId } = WordCountEntitie(
+    const { getWordCountByUserEmail } = WordCountEntitie(
       WordCountEntitieMock,
-      userEntitieMock.id,
+      userEntitieMock.email,
     )
-
-    const sut = getWordCountByUserId()
-
+    const sut = getWordCountByUserEmail()
     expect(sut).resolves.toEqual(WordCountEntitieMock)
   })
 })
@@ -104,7 +97,7 @@ describe('updateWordCount', () => {
   it('should throw a exception about user not found', () => {
     const { updateWordCount } = WordCountEntitie(
       WordCountEntitieMock,
-      'fakeUserId',
+      'fakeEmail',
     )
 
     const sut = updateWordCount(words)
@@ -115,7 +108,7 @@ describe('updateWordCount', () => {
   it('should throw a exception about missing words', () => {
     const { updateWordCount } = WordCountEntitie(
       WordCountEntitieMock,
-      userEntitieMock.id,
+      userEntitieMock.email,
     )
 
     const sut = updateWordCount(0)
@@ -129,7 +122,7 @@ describe('updateWordCount', () => {
         ...WordCountEntitieMock,
         updatedAt: new Date(Date.now(), -1),
       },
-      userEntitieMock.id,
+      userEntitieMock.email,
     )
 
     const sut = updateWordCount(words)
@@ -140,7 +133,7 @@ describe('updateWordCount', () => {
   it('should be able to update a word count', () => {
     const { updateWordCount } = WordCountEntitie(
       WordCountEntitieMock,
-      userEntitieMock.id,
+      userEntitieMock.email,
     )
 
     const sut = updateWordCount(words)
@@ -150,4 +143,8 @@ describe('updateWordCount', () => {
       words,
     })
   })
+})
+
+it('should', () => {
+  expect(1 + 5).toBe(6)
 })

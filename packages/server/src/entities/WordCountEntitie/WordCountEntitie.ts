@@ -1,11 +1,11 @@
 import { WordCount } from '@prisma/client'
 import { throwWordCountMessages } from 'src/entities/WordCountEntitie/utils'
 
-export const WordCountEntitie = (wordCount: WordCount, userId: string) => {
+export const WordCountEntitie = (wordCount: WordCount, email: string) => {
   const setWordCount = async () => {
-    if (!userId) throw new Error(throwWordCountMessages.userIdReferenceMissing)
+    if (!email) throw new Error(throwWordCountMessages.emailReferenceMissing)
 
-    if (wordCount.userId !== userId)
+    if (wordCount.email !== email)
       throw new Error(throwWordCountMessages.wordCountNotFound)
 
     if (wordCount.words <= 0)
@@ -14,10 +14,10 @@ export const WordCountEntitie = (wordCount: WordCount, userId: string) => {
     return wordCount
   }
 
-  const getWordCountByUserId = async (date?: Date) => {
-    if (!userId) throw new Error(throwWordCountMessages.userIdReferenceMissing)
+  const getWordCountByUserEmail = async (date?: Date) => {
+    if (!email) throw new Error(throwWordCountMessages.emailReferenceMissing)
 
-    if (wordCount.userId !== userId)
+    if (wordCount.email !== email)
       throw new Error(throwWordCountMessages.wordCountNotFound)
 
     if (date && wordCount.updatedAt.getDay() !== date.getDay())
@@ -27,7 +27,7 @@ export const WordCountEntitie = (wordCount: WordCount, userId: string) => {
   }
 
   const updateWordCount = async (words: number) => {
-    if (wordCount.userId !== userId)
+    if (wordCount.email !== email)
       throw new Error(throwWordCountMessages.wordCountNotFound)
 
     if (words <= 0) throw new Error(throwWordCountMessages.wordsMissing)
@@ -39,5 +39,5 @@ export const WordCountEntitie = (wordCount: WordCount, userId: string) => {
     return { ...wordCount, words }
   }
 
-  return { setWordCount, getWordCountByUserId, updateWordCount }
+  return { setWordCount, getWordCountByUserEmail, updateWordCount }
 }

@@ -9,17 +9,17 @@ import {
 } from 'src/services/wordCountServices/create/createWordCount'
 
 describe('Create Word Count', () => {
-  const { createWordCount, getWordCountByUserId, updateWordCount } =
+  const { createWordCount, getWordCountByUserEmail, updateWordCount } =
     inMemoryWordCountRepository()
 
   const actions = {
     createWordCount,
-    getWordCountByUserId,
+    getWordCountByUserEmail,
     updateWordCount,
   }
 
   const body: TCreateWordCountRequest = {
-    userId: userMock.id,
+    email: userMock.email,
     words: 850,
     actions,
   }

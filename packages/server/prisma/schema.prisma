@@ -24,7 +24,7 @@ model User {
 
 model WordCount {
   id        String   @id @default(uuid())
-  userId    String
+  email     String
   words     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

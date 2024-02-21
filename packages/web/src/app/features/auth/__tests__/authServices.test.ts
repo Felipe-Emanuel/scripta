@@ -13,7 +13,7 @@ beforeEach(() => {
   }
 })
 
-describe('auth', () => {
+describe('authServices', () => {
   it('should call post method', async () => {
     const endpoint = '/auth'
     const body: TAuthRequest = {

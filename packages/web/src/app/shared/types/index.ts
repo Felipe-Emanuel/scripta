@@ -6,4 +6,7 @@ export * from './TCreateSession'
 
 export * from './requests/TAuthRequest'
 export * from './requests/TCreateUserRequest'
+export * from './requests/TCreateWordCountRequest'
+
 export * from './responses/TUser'
+export * from './responses/TWordCountResponse'

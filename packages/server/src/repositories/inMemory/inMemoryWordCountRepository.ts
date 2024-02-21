@@ -11,19 +11,19 @@ export const inMemoryWordCountRepository = (): IWordCountRepository => {
     return updatedWordCount
   }
 
-  const getWordCountByUserId = async (
-    userId: string,
+  const getWordCountByUserEmail = async (
+    email: string,
   ): Promise<WordCount | null> => {
-    const exisintgWordCount = wordCounts.find((word) => word.userId === userId)
+    const exisintgWordCount = wordCounts.find((word) => word.email === email)
 
     return exisintgWordCount || null
   }
 
   const updateWordCount = async (
-    userId: string,
+    email: string,
     words: number,
   ): Promise<WordCount | null> => {
-    const exisintgWordCount = wordCounts.find((word) => word.userId === userId)
+    const exisintgWordCount = wordCounts.find((word) => word.email === email)
 
     if (exisintgWordCount) {
       return {
@@ -37,7 +37,7 @@ export const inMemoryWordCountRepository = (): IWordCountRepository => {
 
   return {
     createWordCount,
-    getWordCountByUserId,
+    getWordCountByUserEmail,
     updateWordCount,
   }
 }

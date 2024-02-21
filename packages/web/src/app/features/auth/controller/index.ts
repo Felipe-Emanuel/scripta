@@ -26,8 +26,8 @@ export const useAuthController = () => {
     resolver: zodResolver(authSubmitSchema),
     defaultValues: {
       email: '',
-      name: null,
       password: '',
+      name: null,
     },
   })
 
@@ -60,7 +60,7 @@ export const useAuthController = () => {
     if (user?.accessToken) {
       push(APP_ROUTES.private.dashboard.name)
       return createSession({
-        cookieName: session ?? '',
+        cookieName: session,
         value: JSON.stringify(userSession),
       })
     }

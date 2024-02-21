@@ -3,36 +3,36 @@ import { WordCountEntitie } from 'src/entities/WordCountEntitie/WordCountEntitie
 import { throwWordCountMessages } from 'src/entities/WordCountEntitie/utils'
 import { IWordCountRepository } from 'src/repositories/WordCountRepository'
 
-export type TGetWordCountByUserIdRequest = {
-  userId: string
-  action: Pick<IWordCountRepository, 'getWordCountByUserId'>
+export type TgetWordCountByUserEmailRequest = {
+  email: string
+  action: Pick<IWordCountRepository, 'getWordCountByUserEmail'>
   date?: Date
 }
 
-export type TGetWordCountByUserIdResponse = WordCount
+export type TgetWordCountByUserEmailResponse = WordCount
 
-export const GetWordCountByUserIdService = async ({
-  userId,
+export const getWordCountByUserEmailService = async ({
+  email,
   action,
   date,
-}: TGetWordCountByUserIdRequest): Promise<TGetWordCountByUserIdResponse> => {
-  const { getWordCountByUserId } = action
+}: TgetWordCountByUserEmailRequest): Promise<TgetWordCountByUserEmailResponse> => {
+  const { getWordCountByUserEmail } = action
 
-  if (!userId) throw new Error(throwWordCountMessages.userIdReferenceMissing)
+  if (!email) throw new Error(throwWordCountMessages.emailReferenceMissing)
 
-  const existingWordCount = await getWordCountByUserId(userId)
+  const existingWordCount = await getWordCountByUserEmail(email)
 
   if (!existingWordCount)
     throw new Error(throwWordCountMessages.wordCountNotFound)
 
-  const { getWordCountByUserId: getWordCount } = WordCountEntitie(
+  const { getWordCountByUserEmail: getWordCount } = WordCountEntitie(
     existingWordCount,
-    userId,
+    email,
   )
 
   const wordCount = getWordCount(date)
 
-  await getWordCountByUserId(userId)
+  await getWordCountByUserEmail(email)
 
   return wordCount
 }

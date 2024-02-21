@@ -4,7 +4,6 @@ import { parseCookies, destroyCookie } from 'nookies'
 import { toast } from 'react-toastify'
 import { session } from '@shared/utils/constants/cookies'
 import { TSessionCustomer } from '@shared/types'
-import { getProviders } from 'next-auth/react'
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
@@ -15,14 +14,13 @@ export const api = axios.create({
 api.interceptors.request.use(async (config) => {
   const cookies = parseCookies()
   const stringfyiedSessionCustomer = cookies._memorize_
-  const sessionCustomer: TSessionCustomer =
+  const sessionCustomer: Pick<TSessionCustomer, 'provider' | 'accessToken'> =
     stringfyiedSessionCustomer && JSON.parse(stringfyiedSessionCustomer)
 
-  const provider = await getProviders()
-
-  if (sessionCustomer) {
-    config.headers.Authorization = `Bearer ${sessionCustomer?.accessToken}`
-    config.headers.provider = provider?.id
+  if (sessionCustomer?.accessToken) {
+    config.headers.Authorization = sessionCustomer?.accessToken
+  } else if (sessionCustomer?.provider) {
+    config.headers.provider = sessionCustomer.provider
   }
 
   return config
@@ -41,7 +39,6 @@ api.interceptors.response.use(
       }
 
       if (error.response?.status === 401 && token) {
-        console.log(token)
         toast.error('Acesso não autorizado')
         session && destroyCookie(null, session)
         return (window.location.href = '/')

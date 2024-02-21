@@ -14,33 +14,33 @@ export const databaseWordCountRepository = (): IWordCountRepository => {
     return updateWordCount
   }
 
-  const getWordCountByUserId = async (
-    userId: string,
+  const getWordCountByUserEmail = async (
+    email: string,
   ): Promise<WordCount | null> => {
     const wordCounts = await prisma.wordCount.findMany({
       where: {
-        userId,
+        email,
       },
     })
 
-    const exisintgUser = wordCounts.find((user) => user.userId === userId)
+    const exisintgUser = wordCounts.find((user) => user.email === email)
 
     return exisintgUser || null
   }
 
   const updateWordCount = async (
-    userId: string,
+    email: string,
     words: number,
   ): Promise<WordCount | null> => {
     const today = new Date()
     const wordCounts = await prisma.wordCount.findMany({
       where: {
-        userId,
+        email,
         updatedAt: today,
       },
     })
 
-    const exisintgWordCounts = wordCounts.find((user) => user.userId === userId)
+    const exisintgWordCounts = wordCounts.find((user) => user.email === email)
 
     if (exisintgWordCounts) {
       const updatedWordCount: WordCount = {
@@ -61,7 +61,7 @@ export const databaseWordCountRepository = (): IWordCountRepository => {
 
   return {
     createWordCount,
-    getWordCountByUserId,
+    getWordCountByUserEmail,
     updateWordCount,
   }
 }
