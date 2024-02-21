@@ -15,7 +15,6 @@ const config = {
   testEnvironment: 'jest-environment-jsdom',
   setupFilesAfterEnv: ['<rootDir>/.jest/setup.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/.next/'],
-  // modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),

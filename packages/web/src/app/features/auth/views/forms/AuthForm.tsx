@@ -16,18 +16,6 @@ export function AuthForm({ changeAuthPageContent }: AuthFormProps) {
     },
     {
       id: id++,
-      component: (
-        <Text
-          size="md"
-          text="Entre com"
-          color="gray"
-          className="pt-4"
-          align="center"
-        />
-      ),
-    },
-    {
-      id: id++,
       component: <ProviderButtons />,
     },
     {

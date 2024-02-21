@@ -18,6 +18,10 @@ jest.mock('@shared/services/axios/api', () => ({
   },
 }))
 
+jest.mock('next-auth/react', () => ({
+  getProviders: jest.fn(),
+}))
+
 describe('useAuthController', () => {
   it('should call authentication function', async () => {
     const { result } = renderHook(() => useAuthController())

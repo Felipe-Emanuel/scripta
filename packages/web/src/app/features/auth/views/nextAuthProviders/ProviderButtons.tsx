@@ -2,18 +2,17 @@
 
 import { buttonsProvidersTV } from '@features/auth/AuthTV'
 import { Button, Motion, Text } from '@shared/components'
+import { ButtonLabel } from '@shared/components/Button/views/ButtonLabel'
 import { useProvidersSession } from '@shared/hooks/useProvidersSession'
 import { TArrayComponents } from '@shared/types'
-import { BsGoogle, BsFacebook } from 'react-icons/bs'
-
-const id = 0
+import { BsGoogle } from 'react-icons/bs'
 
 export const ProviderButtons = () => {
   const { logInWithProviders } = useProvidersSession()
 
   const components: TArrayComponents[] = [
     {
-      id,
+      id: 0,
       component: (
         <Button.root
           variant="provider"
@@ -21,19 +20,7 @@ export const ProviderButtons = () => {
           onClick={() => logInWithProviders('google')}
         >
           <Button.icon icon={BsGoogle} color="white" />
-        </Button.root>
-      ),
-    },
-    {
-      id,
-      component: (
-        <Button.root
-          variant="provider"
-          type="button"
-          disabled
-          // onClick={() => logInWithProviders('facebook')}
-        >
-          <Button.icon icon={BsFacebook} color="white" />
+          <ButtonLabel label="Continuar com o Google" />
         </Button.root>
       ),
     },
@@ -44,7 +31,7 @@ export const ProviderButtons = () => {
       <div className={buttonsProvidersTV()}>
         <Motion components={components} />
       </div>
-      <Text text="ou" align="center" className="pt-8" color="gray" />
+      <Text text="ou" align="center" className="pt-4" color="gray" />
     </>
   )
 }

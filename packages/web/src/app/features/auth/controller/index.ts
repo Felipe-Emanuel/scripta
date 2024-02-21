@@ -5,6 +5,7 @@ import { useCookie } from '@shared/hooks/useCookies'
 import { APP_ROUTES } from '@shared/utils/constants/app-routes'
 import { session } from '@shared/utils/constants/cookies'
 import { isPasswordStrong } from '@shared/utils/validation'
+import { getProviders } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -45,15 +46,22 @@ export const useAuthController = () => {
   }
 
   const onSubmit = async (data: TAuthSubmitSchema) => {
+    const provider = await getProviders()
+
     const { name, email, password } = data
 
     const user = await handleAuthentication(email, password, name || '')
+
+    const userSession = {
+      ...user,
+      provider: provider?.id,
+    }
 
     if (user?.accessToken) {
       push(APP_ROUTES.private.dashboard.name)
       return createSession({
         cookieName: session ?? '',
-        value: JSON.stringify(user),
+        value: JSON.stringify(userSession),
       })
     }
   }

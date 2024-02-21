@@ -20,10 +20,6 @@ export function RegisterForm({
     },
     {
       id: id++,
-      component: <Text text="Continue com" align="center" color="gray" />,
-    },
-    {
-      id: id++,
       component: <ProviderButtons />,
     },
     {

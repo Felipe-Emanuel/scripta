@@ -17,7 +17,7 @@ export function Motion({ components, className, ...props }: TMotion) {
     return (
       <motion.div
         className={className}
-        key={item.id}
+        key={i}
         {...props}
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
