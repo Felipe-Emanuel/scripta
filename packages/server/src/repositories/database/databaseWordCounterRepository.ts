@@ -7,11 +7,11 @@ import { v4 as uuidv4 } from 'uuid'
 export const databaseWordCounterRepository = (): IWordCounterRepository => {
   const createWordCounter = async (
     wordCount: WordCount,
-    wordCounterId: string,
   ): Promise<TWordCounter> => {
     return await prisma.wordsCounter.create({
       data: {
-        id: wordCounterId,
+        id: uuidv4(),
+        email: wordCount.email,
         wordCount: {
           create: {
             id: uuidv4(),
@@ -28,11 +28,11 @@ export const databaseWordCounterRepository = (): IWordCounterRepository => {
     })
   }
 
-  const getCounterById = async (
-    wordCounterId: string,
+  const getCounterByEmail = async (
+    email: string,
   ): Promise<TWordCounter | null> => {
     const existingWordCounter = await prisma.wordsCounter.findFirst({
-      where: { id: wordCounterId },
+      where: { email },
       include: {
         wordCount: true,
       },
@@ -48,7 +48,7 @@ export const databaseWordCounterRepository = (): IWordCounterRepository => {
   ): Promise<WordCount> => {
     const existingWordCounter = await prisma.wordCount.findFirst({
       orderBy: {
-        updatedAt: 'desc',
+        updatedAt: 'asc',
       },
       where: {
         id: wordCount.id,
@@ -74,9 +74,10 @@ export const databaseWordCounterRepository = (): IWordCounterRepository => {
   const insertWordCount = async (
     wordCount: WordCount,
   ): Promise<WordsCounter> => {
+    console.log(wordCount.wordsCounterId)
     const existingWordCounter = await prisma.wordsCounter.findFirst({
       where: {
-        id: wordCount.wordsCounterId,
+        email: wordCount.email,
       },
       include: {
         wordCount: true,
@@ -107,7 +108,7 @@ export const databaseWordCounterRepository = (): IWordCounterRepository => {
 
   return {
     createWordCounter,
-    getCounterById,
+    getCounterByEmail,
     updatedWordCounter,
     insertWordCount,
   }

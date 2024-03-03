@@ -12,8 +12,9 @@ const config: Config = {
       'jacques-francois': '"Jacques Francois", serif',
     },
     fontSize: {
-      '2xl': '96px',
-      xl: '72px',
+      '3xl': '96px',
+      '2xl': '72px',
+      xl: '44px',
       lg: '24px',
       md: '16px',
       sm: '14px',

@@ -13,8 +13,10 @@ export const getCounters = async (
 
     const { data } = await api.get<TWordCountResponse>(endpoint)
 
+    console.log(data)
+
     resolver(true)
-    return data
+    return data.wordCount[0]
   } catch (error) {
     if (error instanceof AxiosError) {
       error.message === defaultErrorMessages.wordCountNotFound &&
@@ -23,18 +25,22 @@ export const getCounters = async (
   }
 }
 
-export const createWordCount = async ({
+export const postWordCounter = async ({
   email,
   words,
+  wordCounterId,
 }: TCreateWordCountRequest) => {
   const endpoint = '/wordCount'
 
-  const body = {
+  const body: TCreateWordCountRequest = {
+    wordCounterId,
     email,
     words,
   }
 
-  const { data } = await api.post(endpoint, body)
+  const { data } = await api.post<TWordCountResponse>(endpoint, body)
 
-  return data
+  if (data) {
+    return data.wordCount?.[0]
+  }
 }

@@ -5,20 +5,20 @@ import { inMemoryWordCounterRepository } from 'src/repositories/inMemory/inMemor
 import { UpdatetWordCountService } from 'src/services/wordCountersServices/update/updateWordCount'
 
 describe('UpdatetWordCountService', () => {
-  const { createWordCounter, getCounterById, updatedWordCounter } =
+  const { createWordCounter, getCounterByEmail, updatedWordCounter } =
     inMemoryWordCounterRepository()
 
   const action: Pick<
     IWordCounterRepository,
-    'updatedWordCounter' | 'getCounterById'
+    'updatedWordCounter' | 'getCounterByEmail'
   > = {
-    getCounterById,
+    getCounterByEmail,
     updatedWordCounter,
   }
 
   const wordCount = wordsCounterEntitieMock.wordCount[0]
 
-  const { updatedAt, wordsCounterId } = wordCount
+  const { updatedAt } = wordCount
 
   const updatedWords = 150
 
@@ -27,7 +27,6 @@ describe('UpdatetWordCountService', () => {
       action,
       updatedAt,
       wordCount,
-      wordCountId: wordsCounterId,
       words: updatedWords,
     })
 
@@ -35,13 +34,12 @@ describe('UpdatetWordCountService', () => {
   })
 
   it('should be able to update a existent wordCount', async () => {
-    const wordCounter = await createWordCounter(wordCount, wordsCounterId)
+    const wordCounter = await createWordCounter(wordCount)
 
     const sut = await UpdatetWordCountService({
       action,
       updatedAt,
       wordCount: wordCounter.wordCount[0],
-      wordCountId: wordCounter.id,
       words: updatedWords,
     })
 

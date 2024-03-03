@@ -12,7 +12,9 @@ export function AuthForm({ changeAuthPageContent }: AuthFormProps) {
   const authComponents: TArrayComponents[] = [
     {
       id: id++,
-      component: <Title size="xl" title="Bem vindo!" align="center" />,
+      component: (
+        <Title size="xl" title="Bom ver você novamente!" align="center" />
+      ),
     },
     {
       id: id++,
@@ -57,7 +59,7 @@ export function AuthForm({ changeAuthPageContent }: AuthFormProps) {
       id: id++,
       component: (
         <Button.root>
-          <Button.label label="Entrar" />
+          <Button.label text="Entrar" />
         </Button.root>
       ),
     },

@@ -1,8 +1,16 @@
 import { TRootComponent } from '@shared/types'
-import { FormHTMLAttributes } from 'react'
+import { FormHTMLAttributes, forwardRef } from 'react'
 
 type FormProps = TRootComponent & FormHTMLAttributes<HTMLFormElement>
 
-export function Form({ children, ...props }: FormProps) {
-  return <form {...props}>{children}</form>
-}
+export const Form = forwardRef<HTMLFormElement, FormProps>(
+  ({ children, ...props }, formRef?) => {
+    return (
+      <form ref={formRef} {...props}>
+        {children}
+      </form>
+    )
+  },
+)
+
+Form.displayName = 'Form'

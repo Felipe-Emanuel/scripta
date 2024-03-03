@@ -16,20 +16,19 @@ export const WordsCounterEntitie = (
     return wordsCounter
   }
 
-  const setWordCount = async (
-    wordsCounterId: string,
-    wordCount: WordCount,
-  ): Promise<WordCount> => {
-    if (wordCount.wordsCounterId !== wordsCounterId)
+  const setWordCount = async (wordCount: WordCount): Promise<WordCount> => {
+    if (wordCount.email !== email)
       throw new Error(throwWordsCounterMessages.wordCounterNotFount)
 
     return wordCount
   }
 
-  const getWordsCounterById = async (id: string): Promise<TWordCounter> => {
-    if (!id) throw new Error(throwWordsCounterMessages.idMissing)
+  const getWordsCounterByEmail = async (
+    email: string,
+  ): Promise<TWordCounter> => {
+    if (!email) throw new Error(throwWordsCounterMessages.idMissing)
 
-    if (wordsCounter.id !== id)
+    if (wordsCounter.email !== email)
       throw new Error(throwWordsCounterMessages.wordCounterNotFount)
 
     return wordsCounter
@@ -46,8 +45,7 @@ export const WordsCounterEntitie = (
     if (wordCount.email !== email)
       throw new Error(throwWordsCounterMessages.emailReferenceMissing)
 
-    if (words <= 100)
-      throw new Error(throwWordsCounterMessages.lowNumberOfWords)
+    if (words < 100) throw new Error(throwWordsCounterMessages.lowNumberOfWords)
 
     return {
       ...wordCount,
@@ -56,21 +54,21 @@ export const WordsCounterEntitie = (
   }
 
   const insertWordCount = async (
-    wordsCounterId: string,
     wordCount: WordCount,
   ): Promise<TWordCounter> => {
-    if (wordCount.wordsCounterId !== wordsCounterId)
+    if (wordCount.email !== email)
       throw new Error(throwWordsCounterMessages.wordCounterNotFount)
 
     return {
       id: wordsCounter.id,
+      email: wordsCounter.email,
       wordCount: [...wordsCounter.wordCount, wordCount],
     }
   }
 
   return {
     createNewWordCount,
-    getWordsCounterById,
+    getWordsCounterByEmail,
     updatedWordCounter,
     insertWordCount,
     setWordCount,

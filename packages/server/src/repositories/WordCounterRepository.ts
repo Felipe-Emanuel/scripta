@@ -2,11 +2,8 @@ import { WordCount, WordsCounter } from '@prisma/client'
 import { TWordCounter } from '@types'
 
 export interface IWordCounterRepository {
-  createWordCounter: (
-    wordCount: WordCount,
-    wordCounterId: string,
-  ) => Promise<TWordCounter>
-  getCounterById: (id: string) => Promise<TWordCounter | null>
+  createWordCounter: (wordCount: WordCount) => Promise<TWordCounter>
+  getCounterByEmail: (email: string) => Promise<TWordCounter | null>
   updatedWordCounter: (
     updatedAt: Date,
     words: number,

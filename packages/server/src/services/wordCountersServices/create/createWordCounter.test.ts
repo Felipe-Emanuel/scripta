@@ -8,12 +8,12 @@ import {
 
 describe('CreateWordCountersServices', () => {
   it('should create a new word counter table', async () => {
-    const { createWordCounter, getCounterById } =
+    const { createWordCounter, getCounterByEmail } =
       inMemoryWordCounterRepository()
 
     const action: TCreateCreateWordCountersServicesRequest['action'] = {
       createWordCounter,
-      getCounterById,
+      getCounterByEmail,
     }
 
     const mockedWordCount = wordsCounterEntitieMock.wordCount[0]

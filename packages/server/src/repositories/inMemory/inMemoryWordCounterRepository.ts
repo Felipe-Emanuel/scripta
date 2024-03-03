@@ -6,22 +6,25 @@ import { IWordCounterRepository } from 'src/repositories/WordCounterRepository'
 export const inMemoryWordCounterRepository = (): IWordCounterRepository => {
   let wordCounters: TWordCounter = {
     id: randomUUID(),
+    email: 'user@example.com',
     wordCount: [],
   }
 
   const createWordCounter = async (
     wordCount: WordCount,
-    wordCounterId: string,
   ): Promise<TWordCounter> => {
     const updatedWordCounters = (wordCounters = {
-      id: wordCounterId,
+      id: randomUUID(),
+      email: wordCount.email,
       wordCount: [wordCount],
     })
     return updatedWordCounters
   }
 
-  const getCounterById = async (id: string): Promise<TWordCounter | null> => {
-    const existingWordCounter = wordCounters.id === id
+  const getCounterByEmail = async (
+    email: string,
+  ): Promise<TWordCounter | null> => {
+    const existingWordCounter = wordCounters.email === email
 
     return existingWordCounter ? wordCounters : null
   }
@@ -50,13 +53,14 @@ export const inMemoryWordCounterRepository = (): IWordCounterRepository => {
   ): Promise<TWordCounter> => {
     return {
       id: wordCounters.id,
+      email: wordCounters.email,
       wordCount: [...wordCounters.wordCount, wordCount],
     }
   }
 
   return {
     createWordCounter,
-    getCounterById,
+    getCounterByEmail,
     updatedWordCounter,
     insertWordCount,
   }

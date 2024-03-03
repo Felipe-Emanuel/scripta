@@ -1,17 +1,13 @@
 import { FastifyInstance } from 'fastify'
 import { authorization } from 'src/controllers/utils'
-import { throwUserMessages } from 'src/entities/User/utils'
 import { throwWordsCounterMessages } from 'src/entities/WordsCounter/utils'
-import { IUserRepository } from 'src/repositories/UserRepository'
 import { IWordCounterRepository } from 'src/repositories/WordCounterRepository'
-import { databaseUserRepository } from 'src/repositories/database/databaseUserRepository'
 import { databaseWordCounterRepository } from 'src/repositories/database/databaseWordCounterRepository'
-import { GetByEmailService } from 'src/services/userServices/getByEmail/getByEmail'
 import {
   TCreateCreateWordCountersServicesRequest,
   CreateWordCountersServices,
 } from 'src/services/wordCountersServices/create/createWordCounter'
-import { GetByIdWordCounterService } from 'src/services/wordCountersServices/getById/getByIdWordCounter'
+import { GetByEmailWordCounterService } from 'src/services/wordCountersServices/getByEmail/getByEmailWordCounter'
 import { InsertWordCountService } from 'src/services/wordCountersServices/insert/insertWordCount'
 import { UpdatetWordCountService } from 'src/services/wordCountersServices/update/updateWordCount'
 
@@ -27,29 +23,24 @@ export async function wordCounterController(
 ): Promise<void> {
   const {
     createWordCounter,
-    getCounterById,
+    getCounterByEmail,
     updatedWordCounter,
     insertWordCount,
   } = databaseWordCounterRepository()
-  const { getUserByEmail } = databaseUserRepository()
-
-  const getUserByEmailAction: Pick<IUserRepository, 'getUserByEmail'> = {
-    getUserByEmail,
-  }
 
   const updatetWordCountAction: Pick<
     IWordCounterRepository,
-    'updatedWordCounter' | 'getCounterById'
+    'updatedWordCounter' | 'getCounterByEmail'
   > = {
-    getCounterById,
+    getCounterByEmail,
     updatedWordCounter,
   }
 
   const insertWordCountAction: Pick<
     IWordCounterRepository,
-    'insertWordCount' | 'getCounterById'
+    'insertWordCount' | 'getCounterByEmail'
   > = {
-    getCounterById,
+    getCounterByEmail,
     insertWordCount,
   }
 
@@ -61,10 +52,10 @@ export async function wordCounterController(
 
       await authorization(provider, accessToken, apply)
 
-      const existingUser = await GetByEmailService({
-        action: getUserByEmailAction,
-        email,
-      })
+      if (words < 100)
+        apply
+          .status(409)
+          .send({ message: throwWordsCounterMessages.lowNumberOfWords })
 
       if (!wordCounterId)
         apply.status(404).send({ message: throwWordsCounterMessages.idMissing })
@@ -72,7 +63,7 @@ export async function wordCounterController(
       const creeateWordCounterActions: TCreateCreateWordCountersServicesRequest['action'] =
         {
           createWordCounter,
-          getCounterById,
+          getCounterByEmail,
         }
 
       const newWordCount = await CreateWordCountersServices({
@@ -82,9 +73,6 @@ export async function wordCounterController(
         words,
       })
 
-      if (!existingUser)
-        apply.status(404).send({ message: throwUserMessages.userNotFound })
-
       const lastCounterCreatedAt = newWordCount.wordCount[0].updatedAt
 
       if (isToday(lastCounterCreatedAt)) {
@@ -92,7 +80,6 @@ export async function wordCounterController(
           action: updatetWordCountAction,
           updatedAt: lastCounterCreatedAt,
           wordCount: newWordCount.wordCount[0],
-          wordCountId: newWordCount.id,
           words,
         })
 
@@ -100,7 +87,7 @@ export async function wordCounterController(
       } else {
         const insertedCounter = await InsertWordCountService({
           action: insertWordCountAction,
-          wordCountId: newWordCount.id,
+          email,
           words,
         })
 
@@ -113,8 +100,8 @@ export async function wordCounterController(
     }
   })
 
-  app.get('/wordCount/:wordCounterId', async (req, apply) => {
-    const { wordCounterId, email } = req.params as Partial<TBody>
+  app.get('/wordCount/:email', async (req, apply) => {
+    const { email } = req.params as Partial<TBody>
     const provider = req.headers.provider
     const accessToken = req.headers.authorization
 
@@ -122,15 +109,14 @@ export async function wordCounterController(
 
     const getWordCounterByEmail: Pick<
       IWordCounterRepository,
-      'getCounterById'
+      'getCounterByEmail'
     > = {
-      getCounterById,
+      getCounterByEmail,
     }
 
-    const wordCounters = await GetByIdWordCounterService({
+    const wordCounters = await GetByEmailWordCounterService({
       action: getWordCounterByEmail,
       email,
-      wordCounterId,
     })
 
     if (!wordCounters) {

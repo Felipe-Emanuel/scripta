@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto'
 
 export const wordsCounterEntitieMock: TWordCounter = {
   id: '234-sdfsdf-23f-2effdgd',
+  email: 'foo@example.com',
   wordCount: [
     {
       createdAt: new Date(),

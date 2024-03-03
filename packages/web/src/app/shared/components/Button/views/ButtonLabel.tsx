@@ -1,9 +1,5 @@
-import { Text } from '@shared/components'
+import { Text, TextProps } from '@shared/components'
 
-interface ButtonLabelProps {
-  label: string
-}
-
-export function ButtonLabel({ label }: ButtonLabelProps) {
-  return <Text text={label} />
+export function ButtonLabel({ text, ...props }: TextProps) {
+  return <Text text={text} {...props} />
 }

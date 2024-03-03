@@ -28,26 +28,26 @@ describe('createNewWordCount', () => {
   })
 })
 
-describe('getWordsCounterById', () => {
-  const { getWordsCounterById } = WordsCounterEntitie(
+describe('getWordsCounterByEmail', () => {
+  const { getWordsCounterByEmail } = WordsCounterEntitie(
     wordsCounterEntitieMock,
     wordsCounterEntitieMock.wordCount[0].email,
   )
 
   it('should throw exception about missing id', () => {
-    const sut = getWordsCounterById('')
+    const sut = getWordsCounterByEmail('')
 
     expect(sut).rejects.toThrow(throwWordsCounterMessages.idMissing)
   })
 
   it('should throw exception about word counter not found', () => {
-    const sut = getWordsCounterById('unexistingWordCounterId')
+    const sut = getWordsCounterByEmail('unexistingEmailCounterId')
 
     expect(sut).rejects.toThrow(throwWordsCounterMessages.wordCounterNotFount)
   })
 
   it('should return a existent word counter', async () => {
-    const sut = await getWordsCounterById(wordsCounterEntitieMock.id)
+    const sut = await getWordsCounterByEmail(wordsCounterEntitieMock.email)
 
     expect(sut.wordCount[0].email).toEqual(
       wordsCounterEntitieMock.wordCount[0].email,
@@ -118,19 +118,18 @@ describe('insertWordCount', () => {
   )
 
   it('should throw exception about word counter not found', () => {
-    const sut = insertWordCount(
+    const { insertWordCount } = WordsCounterEntitie(
+      wordsCounterEntitieMock,
       'unexistingWordCounterId',
-      wordsCounterEntitieMock.wordCount[0],
     )
+
+    const sut = insertWordCount(wordsCounterEntitieMock.wordCount[0])
 
     expect(sut).rejects.toThrow(throwWordsCounterMessages.wordCounterNotFount)
   })
 
   it('should return a new word count at words counter table', async () => {
-    const sut = await insertWordCount(
-      wordsCounterEntitieMock.id,
-      wordsCounterEntitieMock.wordCount[0],
-    )
+    const sut = await insertWordCount(wordsCounterEntitieMock.wordCount[0])
 
     expect(sut.wordCount[1].email).toEqual(
       wordsCounterEntitieMock.wordCount[0].email,
@@ -145,19 +144,17 @@ describe('setWordCount', () => {
   )
 
   it('should throw exception about word counter not found', () => {
-    const sut = setWordCount(
+    const { setWordCount } = WordsCounterEntitie(
+      wordsCounterEntitieMock,
       'unexistingWordCounterId',
-      wordsCounterEntitieMock.wordCount[0],
     )
+    const sut = setWordCount(wordsCounterEntitieMock.wordCount[0])
 
     expect(sut).rejects.toThrow(throwWordsCounterMessages.wordCounterNotFount)
   })
 
   it('should be able to return a new word count', async () => {
-    const sut = await setWordCount(
-      wordsCounterEntitieMock.id,
-      wordsCounterEntitieMock.wordCount[0],
-    )
+    const sut = await setWordCount(wordsCounterEntitieMock.wordCount[0])
 
     expect(sut.id).toEqual(wordsCounterEntitieMock.wordCount[0].id)
   })

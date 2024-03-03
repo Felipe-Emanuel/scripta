@@ -1,4 +1,5 @@
 'use client'
+
 import { LottieOptions, useLottie } from 'lottie-react'
 import AnimatedRightArrow from './animatedRightArrow.json'
 import { rightArrowTV } from '@shared/animations/animatedRightArrow/RightArrowTV'

@@ -13,7 +13,7 @@ export default function ClientContent() {
     <div className="flex items-center justify-center gap-2 md:gap-4">
       <Text text="página de novos construção" />
       <Button.root onClick={handleAuthNavigation}>
-        <Button.label label="Ir para autenticação" />
+        <Button.label text="Ir para autenticação" />
       </Button.root>
     </div>
   )

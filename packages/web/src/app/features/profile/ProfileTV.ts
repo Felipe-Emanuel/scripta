@@ -19,3 +19,42 @@ export const profileInfoHeaderTV = tv({
 export const profileleInfoWelcomeTV = tv({
   base: 'w-full max-w-40 leading-6',
 })
+
+export const profileleInfoFormWrapperTV = tv({
+  base: 'duration-150 flex items-center gap-2 relative pointer-events-auto h-8',
+  variants: {
+    visible: {
+      visible: 'w-72',
+      hidden: 'w-32',
+    },
+  },
+  defaultVariants: {
+    visible: 'hidden',
+  },
+})
+
+export const profileleInfoInputRootTV = tv({
+  base: 'duration-150',
+  variants: {
+    visible: {
+      visible: 'w-20',
+      hidden: 'w-0',
+    },
+  },
+  defaultVariants: {
+    visible: 'hidden',
+  },
+})
+
+export const profileleInfoInputFieldTV = tv({
+  base: 'duration-150',
+  variants: {
+    visible: {
+      visible: 'p-4 border-2',
+      hidden: 'p-0 border-0',
+    },
+  },
+  defaultVariants: {
+    visible: 'hidden',
+  },
+})

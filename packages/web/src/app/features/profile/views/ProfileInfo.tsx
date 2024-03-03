@@ -3,7 +3,8 @@
 import * as tv from '@features/profile/ProfileTV'
 import { useProfileController } from '@features/profile/controller'
 import { RightArrow } from '@shared/animations/animatedRightArrow'
-import { Button, Text } from '@shared/components'
+import { Button, Form, Input, Text } from '@shared/components'
+import { FormProvider } from 'react-hook-form'
 
 export function ProfileInfo() {
   const {
@@ -12,6 +13,11 @@ export function ProfileInfo() {
     wordCountersLoading,
     sessionCustomer,
     existeWrrdCount,
+    wordCountSchema,
+    visibleState,
+    toggleFormVisible,
+    handleSubmit,
+    onSubmit,
   } = useProfileController()
 
   if (wordCountersLoading || !sessionCustomer) return null
@@ -50,13 +56,30 @@ export function ProfileInfo() {
           )}
         </div>
       </div>
-      <div className="justify-start">
-        <Button.root variant="text">
+      <div className={tv.profileleInfoFormWrapperTV({ visible: visibleState })}>
+        <Button.root variant="text" onClick={toggleFormVisible}>
           <Button.label
-            label={existeWrrdCount ? 'Atualizar meta' : 'Estipular meta'}
+            size="xs"
+            text={existeWrrdCount ? 'Atualizar meta' : 'Estipular meta'}
           />
           <RightArrow />
         </Button.root>
+        <FormProvider {...wordCountSchema}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Input.root
+              className={tv.profileleInfoInputRootTV({ visible: visibleState })}
+            >
+              <Input.field
+                min={100}
+                name="wordCount"
+                type="number"
+                className={tv.profileleInfoInputFieldTV({
+                  visible: visibleState,
+                })}
+              />
+            </Input.root>
+          </Form>
+        </FormProvider>
       </div>
     </div>
   )

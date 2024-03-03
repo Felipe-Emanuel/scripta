@@ -1,5 +1,5 @@
 import { tv } from 'tailwind-variants'
 
 export const rightArrowTV = tv({
-  base: 'w-10 mt-1.5 flex items-center justify-center',
+  base: 'w-8 mt-1 flex items-center justify-center',
 })

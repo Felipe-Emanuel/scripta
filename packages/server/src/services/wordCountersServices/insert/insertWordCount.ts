@@ -5,8 +5,8 @@ import { IWordCounterRepository } from 'src/repositories/WordCounterRepository'
 import { v4 as uuidv4 } from 'uuid'
 
 export type TInsertWordCountServiceRequest = {
-  action: Pick<IWordCounterRepository, 'insertWordCount' | 'getCounterById'>
-  wordCountId: string
+  action: Pick<IWordCounterRepository, 'insertWordCount' | 'getCounterByEmail'>
+  email: string
   words: number
 }
 
@@ -15,11 +15,11 @@ export type TInsertWordCountServiceResponse = TWordCounter
 export const InsertWordCountService = async ({
   action,
   words,
-  wordCountId,
+  email,
 }: TInsertWordCountServiceRequest): Promise<TInsertWordCountServiceResponse> => {
-  const { insertWordCount, getCounterById } = action
+  const { insertWordCount, getCounterByEmail } = action
 
-  const existingWordCounter = await getCounterById(wordCountId)
+  const existingWordCounter = await getCounterByEmail(email)
 
   if (!existingWordCounter)
     throw new Error(throwWordsCounterMessages.wordCounterNotFount)
@@ -29,16 +29,16 @@ export const InsertWordCountService = async ({
     existingWordCounter.wordCount[0].email,
   )
 
-  const newWordCount = await setWordCount(wordCountId, {
+  const newWordCount = await setWordCount({
     id: uuidv4(),
     createdAt: new Date(),
     updatedAt: new Date(),
     words,
-    email: existingWordCounter.wordCount[0].email,
-    wordsCounterId: wordCountId,
+    email,
+    wordsCounterId: existingWordCounter.wordCount[0].wordsCounterId,
   })
 
-  const insertedCounter = await insert(wordCountId, newWordCount)
+  const insertedCounter = await insert(newWordCount)
 
   await insertWordCount(newWordCount)
 

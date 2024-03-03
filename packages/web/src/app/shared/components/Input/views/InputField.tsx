@@ -6,14 +6,12 @@ import { useFormContext } from 'react-hook-form'
 
 type InputFieldProps = {
   name: string
-  placeholder: string
-  className?: string
 } & InputHTMLAttributes<HTMLInputElement>
 
 export function InputField({
   name,
   type,
-  placeholder,
+  className,
   ...props
 }: InputFieldProps) {
   const { register } = useFormContext()
@@ -24,8 +22,7 @@ export function InputField({
       {...register(name)}
       id={name}
       type={type ?? name}
-      placeholder={placeholder}
-      className={inputFieldTV()}
+      className={inputFieldTV({ className })}
     />
   )
 }

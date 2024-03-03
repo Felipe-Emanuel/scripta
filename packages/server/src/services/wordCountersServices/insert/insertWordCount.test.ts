@@ -5,38 +5,38 @@ import { inMemoryWordCounterRepository } from 'src/repositories/inMemory/inMemor
 import { InsertWordCountService } from 'src/services/wordCountersServices/insert/insertWordCount'
 
 describe('InsertWordCountService', () => {
-  const { createWordCounter, getCounterById, insertWordCount } =
+  const { createWordCounter, getCounterByEmail, insertWordCount } =
     inMemoryWordCounterRepository()
 
   const action: Pick<
     IWordCounterRepository,
-    'insertWordCount' | 'getCounterById'
+    'insertWordCount' | 'getCounterByEmail'
   > = {
-    getCounterById,
+    getCounterByEmail,
     insertWordCount,
   }
 
   const wordCount = wordsCounterEntitieMock.wordCount[0]
 
-  const { wordsCounterId, words } = wordCount
+  const { words, email } = wordCount
 
   it('should throw about word counter not found', () => {
     const sut = InsertWordCountService({
       action,
       words,
-      wordCountId: wordsCounterId,
+      email,
     })
 
     expect(sut).rejects.toThrow(throwWordsCounterMessages.wordCounterNotFount)
   })
 
   it('should be able to insert into a existent wordCount', async () => {
-    const wordCounter = await createWordCounter(wordCount, wordsCounterId)
+    const wordCounter = await createWordCounter(wordCount)
 
     const sut = await InsertWordCountService({
       action,
       words: wordCounter.wordCount[0].words,
-      wordCountId: wordsCounterId,
+      email,
     })
 
     expect(sut.wordCount[1].words).toEqual(words)

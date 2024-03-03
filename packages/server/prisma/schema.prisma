@@ -34,6 +34,7 @@ model WordCount {
 
 model WordsCounter {
   id        String      @id @default(uuid())
+  email     String
   wordCount WordCount[]
 }
 

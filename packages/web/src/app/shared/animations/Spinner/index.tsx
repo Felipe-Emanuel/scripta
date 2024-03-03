@@ -1,4 +1,5 @@
 'use client'
+
 import { useLottie } from 'lottie-react'
 import SpinnerLoad from './SpinnerLoad.json'
 
