@@ -10,4 +10,5 @@ export interface IWordCounterRepository {
     wordCount: WordCount,
   ) => Promise<WordCount>
   insertWordCount: (wordCount: WordCount) => Promise<WordsCounter>
+  updateWordGoals: (email: string, wordGoals: number) => Promise<WordCount>
 }

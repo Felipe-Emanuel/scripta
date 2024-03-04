@@ -30,6 +30,7 @@ export const CreateWordCountersServices = async ({
     const wordCount: WordCount = {
       id: uuidv4(),
       email,
+      wordGoals: 100,
       words,
       createdAt: new Date(),
       updatedAt: new Date(),

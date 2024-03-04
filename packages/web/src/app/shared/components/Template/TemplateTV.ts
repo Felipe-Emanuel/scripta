@@ -1,11 +1,15 @@
 import { tv } from 'tailwind-variants'
 
 export const templateTV = tv({
-  base: 'relative p-4 md:p-7 rounded-2xl bg-secondary-background flex gap-2 md:gap-5',
+  base: 'relative p-4 md:p-7 rounded-2xl flex gap-2 md:gap-5',
   variants: {
     size: {
       fit: 'w-fit h-fit',
       full: 'w-full h-full',
+    },
+    background: {
+      'secondary-background': 'bg-secondary-background',
+      'primary-background': 'bg-primary-background',
     },
     'flex-direction': {
       row: 'flex-row',
@@ -22,5 +26,6 @@ export const templateTV = tv({
   defaultVariants: {
     size: 'fit',
     'flex-direction': 'col',
+    background: 'secondary-background',
   },
 })

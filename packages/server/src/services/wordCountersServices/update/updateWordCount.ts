@@ -13,7 +13,7 @@ export type TupdatetWordCountServiceRequest = {
   wordCount: WordCount
 }
 
-export type TupdatetWordCountServiceResponse = WordCount
+type TupdatetWordCountServiceResponse = WordCount
 
 export const UpdatetWordCountService = async ({
   action,
@@ -33,7 +33,7 @@ export const UpdatetWordCountService = async ({
     wordCount.email,
   )
 
-  const updatedCounter = updateCounter(updatedAt, words, wordCount)
+  const updatedCounter = await updateCounter(updatedAt, words, wordCount)
 
   await updatedWordCounter(updatedAt, words, wordCount)
 

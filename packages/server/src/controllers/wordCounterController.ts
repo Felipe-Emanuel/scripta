@@ -10,12 +10,14 @@ import {
 import { GetByEmailWordCounterService } from 'src/services/wordCountersServices/getByEmail/getByEmailWordCounter'
 import { InsertWordCountService } from 'src/services/wordCountersServices/insert/insertWordCount'
 import { UpdatetWordCountService } from 'src/services/wordCountersServices/update/updateWordCount'
+import { UpdateWordGoalsService } from 'src/services/wordCountersServices/updateWordGoals/updateWordGoals'
 
 import { isToday } from 'src/shared/utils/dates'
 import { globalErrorMessage } from 'src/shared/utils/globalErrorMessage'
 
 type TBody = {
   wordCounterId: string
+  wordGoals: number
 } & TCreateCreateWordCountersServicesRequest
 
 export async function wordCounterController(
@@ -26,6 +28,7 @@ export async function wordCounterController(
     getCounterByEmail,
     updatedWordCounter,
     insertWordCount,
+    updateWordGoals,
   } = databaseWordCounterRepository()
 
   const updatetWordCountAction: Pick<
@@ -42,6 +45,14 @@ export async function wordCounterController(
   > = {
     getCounterByEmail,
     insertWordCount,
+  }
+
+  const updateWordsGoalActions: Pick<
+    IWordCounterRepository,
+    'updateWordGoals' | 'getCounterByEmail'
+  > = {
+    getCounterByEmail,
+    updateWordGoals,
   }
 
   app.post('/wordCount', async (req, apply) => {
@@ -124,5 +135,23 @@ export async function wordCounterController(
     }
 
     apply.send(wordCounters)
+  })
+
+  app.patch('/wordCount', async (req, apply) => {
+    const { wordGoals, email } = req.body as Partial<TBody>
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    if (!email) throw new Error(throwWordsCounterMessages.emailReferenceMissing)
+
+    const updatedWordCount = await UpdateWordGoalsService({
+      actions: updateWordsGoalActions,
+      email,
+      wordGoals,
+    })
+
+    apply.send(updatedWordCount)
   })
 }

@@ -58,10 +58,25 @@ export const inMemoryWordCounterRepository = (): IWordCounterRepository => {
     }
   }
 
+  const updateWordGoals = async (
+    email: string,
+    wordGoals: number,
+  ): Promise<WordCount> => {
+    const existingWordCounter = wordCounters.wordCount.find(
+      (w) => w.email === email,
+    )
+
+    return {
+      ...existingWordCounter,
+      wordGoals,
+    }
+  }
+
   return {
     createWordCounter,
     getCounterByEmail,
     updatedWordCounter,
     insertWordCount,
+    updateWordGoals,
   }
 }

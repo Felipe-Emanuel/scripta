@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const profileRootTV = tv({
-  base: 'sm:w-full max-w-[590px] h-full max-h-[280px]',
+  base: 'sm:w-full max-w-[590px] h-72',
 })
 
 export const profileHeroTV = tv({

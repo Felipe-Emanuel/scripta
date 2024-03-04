@@ -26,6 +26,7 @@ model WordCount {
   id             String        @id @default(uuid())
   email          String
   words          Int
+  wordGoals      Int
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   WordsCounter   WordsCounter? @relation(fields: [wordsCounterId], references: [id])

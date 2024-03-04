@@ -6,7 +6,7 @@ export const buttonRootTv = tv({
     variant: {
       provider: 'bg-white/10 border-2 border-white/35 hover:bg-white/25 gap-2',
       secondary: 'bg-transparent hover:bg-transparent border-2 border-primary',
-      text: 'bg-transparent hover:bg-transparent border-0 pointer-events-auto w-fit p-0 m-0',
+      text: 'bg-transparent hover:bg-transparent border-0 pointer-events-auto w-fit p-0 m-0 disabled:bg-transparent disabled:hover:bg-transparent',
     },
   },
 })

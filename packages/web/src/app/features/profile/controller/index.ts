@@ -4,50 +4,51 @@ import {
 } from '@features/profile/ProfileUtils'
 import { postWordCounter, getCounters } from '@features/profile/services'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useLocalStorage } from '@shared/hooks/useLocalStorage'
+import { useQueryData, useQueryMutation } from '@shared/hooks/useReactQuery'
 import { useUser } from '@shared/hooks/useUser'
-import { TCreateWordCountRequest } from '@shared/types'
+import { TCreateWordCountRequest, TWordCount } from '@shared/types'
+import { localStorageNames } from '@shared/utils/constants/localStorageNames'
 import { capitalizeName } from '@shared/utils/transformers'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { v4 as uuidv4 } from 'uuid'
 
 export const useProfileController = () => {
+  const { setLocalStorage } = useLocalStorage()
   const { sessionCustomer } = useUser()
-
   const [existeWrrdCount, setExisteWrrdCount] = useState(false)
   const [isFormVisible, setIsFormVisible] = useState(false)
 
-  const queryClient = useQueryClient()
-
   const toggleFormVisible = () => setIsFormVisible((prev) => !prev)
 
-  const getWordCounters = useCallback(() => {
+  const getWordCounters = useCallback(async () => {
     if (sessionCustomer) {
-      const wordCounters = getCounters(
-        sessionCustomer.email,
+      const wordCounters = await getCounters(
+        sessionCustomer?.email,
         setExisteWrrdCount,
       )
 
+      setLocalStorage(localStorageNames.wordCounters, wordCounters?.words)
       return wordCounters
     }
-  }, [])
+  }, [sessionCustomer, setLocalStorage])
 
   const {
     data: wordCounters,
     isLoading: wordCountersLoading,
     refetch,
-  } = useQuery({
-    queryKey: ['wordCounters'],
-    queryFn: getWordCounters,
-    refetchOnWindowFocus: false,
-  })
+  } = useQueryData(getWordCounters, 'wordCounters', '12-hours')
+
+  useEffect(() => {
+    if (sessionCustomer?.email && !wordCounters?.words) refetch()
+  }, [refetch, sessionCustomer?.email, wordCounters?.words])
 
   const wordsCount = wordCounters?.words || 0
 
   const wordsCountText =
     wordsCount > 0
-      ? `Sua meta de hoje são ${wordsCount} palavras.`
+      ? `Hoje você escreveu ${wordsCount} palavras.`
       : 'Você ainda não escreveu nenhuma palavra hoje!'
 
   const userName = capitalizeName(sessionCustomer?.name?.split(' ')[0] ?? '')
@@ -61,15 +62,10 @@ export const useProfileController = () => {
 
   const { handleSubmit, reset } = wordCountSchema
 
-  const { mutateAsync: mutateCreateWordCount } = useMutation({
-    mutationFn: postWordCounter,
-    onSuccess(_, variables) {
-      queryClient.setQueryData(['wordCounters'], () => ({
-        email: variables.email,
-        words: variables.words,
-      }))
-    },
-  })
+  const { mutateAsync } = useQueryMutation<TWordCount, TCreateWordCountRequest>(
+    postWordCounter,
+    'wordCounters',
+  )
 
   const onSubmit = async (data: TUpdateWordCountSchema) => {
     const createWordCountRequest: TCreateWordCountRequest = {
@@ -79,12 +75,13 @@ export const useProfileController = () => {
     }
 
     if (existeWrrdCount) {
-      await mutateCreateWordCount(createWordCountRequest)
+      await mutateAsync(createWordCountRequest)
     } else if (!existeWrrdCount) {
       await postWordCounter(createWordCountRequest)
       refetch()
     }
 
+    setLocalStorage(localStorageNames.wordCounters, data.wordCount)
     reset()
     toggleFormVisible()
   }

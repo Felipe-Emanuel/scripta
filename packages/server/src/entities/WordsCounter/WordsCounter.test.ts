@@ -159,3 +159,27 @@ describe('setWordCount', () => {
     expect(sut.id).toEqual(wordsCounterEntitieMock.wordCount[0].id)
   })
 })
+
+describe('updateWordGoals', () => {
+  const { updateWordGoals } = WordsCounterEntitie(
+    wordsCounterEntitieMock,
+    wordsCounterEntitieMock.wordCount[0].email,
+  )
+
+  const { wordGoals, words } = wordsCounterEntitieMock.wordCount[0]
+
+  it('should throw exception about invalid goal', () => {
+    const invlaidGoal = wordGoals - words
+
+    const sut = updateWordGoals(invlaidGoal)
+
+    expect(sut).rejects.toThrow(throwWordsCounterMessages.invalidGoal)
+  })
+
+  it('should update a word goals', async () => {
+    const validGoal = wordGoals + words
+    const sut = await updateWordGoals(validGoal)
+
+    expect(sut.wordGoals).toEqual(validGoal)
+  })
+})

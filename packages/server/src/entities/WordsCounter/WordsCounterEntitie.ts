@@ -66,11 +66,22 @@ export const WordsCounterEntitie = (
     }
   }
 
+  const updateWordGoals = async (wordGoals: number): Promise<WordCount> => {
+    if (wordGoals <= wordsCounter.wordCount[0].words)
+      throw new Error(throwWordsCounterMessages.invalidGoal)
+
+    return {
+      ...wordsCounter.wordCount[0],
+      wordGoals,
+    }
+  }
+
   return {
     createNewWordCount,
     getWordsCounterByEmail,
     updatedWordCounter,
     insertWordCount,
     setWordCount,
+    updateWordGoals,
   }
 }

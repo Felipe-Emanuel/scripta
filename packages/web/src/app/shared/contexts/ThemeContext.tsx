@@ -47,7 +47,7 @@ export function AppThemeProvider({ children }: AppThemeProviderProps) {
     const defaultTheme =
       themeValue === null ? getSystemThemePreference() : themeValue
     setTheme(defaultTheme)
-  }, [getLocalStorage])
+  }, [getLocalStorage, getSystemThemePreference])
 
   return (
     <ThemeContext.Provider

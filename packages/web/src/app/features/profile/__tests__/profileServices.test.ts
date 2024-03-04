@@ -28,6 +28,7 @@ describe('profileServices', () => {
   it('should call post method', async () => {
     const endpoint = '/wordCount'
     const body: TCreateWordCountRequest = {
+      wordCounterId: 'wordCounterId',
       email: 'test@example.com',
       words: 500,
     }

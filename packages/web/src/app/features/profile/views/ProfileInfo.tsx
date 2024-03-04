@@ -27,7 +27,13 @@ export function ProfileInfo() {
       <div className={tv.profileInfoHeaderTV()}>
         <div>
           <Text text="Bem vindo," size="sm" color="gray" weight="normal" />
-          <Text text={userName} size="lg" color="white" weight="bold" />
+          <Text
+            data-testid="profile-name"
+            text={userName}
+            size="lg"
+            color="white"
+            weight="bold"
+          />
         </div>
 
         <div>
@@ -41,6 +47,7 @@ export function ProfileInfo() {
 
           {existeWrrdCount ? (
             <Text
+              data-testid="words-count-text"
               text={wordsCountText}
               size="sm"
               color="white"
@@ -48,7 +55,7 @@ export function ProfileInfo() {
             />
           ) : (
             <Text
-              text="Você ainda não estipulou nenhuma meta"
+              text="Você ainda não escreveu nenhuma palavra"
               size="sm"
               color="white"
               weight="normal"
@@ -58,14 +65,11 @@ export function ProfileInfo() {
       </div>
       <div className={tv.profileleInfoFormWrapperTV({ visible: visibleState })}>
         <Button.root variant="text" onClick={toggleFormVisible}>
-          <Button.label
-            size="xs"
-            text={existeWrrdCount ? 'Atualizar meta' : 'Estipular meta'}
-          />
+          <Button.label size="xs" text="Atualizar" />
           <RightArrow />
         </Button.root>
         <FormProvider {...wordCountSchema}>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form onSubmit={handleSubmit(onSubmit)} data-testid="profile-form">
             <Input.root
               className={tv.profileleInfoInputRootTV({ visible: visibleState })}
             >

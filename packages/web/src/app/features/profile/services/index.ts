@@ -13,8 +13,6 @@ export const getCounters = async (
 
     const { data } = await api.get<TWordCountResponse>(endpoint)
 
-    console.log(data)
-
     resolver(true)
     return data.wordCount[0]
   } catch (error) {

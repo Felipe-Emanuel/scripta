@@ -16,7 +16,7 @@ export function AuthRightSide({ children }: TRootComponent) {
 
   useEffect(() => {
     if (sessionCustomer?.email) return push(APP_ROUTES.private.dashboard.name)
-  }, [sessionCustomer])
+  }, [push, sessionCustomer?.email])
 
   return (
     <div className={authRightSideRootTV()}>

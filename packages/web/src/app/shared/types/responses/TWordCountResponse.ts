@@ -3,6 +3,7 @@ export type TWordCount = {
   wordsCounterId: string
   email: string
   words: number
+  wordGoals: number
   createdAt: Date
   updatedAt: Date
 }

@@ -6,11 +6,12 @@ export const wordsCounterEntitieMock: TWordCounter = {
   email: 'foo@example.com',
   wordCount: [
     {
+      id: randomUUID(),
       createdAt: new Date(),
       updatedAt: new Date(),
-      email: 'user@prisma.com',
-      id: randomUUID(),
+      wordGoals: 4000,
       words: 3500,
+      email: 'user@prisma.com',
       wordsCounterId: '234-sdfsdf-23f-2effdgd',
     },
   ],

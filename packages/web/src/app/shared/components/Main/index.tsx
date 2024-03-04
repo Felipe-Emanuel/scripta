@@ -17,7 +17,7 @@ export function Main({ children, overflow }: TMain) {
 
   useEffect(() => {
     if (!sessionCustomer?.email) return push(APP_ROUTES.public.auth.name)
-  }, [sessionCustomer])
+  }, [push, sessionCustomer?.email])
 
   useEffect(() => {
     setClientSide(true)

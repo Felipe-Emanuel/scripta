@@ -2,9 +2,9 @@ import { APP_ROUTES } from '@shared/utils/constants/app-routes'
 import { BuiltInProviderType } from 'next-auth/providers/index'
 import { getSession, signIn, signOut } from 'next-auth/react'
 import { useCallback } from 'react'
-import { useQuery } from 'react-query'
 import { session as cookieSession } from '@shared/utils/constants/cookies'
 import { useCookie } from '@shared/hooks/useCookies'
+import { useQueryData } from '@shared/hooks/useReactQuery'
 
 export const useProvidersSession = () => {
   const { createSession, deleteCookie } = useCookie()
@@ -15,12 +15,10 @@ export const useProvidersSession = () => {
     return session
   }, [])
 
-  const { data: session, isLoading: sessionLoading } = useQuery(
-    'session',
+  const { data: session, isLoading: sessionLoading } = useQueryData(
     getNextAuthSession,
-    {
-      refetchOnWindowFocus: false,
-    },
+    'session',
+    '12-hours',
   )
 
   const cookieValue = {

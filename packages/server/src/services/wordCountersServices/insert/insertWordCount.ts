@@ -35,6 +35,7 @@ export const InsertWordCountService = async ({
     updatedAt: new Date(),
     words,
     email,
+    wordGoals: existingWordCounter.wordCount[0].wordGoals,
     wordsCounterId: existingWordCounter.wordCount[0].wordsCounterId,
   })
 
