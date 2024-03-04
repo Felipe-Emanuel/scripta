@@ -1,6 +1,5 @@
 import { api } from '@shared/services/axios/api'
-import { TWordCount } from '@shared/types'
-import { TUpdateWordsGoalRequest } from '@shared/types/requests/TUpdateWordsGoalRequest'
+import { TUpdateWordsGoalRequest, TWordCount } from '@shared/types'
 
 export const updateWordsGoal = async ({
   email,

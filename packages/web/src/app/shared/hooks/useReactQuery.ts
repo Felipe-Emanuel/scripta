@@ -3,7 +3,6 @@ import { timeToRefetchCache } from '@shared/utils/constants/timeToRefetchCache'
 import { useCallback } from 'react'
 import {
   MutationFunction,
-  UseQueryOptions,
   useMutation,
   useQuery,
   useQueryClient,
