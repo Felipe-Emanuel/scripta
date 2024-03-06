@@ -75,7 +75,6 @@ export const databaseWordCounterRepository = (): IWordCounterRepository => {
   const insertWordCount = async (
     wordCount: WordCount,
   ): Promise<WordsCounter> => {
-    console.log(wordCount.wordsCounterId)
     const existingWordCounter = await prisma.wordsCounter.findFirst({
       where: {
         email: wordCount.email,
@@ -130,8 +129,6 @@ export const databaseWordCounterRepository = (): IWordCounterRepository => {
         },
       })
     }
-
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>', email)
 
     return existingWordCounter
   }
