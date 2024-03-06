@@ -1,18 +1,17 @@
 import fastify from 'fastify'
 import cors from '@fastify/cors'
-import { authController } from 'src/controllers/authController'
-import { userController } from 'src/controllers/userController'
-import { wordCounterController } from 'src/controllers/wordCounterController'
+import { dailySatisfactionRateJob } from 'src/shared/jobs/dailySatisfactionRateJob'
+import { routes } from 'src/routes'
 
 const app = fastify()
 
-app.register(userController)
-app.register(authController)
-app.register(wordCounterController)
+routes(app)
 
 app.register(cors, {
   origin: true,
 })
+
+dailySatisfactionRateJob.start()
 
 app
   .listen({

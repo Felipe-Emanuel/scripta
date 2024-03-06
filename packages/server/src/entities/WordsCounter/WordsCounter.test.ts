@@ -87,16 +87,6 @@ describe('updatedWordCounter', () => {
     expect(sut).rejects.toThrow(throwWordsCounterMessages.emailReferenceMissing)
   })
 
-  it('should throw a exception about low number of words', () => {
-    const sut = updatedWordCounter(
-      wordsCounterEntitieMock.wordCount[0].updatedAt,
-      90,
-      wordsCounterEntitieMock.wordCount[0],
-    )
-
-    expect(sut).rejects.toThrow(throwWordsCounterMessages.lowNumberOfWords)
-  })
-
   it('should throw exceptions about invalid date', () => {
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)

@@ -31,9 +31,16 @@ export const inMemomoryUserRepository = (): IUserRepository => {
     return null
   }
 
+  const getAllUsers = async (): Promise<User[]> => {
+    const allUsers = users
+
+    return allUsers || []
+  }
+
   return {
     createUser,
     getUserByEmail,
     patchUserPicture,
+    getAllUsers,
   }
 }

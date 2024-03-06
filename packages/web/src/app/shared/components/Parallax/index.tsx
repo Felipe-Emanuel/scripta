@@ -29,6 +29,7 @@ export function Parallax({ children, className }: TRootComponent) {
       <div
         style={{
           transform: calculateTransform(mousePosition),
+          transitionDuration: '5s',
         }}
       >
         {children}

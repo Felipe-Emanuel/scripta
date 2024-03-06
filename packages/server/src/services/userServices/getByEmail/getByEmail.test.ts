@@ -1,19 +1,19 @@
 import { throwUserMessages } from 'src/entities/User/utils'
-import { IUserRepository } from 'src/repositories/UserRepository'
 import { inMemomoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
-import { CreateUserService } from 'src/services/userServices/create/createUser'
+import {
+  CreateUserService,
+  TCreateUserServiceRequest,
+} from 'src/services/userServices/create/createUser'
 import { GetByEmailService } from 'src/services/userServices/getByEmail/getByEmail'
 import { userMock } from 'src/services/userServices/mock'
 
 describe('GetByEmailService', () => {
-  const { createUser, getUserByEmail, patchUserPicture } =
-    inMemomoryUserRepository()
+  const { createUser, getUserByEmail } = inMemomoryUserRepository()
 
   it('should be able to return an exists user by ID', async () => {
-    const actions: IUserRepository = {
+    const actions: TCreateUserServiceRequest['actions'] = {
       createUser,
       getUserByEmail,
-      patchUserPicture,
     }
 
     await CreateUserService({

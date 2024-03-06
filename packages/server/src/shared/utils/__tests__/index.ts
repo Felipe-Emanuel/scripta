@@ -1,4 +1,4 @@
-import { isToday } from 'src/shared/utils/dates'
+import { getWeekNumber, isToday } from 'src/shared/utils/dates'
 import { isPasswordStrong } from 'src/shared/utils/stringValidations'
 
 describe('isPasswordStrong', () => {
@@ -27,5 +27,14 @@ describe('isToday', () => {
 
     expect(sut).toBe(true)
     expect(sut).not.toBe(false)
+  })
+})
+
+describe('getWeekNumber', () => {
+  it('should return weeks number correctly', () => {
+    const today = new Date('2024-03-05T00:55:15.917Z')
+
+    const sut = getWeekNumber(today)
+    expect(sut).toBe(1)
   })
 })

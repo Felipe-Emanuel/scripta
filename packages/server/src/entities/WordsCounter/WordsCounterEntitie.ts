@@ -45,8 +45,6 @@ export const WordsCounterEntitie = (
     if (wordCount.email !== email)
       throw new Error(throwWordsCounterMessages.emailReferenceMissing)
 
-    if (words < 100) throw new Error(throwWordsCounterMessages.lowNumberOfWords)
-
     return {
       ...wordCount,
       words,

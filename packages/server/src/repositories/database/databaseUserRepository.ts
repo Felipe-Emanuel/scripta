@@ -53,5 +53,15 @@ export const databaseUserRepository = (): IUserRepository => {
     return null
   }
 
-  return { createUser, getUserByEmail, patchUserPicture }
+  const getAllUsers = async (): Promise<User[]> => {
+    const existingUsers = await prisma.user.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    return existingUsers || []
+  }
+
+  return { createUser, getUserByEmail, patchUserPicture, getAllUsers }
 }

@@ -9,7 +9,7 @@ export type TCreateUserServiceRequest = {
   name: string
   email: string
   password: string
-  actions: IUserRepository
+  actions: Pick<IUserRepository, 'createUser' | 'getUserByEmail'>
 }
 
 type TCreateUserServiceResponse = User
