@@ -1,13 +1,13 @@
-import { throwUserMessages } from 'src/entities/User/utils'
-import { inMemomoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
+import { throwUserMessages } from '@entities/User/utils'
+import { inMemomoryUserRepository } from '@repositories'
 import {
+  userMock,
+  GetUserByEmailService,
   CreateUserService,
   TCreateUserServiceRequest,
-} from 'src/services/userServices/create/createUser'
-import { GetByEmailService } from 'src/services/userServices/getByEmail/getByEmail'
-import { userMock } from 'src/services/userServices/mock'
+} from '@services'
 
-describe('GetByEmailService', () => {
+describe('GetUserByEmailService', () => {
   const { createUser, getUserByEmail } = inMemomoryUserRepository()
 
   it('should be able to return an exists user by ID', async () => {
@@ -17,11 +17,12 @@ describe('GetByEmailService', () => {
     }
 
     await CreateUserService({
-      ...userMock,
       actions,
+      hasProvider: false,
+      ...userMock,
     })
 
-    const sut = await GetByEmailService({
+    const sut = await GetUserByEmailService({
       email: userMock.email,
       action: {
         getUserByEmail,
@@ -32,7 +33,7 @@ describe('GetByEmailService', () => {
   })
 
   it('should throw exception about unexistent ID', async () => {
-    const sut = GetByEmailService({
+    const sut = GetUserByEmailService({
       email: '',
       action: {
         getUserByEmail,
@@ -43,7 +44,7 @@ describe('GetByEmailService', () => {
   })
 
   it('should throw exception about user not found', async () => {
-    const sut = GetByEmailService({
+    const sut = GetUserByEmailService({
       email: 'invalidEmail@test.com',
       action: {
         getUserByEmail,

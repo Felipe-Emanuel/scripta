@@ -46,7 +46,7 @@ export function WordGoalsInfo() {
               <Input.field
                 className={wordGoalsInputFieldTV({ visible: visibleState })}
                 min={100}
-                name="wordGoals"
+                name="goal"
                 type="number"
               />
             </Input.root>

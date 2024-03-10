@@ -1,9 +1,8 @@
+import { databaseUserRepository } from '@repositories'
+import { TCreateUserServiceRequest, GetUserByEmailService } from '@services'
+import { generateToken } from '@utils'
 import { FastifyInstance } from 'fastify'
-import { throwUserMessages } from 'src/entities/User/utils'
-import { databaseUserRepository } from 'src/repositories/database/databaseUserRepository'
-import { TCreateUserServiceRequest } from 'src/services/userServices/create/createUser'
-import { GetByEmailService } from 'src/services/userServices/getByEmail/getByEmail'
-import { generateToken } from 'src/shared/utils/tokens'
+import { throwUserMessages } from '@entities/User/utils'
 
 export async function authController(app: FastifyInstance): Promise<void> {
   const { getUserByEmail } = databaseUserRepository()
@@ -11,7 +10,7 @@ export async function authController(app: FastifyInstance): Promise<void> {
   app.post('/auth', async (req, apply) => {
     const { email, password } = req.body as Partial<TCreateUserServiceRequest>
 
-    const user = await GetByEmailService({
+    const user = await GetUserByEmailService({
       email,
       action: {
         getUserByEmail,

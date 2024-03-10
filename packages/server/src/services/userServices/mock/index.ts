@@ -1,8 +1,8 @@
 import { fakeBase64 } from '@constants/fakeBase64'
 import { User } from '@prisma/client'
 import { randomUUID } from 'crypto'
-import { expirationTime } from 'src/services/userServices/create/createUser'
-import { TPatchUserRequest } from 'src/services/userServices/patch/patchUser'
+import { expirationTime } from 'src/services/userServices/create'
+import { TPatchUserRequest } from 'src/services/userServices/patch'
 
 export const body: TPatchUserRequest = {
   email: 'test@example.com',

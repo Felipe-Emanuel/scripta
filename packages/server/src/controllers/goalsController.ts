@@ -1,38 +1,60 @@
+import { globalErrorMessage, progressGoal } from '@utils'
+import { isToday } from 'date-fns'
 import { FastifyInstance } from 'fastify'
 import { authorization } from 'src/controllers/utils'
-import { databaseGoalsRepository } from 'src/repositories/database/databaseGoalsRepository'
+import { databaseGoalsRepository } from '@repositories'
 import {
-  GetGoalsByFilterService,
   TGetGoalsByFilterServiceRequest,
-} from 'src/services/goalsServices/getGoalsByFilter/getGoalsByFilter'
-import {
-  TPatchGoalServiceRequest,
-  PatchGoalService,
-} from 'src/services/goalsServices/updateGoal/updateGoal'
-import { globalErrorMessage } from 'src/shared/utils/globalErrorMessage'
+  TCreateGoalsRequest,
+  GetGoalsByFilterService,
+  CreateGoalsService,
+  TUpdateGoalRequest,
+  UpdateGoalService,
+  TGetLastGoalRequest,
+  GetLastGoalService,
+} from '@services'
 
 export async function goalsController(app: FastifyInstance): Promise<void> {
-  const { patchGoalComplete, getGoalsByFilter } = databaseGoalsRepository()
+  const { getGoalsByFilter, createGoals, updateGoal, getLastGoal } =
+    databaseGoalsRepository()
 
-  const updateGoalActions: TPatchGoalServiceRequest['action'] = {
-    patchGoalComplete,
-  }
   const getByFilterGoalAction: TGetGoalsByFilterServiceRequest['actions'] = {
     getGoalsByFilter,
   }
+  const createGoalAction: TCreateGoalsRequest['action'] = {
+    createGoals,
+  }
+  const updateGoalActions: TUpdateGoalRequest['actions'] = {
+    getGoalsByFilter,
+    updateGoal,
+  }
+  const getLastGoalAction: TGetLastGoalRequest['action'] = {
+    getLastGoal,
+  }
 
-  app.patch('/goals', async (req, apply) => {
-    const { id, goalCompletePercent } =
-      req.body as Partial<TPatchGoalServiceRequest>
-    const provider = req.headers.provider
-    const accessToken = req.headers.authorization
+  // cria uma nova meta caso o job já não o tenha feito
+  app.post('/goals', async (req, apply) => {
+    const { email, goals: goal } = req.body as Partial<TCreateGoalsRequest>
 
-    await authorization(provider, accessToken, apply)
+    const existentGoal = await getLastGoal(email)
 
-    const newGoal = await PatchGoalService({
-      action: updateGoalActions,
-      id,
-      goalCompletePercent,
+    if (existentGoal) {
+      const lastGoal = existentGoal.createdAt
+
+      if (isToday(lastGoal)) return
+    }
+
+    const newGoals = {
+      ...goal,
+      email,
+      goalComplete: false,
+      goalCompletePercent: progressGoal(goal.words, goal.goal),
+    }
+
+    const newGoal = await CreateGoalsService({
+      action: createGoalAction,
+      email,
+      goals: newGoals,
     })
 
     try {
@@ -42,9 +64,10 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
     }
   })
 
-  app.get('/goals/:filter/:email/:filterValue', async (req, apply) => {
-    const { filter, email, filterValue } =
-      req.params as Partial<TGetGoalsByFilterServiceRequest>
+  // recupera as metas de acordo com o filtro de início da data e fim da data
+  app.post('/getGoals', async (req, apply) => {
+    const { email, endGoalFilter, startGoalFilter } =
+      req.body as Partial<TGetGoalsByFilterServiceRequest>
     const provider = req.headers.provider
     const accessToken = req.headers.authorization
 
@@ -53,12 +76,53 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
     const goals = await GetGoalsByFilterService({
       actions: getByFilterGoalAction,
       email,
-      filter,
-      filterValue,
+      endGoalFilter,
+      startGoalFilter,
     })
 
     try {
       apply.send(goals)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  // atualiza a meta e a quantidade de palavras, tal como a porcentagem
+  app.put('/updateGoals', async (req, apply) => {
+    const { goalId, updatedGoal } = req.body as Partial<TUpdateGoalRequest>
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    const updateGoal = await UpdateGoalService({
+      actions: updateGoalActions,
+      goalId,
+      updatedGoal,
+    })
+
+    try {
+      apply.send(updateGoal)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  // recupera a meta atual
+  app.post('/getLastGoal', async (req, apply) => {
+    const { email } = req.body as Partial<TGetLastGoalRequest>
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    const lastGoal = await GetLastGoalService({
+      action: getLastGoalAction,
+      email,
+    })
+
+    try {
+      apply.send(lastGoal)
     } catch {
       apply.status(500).send({ message: globalErrorMessage.unexpected })
     }

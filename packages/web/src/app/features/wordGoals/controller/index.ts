@@ -1,13 +1,14 @@
+import { updateCurrentGoal } from '@features/profile/services'
 import {
   TUpdateWordGoalsSchema,
   updateWordGoalsSchema,
 } from '@features/wordGoals/WordGoaldUtils'
-import { updateWordsGoal } from '@features/wordGoals/services'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalStorage } from '@shared/hooks/useLocalStorage'
 import { useQueryData, useQueryMutation } from '@shared/hooks/useReactQuery'
-import { useUser } from '@shared/hooks/useUser'
-import { TUpdateWordsGoalRequest, TWordCount } from '@shared/types'
+import { TGoalResponse, TUpdateCurrentGoalRequest } from '@shared/types'
+
 import { localStorageNames } from '@shared/utils/constants/localStorageNames'
 import { progressGoal } from '@shared/utils/validation'
 import { useCallback, useState } from 'react'
@@ -16,53 +17,57 @@ import { useForm } from 'react-hook-form'
 export const useWordGoalsController = () => {
   const { getLocalStorage } = useLocalStorage()
   const [isFormVisible, setIsFormVisible] = useState(false)
-  const { sessionCustomer } = useUser()
 
   const toggleFormVisible = () => setIsFormVisible((prev) => !prev)
 
   const getLocalWords = useCallback(async () => {
-    const wordCount: TWordCount = getLocalStorage(
-      localStorageNames.wordCounters,
+    const wordCount: TGoalResponse = getLocalStorage(
+      localStorageNames.currentGoal,
     )
 
     return wordCount
   }, [getLocalStorage])
 
-  const { data, isLoading } = useQueryData(
+  const { data: currentGoal, isLoading } = useQueryData(
     getLocalWords,
-    'wordCounters',
+    'currentGoal',
     '12-hours',
   )
 
-  const goal = data?.wordGoals
-  const words = data?.words
+  const goal = currentGoal?.goal
+  const words = currentGoal?.words
 
   const wordGoalsSchema = useForm<TUpdateWordGoalsSchema>({
     resolver: zodResolver(updateWordGoalsSchema),
     defaultValues: {
-      wordGoals: isLoading ? 500 : goal,
+      goal: goal || 100,
     },
   })
 
   const { handleSubmit } = wordGoalsSchema
 
-  const { mutateAsync } = useQueryMutation<TWordCount, TUpdateWordsGoalRequest>(
-    updateWordsGoal,
-    'wordCounters',
-  )
+  const { mutateAsync } = useQueryMutation<
+    TGoalResponse,
+    TUpdateCurrentGoalRequest
+  >(updateCurrentGoal, 'currentGoal', 'updatedGoal')
 
   const visibleState: 'visible' | 'hidden' | undefined = isFormVisible
     ? 'visible'
     : 'hidden'
 
-  const onSubmit = async (data: TUpdateWordGoalsSchema) => {
-    await mutateAsync({
-      wordGoals: data.wordGoals,
-      email: sessionCustomer?.email,
-    })
-  }
-
   const series = (goal && words && progressGoal(words, goal).toFixed(2)) || 0
+
+  const onSubmit = async (data: TUpdateWordGoalsSchema) => {
+    if (currentGoal) {
+      await mutateAsync({
+        goalId: currentGoal.id,
+        updatedGoal: {
+          ...currentGoal,
+          goal: data.goal,
+        },
+      })
+    }
+  }
 
   return {
     series,

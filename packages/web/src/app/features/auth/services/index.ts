@@ -28,6 +28,7 @@ export const createUser = async ({
   email,
   name,
   password,
+  hasProvider,
 }: TCreateUserRequest): Promise<TUser | undefined> => {
   try {
     const endpoint = '/users'
@@ -36,6 +37,7 @@ export const createUser = async ({
       email,
       name,
       password,
+      hasProvider,
     }
 
     const { data } = await api.post<TUser>(endpoint, body)

@@ -30,7 +30,7 @@ jest.mock(
       wordCountersLoading: false,
       visibleState: true,
       sessionCustomer: {} as TSessionCustomer,
-      existeWrrdCount: true,
+      currentGoal: true,
       wordCountSchema: jest.fn(() => ({
         wordCount: 500,
       })),

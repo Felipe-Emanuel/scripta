@@ -12,3 +12,16 @@ export const isPasswordStrong = (password: string) => {
     password,
   )
 }
+
+export const generateStrongPass = (passSize = 12) => {
+  const charactersAllowed =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+'
+
+  let password = ''
+  for (let i = 0; i < passSize; i++) {
+    const randomIndex = Math.floor(Math.random() * charactersAllowed.length)
+    password += charactersAllowed.charAt(randomIndex)
+  }
+
+  return password
+}

@@ -6,9 +6,9 @@ import {
   CreateUserService,
   TCreateUserServiceRequest,
   expirationTime,
-} from 'src/services/userServices/create/createUser'
+} from 'src/services/userServices/create'
 
-describe('Create User', () => {
+describe('CreateUser', () => {
   const { createUser, getUserByEmail, patchUserPicture } =
     inMemomoryUserRepository()
 
@@ -23,6 +23,7 @@ describe('Create User', () => {
     name: 'John Doe John Doe',
     password: 'A@a12345',
     actions,
+    hasProvider: false,
   }
 
   it('should create a new user', async () => {

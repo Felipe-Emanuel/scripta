@@ -1,6 +1,6 @@
 import { fakeBase64 } from '@constants/fakeBase64'
 import { User } from '@prisma/client'
-import { expirationTime } from 'src/services/userServices/create/createUser'
+import { expirationTime } from 'src/services/userServices/create'
 
 export const userEntitieMock: User = {
   id: '234-sdfsdf-23f-2effdgd',

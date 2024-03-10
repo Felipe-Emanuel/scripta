@@ -1,11 +1,10 @@
-import { Goals } from '@prisma/client'
-import { TGoalsFilter } from '@types'
+import { Goal } from '@prisma/client'
 import { prisma } from 'src/lib'
 import { IGoalRepository } from 'src/repositories/GoalRepository'
 
 export const databaseGoalsRepository = (): IGoalRepository => {
-  const createGoals = async (goals: Goals): Promise<Goals[]> => {
-    const updatedGoals = await prisma.goals.create({
+  const createGoals = async (goals: Goal): Promise<Goal[]> => {
+    const updatedGoals = await prisma.goal.create({
       data: goals,
     })
 
@@ -14,48 +13,61 @@ export const databaseGoalsRepository = (): IGoalRepository => {
 
   const getGoalsByFilter = async (
     email: string,
-    filter: TGoalsFilter,
-    filterValue: number,
-  ): Promise<Goals[]> => {
-    const existingGoals = await prisma.goals.findMany({
+    startGoalFilter: Date,
+    endGoalFilter: Date,
+  ): Promise<Goal[]> => {
+    const existingGoals = await prisma.goal.findMany({
       where: {
         email,
-        [filter]: {
-          equals: filterValue,
+        createdAt: {
+          gte: startGoalFilter,
+          lte: endGoalFilter,
         },
       },
       orderBy: {
-        [filter]: 'asc',
+        createdAt: 'asc',
       },
     })
+
     return existingGoals || []
   }
 
-  const patchGoalComplete = async (id: string): Promise<Goals> => {
-    const existingGoals = await prisma.goals.findFirstOrThrow({
+  const updateGoal = async (
+    goalId: string,
+    updatedGoal: Goal,
+  ): Promise<Goal> => {
+    const existingGoals = await prisma.goal.findFirstOrThrow({
       where: {
-        id,
+        id: goalId,
       },
     })
 
     if (existingGoals) {
-      return await prisma.goals.update({
+      return await prisma.goal.update({
         where: {
-          id: existingGoals.id,
+          id: goalId,
         },
-        data: {
-          ...existingGoals,
-          goalComplete: true,
-        },
+        data: { ...updatedGoal },
       })
     }
 
     return existingGoals
   }
 
+  const getLastGoal = async (email: string): Promise<Goal | null> => {
+    return (
+      (await prisma.goal.findFirst({
+        where: {
+          email,
+        },
+      })) || null
+    )
+  }
+
   return {
     createGoals,
     getGoalsByFilter,
-    patchGoalComplete,
+    updateGoal,
+    getLastGoal,
   }
 }

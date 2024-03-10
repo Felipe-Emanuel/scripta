@@ -1,4 +1,4 @@
 export const cacheName = {
-  wordCounters: 'wordCounters',
+  currentGoal: 'currentGoal',
   session: 'session',
 }

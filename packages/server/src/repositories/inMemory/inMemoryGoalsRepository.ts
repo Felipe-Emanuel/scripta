@@ -1,11 +1,10 @@
-import { Goals } from '@prisma/client'
-import { TGoalsFilter } from '@types'
+import { Goal } from '@prisma/client'
 import { IGoalRepository } from 'src/repositories/GoalRepository'
 
 export const inMemoryGoalsRepository = (): IGoalRepository => {
-  let userGoals: Goals[] = []
+  let userGoals: Goal[] = []
 
-  const createGoals = async (goals: Goals): Promise<Goals[]> => {
+  const createGoals = async (goals: Goal): Promise<Goal[]> => {
     const updatedGoals = (userGoals = [...userGoals, goals])
 
     return updatedGoals
@@ -13,28 +12,35 @@ export const inMemoryGoalsRepository = (): IGoalRepository => {
 
   const getGoalsByFilter = async (
     email: string,
-    filter: TGoalsFilter,
-    filterValue: number,
-  ): Promise<Goals[]> => {
+    startGoalFilter: Date,
+    endGoalFilter: Date,
+  ): Promise<Goal[]> => {
     const existentGoals = userGoals.filter(
-      (goal) => goal.email === email && goal[filter] === filterValue,
+      (goal) =>
+        goal.email === email &&
+        goal.createdAt === startGoalFilter &&
+        goal.createdAt === endGoalFilter,
     )
 
     return existentGoals || []
   }
 
-  const patchGoalComplete = async (id: string): Promise<Goals> => {
-    const existingGoals = userGoals.find((goals) => goals.id === id)
+  const updateGoal = async (
+    goalId: string,
+    updatedGoal: Goal,
+  ): Promise<Goal> => {
+    const existingGoals = userGoals.find((goals) => goals.id === goalId)
 
-    return {
-      ...existingGoals,
-      goalComplete: true,
-    }
+    return { ...existingGoals, ...updatedGoal } || existingGoals
   }
+
+  const getLastGoal = async (email: string): Promise<Goal | null> =>
+    userGoals.find((goals) => goals.email === email) || null
 
   return {
     createGoals,
     getGoalsByFilter,
-    patchGoalComplete,
+    updateGoal,
+    getLastGoal,
   }
 }

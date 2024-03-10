@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { CreateBookService, TCreateBookServiceRequest } from './CreateBook'
+import { CreateBookService, TCreateBookServiceRequest } from '.'
 
 describe('Create Book', () => {
   it('should create a new book', async () => {

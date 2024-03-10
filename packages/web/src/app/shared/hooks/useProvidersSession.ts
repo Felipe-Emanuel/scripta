@@ -34,8 +34,8 @@ export const useProvidersSession = () => {
       value: JSON.stringify(cookieValue),
     })
 
-  const logInWithProviders = (provider: BuiltInProviderType) =>
-    signIn(provider, {
+  const logInWithProviders = async (provider: BuiltInProviderType) =>
+    await signIn(provider, {
       redirect: true,
       callbackUrl: APP_ROUTES.private.dashboard.name,
     })

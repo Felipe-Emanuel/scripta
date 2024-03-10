@@ -1,23 +1,24 @@
 import { api } from '@shared/services/axios/api'
-import { TUpdateWordsGoalRequest, TWordCount } from '@shared/types'
+import { TGoalResponse, TCreateGoalRequest } from '@shared/types'
 
-export const updateWordsGoal = async ({
-  email,
-  wordGoals,
-}: TUpdateWordsGoalRequest) => {
+export const createNewGoal = async ({ email, goals }: TCreateGoalRequest) => {
   try {
-    const endpoint = '/wordCount'
+    const endpoint = '/goals'
 
-    const body: TUpdateWordsGoalRequest = {
+    const body: TCreateGoalRequest = {
       email,
-      wordGoals,
+      goals,
     }
 
-    const { data } = await api.patch<TWordCount>(endpoint, body)
+    const { data } = await api.post<TGoalResponse[]>(endpoint, body)
 
-    return data
+    console.log(data)
+
+    if (data) {
+      return data[0]
+    }
   } catch (err) {
     if (err instanceof Error)
-      throw new Error('Falha na atualização da meta', err)
+      throw new Error('Falha ao registrar uma nova meta do dia', err)
   }
 }

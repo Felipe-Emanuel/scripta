@@ -1,5 +1,6 @@
 import { TAuthSubmitSchema, authSubmitSchema } from '@features/auth/AuthUtils'
 import { auth, createUser } from '@features/auth/services'
+import { createNewGoal } from '@features/wordGoals/services'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCookie } from '@shared/hooks/useCookies'
 import { APP_ROUTES } from '@shared/utils/constants/app-routes'
@@ -41,7 +42,7 @@ export const useAuthController = () => {
     if (isAuth) {
       return await auth({ email, password })
     } else if (name) {
-      return await createUser({ email, name, password })
+      return await createUser({ email, name, password, hasProvider: false })
     }
   }
 
@@ -58,6 +59,15 @@ export const useAuthController = () => {
     }
 
     if (user?.accessToken) {
+      await createNewGoal({
+        email,
+        goals: {
+          createdAt: new Date(),
+          words: 0,
+          goal: 0,
+        },
+      })
+
       push(APP_ROUTES.private.dashboard.name)
       return createSession({
         cookieName: session,

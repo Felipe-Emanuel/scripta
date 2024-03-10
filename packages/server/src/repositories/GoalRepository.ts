@@ -1,12 +1,12 @@
-import { Goals } from '@prisma/client'
-import { TGoalsFilter } from '@types'
+import { Goal } from '@prisma/client'
 
 export interface IGoalRepository {
-  createGoals: (goals: Goals) => Promise<Goals[]>
+  createGoals: (goal: Goal) => Promise<Goal[]>
   getGoalsByFilter: (
     email: string,
-    filter: TGoalsFilter,
-    filterValue: number,
-  ) => Promise<Goals[]>
-  patchGoalComplete: (id: string) => Promise<Goals>
+    startGoalFilter: Date,
+    endGoalFilter: Date,
+  ) => Promise<Goal[]>
+  updateGoal: (goalId: string, updatedGoal: Goal) => Promise<Goal>
+  getLastGoal: (email: string) => Promise<Goal | null>
 }

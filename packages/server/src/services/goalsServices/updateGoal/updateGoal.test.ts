@@ -1,49 +1,55 @@
-import { mockGoals } from 'src/entities/Goals/mocks/mockGoals'
-import { throwGoalsMessages } from 'src/entities/Goals/utils'
-import { inMemoryGoalsRepository } from 'src/repositories/inMemory/inMemoryGoalsRepository'
+import { mockGoal } from '@entities/Goals/mocks'
+import { throwGoalsMessages } from '@entities/Goals/utils'
+import { inMemoryGoalsRepository } from '@repositories'
 import {
-  PatchGoalService,
-  TPatchGoalServiceRequest,
-} from 'src/services/goalsServices/updateGoal/updateGoal'
+  CreateGoalsService,
+  TCreateGoalsRequest,
+  TUpdateGoalRequest,
+  UpdateGoalService,
+} from '@services'
 
-describe('PatchGoalService', () => {
-  const { patchGoalComplete } = inMemoryGoalsRepository()
+describe('UpdateGoalService', () => {
+  const { getGoalsByFilter, updateGoal, createGoals } =
+    inMemoryGoalsRepository()
 
-  const action: TPatchGoalServiceRequest['action'] = {
-    patchGoalComplete,
+  const actions: TUpdateGoalRequest['actions'] = {
+    getGoalsByFilter,
+    updateGoal,
   }
 
-  const { goalCompletePercent } = mockGoals
+  const createGoalsAction: TCreateGoalsRequest['action'] = {
+    createGoals,
+  }
 
-  it('should throw exception about goal missing id', () => {
-    const sut = PatchGoalService({
-      action,
-      goalCompletePercent,
-      id: '',
+  it('should throw excpetion about goal not found', () => {
+    const sut = UpdateGoalService({
+      actions,
+      goalId: 'unexpectedGoalId',
+      updatedGoal: mockGoal,
     })
 
-    expect(sut).rejects.toThrow(throwGoalsMessages.missingGoalId)
+    expect(sut).rejects.toThrow(throwGoalsMessages.goalNotFound)
   })
 
-  it('should throw exception about insufficient goal complete percent', () => {
-    const sut = PatchGoalService({
-      action,
-      goalCompletePercent: 10,
-      id: 'anyExistentGoal',
+  it('should update a existent goal', async () => {
+    const existentGoal = await CreateGoalsService({
+      action: createGoalsAction,
+      email: mockGoal.email,
+      goals: mockGoal,
     })
 
-    expect(sut).rejects.toThrow(
-      throwGoalsMessages.insufficientGoalCompletePercent,
-    )
-  })
+    const { id } = existentGoal[0]
 
-  it('should be able to patch goal complete percent to true', async () => {
-    const sut = await PatchGoalService({
-      action,
-      goalCompletePercent,
-      id: 'anyExistentGoal',
+    const sut = await UpdateGoalService({
+      actions,
+      goalId: id,
+      updatedGoal: {
+        ...existentGoal[0],
+        words: 2500,
+      },
     })
 
+    expect(sut.goalCompletePercent).toEqual(100)
     expect(sut.goalComplete).toEqual(true)
   })
 })

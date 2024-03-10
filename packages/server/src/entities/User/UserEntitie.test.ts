@@ -1,6 +1,6 @@
 import { fakeBase64 } from '@constants/fakeBase64'
 import { User } from '@prisma/client'
-import { UserEntitie } from 'src/entities/User/UserEntitie'
+import { UserEntitie } from 'src/entities/User'
 import { userEntitieMock } from 'src/entities/User/mocks/userEntitieMock'
 import { throwUserMessages } from 'src/entities/User/utils'
 

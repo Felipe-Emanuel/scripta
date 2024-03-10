@@ -22,23 +22,6 @@ model User {
   updatedAt      DateTime   @updatedAt
 }
 
-model WordCount {
-  id             String        @id @default(uuid())
-  email          String
-  words          Int
-  wordGoals      Int
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  WordsCounter   WordsCounter? @relation(fields: [wordsCounterId], references: [id])
-  wordsCounterId String?
-}
-
-model WordsCounter {
-  id        String      @id @default(uuid())
-  email     String
-  wordCount WordCount[]
-}
-
 model Book {
   id           String      @id @default(uuid())
   title        String
@@ -92,14 +75,13 @@ model Feedback {
   updatedAt  DateTime @updatedAt
 }
 
-model Goals {
+model Goal {
   id                  String   @id @default(uuid())
   email               String
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
   goalComplete        Boolean
   goalCompletePercent Float
-  day                 Int
-  week                Int
-  month               Int
+  words               Int
+  goal                Int
 }

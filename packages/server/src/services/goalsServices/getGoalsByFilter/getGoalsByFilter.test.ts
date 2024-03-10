@@ -1,13 +1,11 @@
-import { mockGoals } from 'src/entities/Goals/mocks/mockGoals'
-import { inMemoryGoalsRepository } from 'src/repositories/inMemory/inMemoryGoalsRepository'
+import { mockGoal } from '@entities/Goals/mocks'
+import { inMemoryGoalsRepository } from '@repositories'
 import {
   CreateGoalsService,
   TCreateGoalsRequest,
-} from 'src/services/goalsServices/create/CreateGoals'
-import {
   GetGoalsByFilterService,
   TGetGoalsByFilterServiceRequest,
-} from 'src/services/goalsServices/getGoalsByFilter/getGoalsByFilter'
+} from '@services'
 
 describe('GetGoalsByFilterService', () => {
   const { getGoalsByFilter, createGoals } = inMemoryGoalsRepository()
@@ -20,33 +18,41 @@ describe('GetGoalsByFilterService', () => {
     createGoals,
   }
 
-  const { email } = mockGoals
+  const { email } = mockGoal
+
+  const startGoalFilter = mockGoal.createdAt
+  const endGoalFilter = mockGoal.createdAt
 
   it('should not broken and return a empty array', async () => {
     const sut = await GetGoalsByFilterService({
       actions,
       email,
-      filter: 'month',
-      filterValue: mockGoals.month,
+      startGoalFilter,
+      endGoalFilter,
     })
 
     expect(sut).toEqual([])
   })
 
   it('should return a existent goal', async () => {
-    await CreateGoalsService({
+    const newGoal = await CreateGoalsService({
       action: createGoalActions,
       email,
-      goals: mockGoals,
+      goals: {
+        ...mockGoal,
+        words: 2500,
+      },
     })
+
+    const { createdAt, email: newEmail, goalComplete } = newGoal[0]
 
     const sut = await GetGoalsByFilterService({
       actions,
-      email,
-      filter: 'month',
-      filterValue: mockGoals.month,
+      email: newEmail,
+      startGoalFilter: createdAt,
+      endGoalFilter: createdAt,
     })
 
-    expect(sut[0].goalComplete).toEqual(mockGoals.goalComplete)
+    expect(sut[0].goalComplete).toEqual(goalComplete)
   })
 })

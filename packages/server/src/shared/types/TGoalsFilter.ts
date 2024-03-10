@@ -1,1 +1,1 @@
-export type TGoalsFilter = 'month' | 'week' | 'day'
+export type TGoalsFilter = 'day' | 'week' | 'month' | 'year'

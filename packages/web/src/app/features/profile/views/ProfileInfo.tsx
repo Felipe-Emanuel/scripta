@@ -10,9 +10,9 @@ export function ProfileInfo() {
   const {
     userName,
     wordsCountText,
-    wordCountersLoading,
+    currentGoalLoading,
     sessionCustomer,
-    existeWrrdCount,
+    currentGoal,
     wordCountSchema,
     visibleState,
     toggleFormVisible,
@@ -20,7 +20,7 @@ export function ProfileInfo() {
     onSubmit,
   } = useProfileController()
 
-  if (wordCountersLoading || !sessionCustomer) return null
+  if (currentGoalLoading || !sessionCustomer) return null
 
   return (
     <div className={tv.profileInfoWrapperTV()}>
@@ -45,7 +45,7 @@ export function ProfileInfo() {
             weight="light"
           />
 
-          {existeWrrdCount ? (
+          {currentGoal ? (
             <Text
               data-testid="words-count-text"
               text={wordsCountText}

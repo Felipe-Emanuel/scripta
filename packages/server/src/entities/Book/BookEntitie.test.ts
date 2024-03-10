@@ -1,4 +1,4 @@
-import { BookEntitie } from './BookEntitie'
+import { BookEntitie } from '.'
 import { isAllAttributeFilled, isBase64, isLink } from '../../shared/utils'
 import {
   bookEntitieMock,

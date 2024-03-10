@@ -2,49 +2,44 @@ import {
   TUpdateWordCountSchema,
   updateWordCountSchema,
 } from '@features/profile/ProfileUtils'
-import { postWordCounter, getCounters } from '@features/profile/services'
+import { updateCurrentGoal, getCurrentGoal } from '@features/profile/services'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocalStorage } from '@shared/hooks/useLocalStorage'
 import { useQueryData, useQueryMutation } from '@shared/hooks/useReactQuery'
 import { useUser } from '@shared/hooks/useUser'
-import { TCreateWordCountRequest, TWordCount } from '@shared/types'
+import { TGoalResponse, TUpdateCurrentGoalRequest } from '@shared/types'
 import { localStorageNames } from '@shared/utils/constants/localStorageNames'
 import { capitalizeName } from '@shared/utils/transformers'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { v4 as uuidv4 } from 'uuid'
 
 export const useProfileController = () => {
   const { setLocalStorage } = useLocalStorage()
   const { sessionCustomer } = useUser()
-  const [existeWrrdCount, setExisteWrrdCount] = useState(false)
   const [isFormVisible, setIsFormVisible] = useState(false)
 
   const toggleFormVisible = () => setIsFormVisible((prev) => !prev)
 
-  const getWordCounters = useCallback(async () => {
+  const getGoal = useCallback(async () => {
     if (sessionCustomer) {
-      const wordCounters = await getCounters(
-        sessionCustomer?.email,
-        setExisteWrrdCount,
-      )
+      const currentGoal = await getCurrentGoal(sessionCustomer?.email)
 
-      setLocalStorage(localStorageNames.wordCounters, wordCounters?.words)
-      return wordCounters
+      setLocalStorage(localStorageNames.currentGoal, currentGoal?.words)
+      return currentGoal
     }
   }, [sessionCustomer, setLocalStorage])
 
   const {
-    data: wordCounters,
-    isLoading: wordCountersLoading,
+    data: currentGoal,
+    isLoading: currentGoalLoading,
     refetch,
-  } = useQueryData(getWordCounters, 'wordCounters', '12-hours')
+  } = useQueryData(getGoal, 'currentGoal', '12-hours')
 
   useEffect(() => {
-    if (sessionCustomer?.email && !wordCounters?.words) refetch()
-  }, [refetch, sessionCustomer?.email, wordCounters?.words])
+    if (sessionCustomer?.email && !currentGoal?.words) refetch()
+  }, [refetch, sessionCustomer?.email, currentGoal?.words])
 
-  const wordsCount = wordCounters?.words || 0
+  const wordsCount = currentGoal?.words || 0
 
   const wordsCountText =
     wordsCount > 0
@@ -56,34 +51,33 @@ export const useProfileController = () => {
   const wordCountSchema = useForm<TUpdateWordCountSchema>({
     resolver: zodResolver(updateWordCountSchema),
     defaultValues: {
-      wordCount: 100,
+      wordCount: currentGoal?.words || 100,
     },
   })
 
   const { handleSubmit, reset } = wordCountSchema
 
-  const { mutateAsync } = useQueryMutation<TWordCount, TCreateWordCountRequest>(
-    postWordCounter,
-    'wordCounters',
-  )
+  const { mutateAsync } = useQueryMutation<
+    TGoalResponse,
+    TUpdateCurrentGoalRequest
+  >(updateCurrentGoal, 'currentGoal', 'updatedGoal')
 
   const onSubmit = async (data: TUpdateWordCountSchema) => {
-    const createWordCountRequest: TCreateWordCountRequest = {
-      wordCounterId: uuidv4(),
-      email: sessionCustomer.email,
-      words: data.wordCount,
-    }
+    if (currentGoal) {
+      const createWordCountRequest: TUpdateCurrentGoalRequest = {
+        goalId: currentGoal?.id,
+        updatedGoal: {
+          ...currentGoal,
+          words: data.wordCount,
+        },
+      }
 
-    if (existeWrrdCount) {
       await mutateAsync(createWordCountRequest)
-    } else if (!existeWrrdCount) {
-      await postWordCounter(createWordCountRequest)
-      refetch()
-    }
 
-    setLocalStorage(localStorageNames.wordCounters, data.wordCount)
-    reset()
-    toggleFormVisible()
+      setLocalStorage(localStorageNames.currentGoal, data.wordCount)
+      reset()
+      toggleFormVisible()
+    }
   }
 
   const visibleState: 'visible' | 'hidden' | undefined = isFormVisible
@@ -93,9 +87,9 @@ export const useProfileController = () => {
   return {
     userName,
     wordsCountText,
-    wordCountersLoading,
+    currentGoalLoading,
     sessionCustomer,
-    existeWrrdCount,
+    currentGoal,
     wordCountSchema,
     visibleState,
     toggleFormVisible,
