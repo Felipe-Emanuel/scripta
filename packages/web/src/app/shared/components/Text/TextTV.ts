@@ -26,6 +26,7 @@ export const textTv = tv({
     color: {
       secondary: 'text-green-400',
       black: 'text-black',
+      tertiary: 'text-tertiary',
       white: 'text-white',
       gray: 'text-gray-400',
       error: 'text-error',

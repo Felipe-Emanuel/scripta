@@ -1,4 +1,4 @@
-import { startOfWeek } from 'date-fns'
+import { startOfWeek, format as formatter } from 'date-fns'
 
 export const isToday = (date: Date): boolean => {
   const today = new Date()
@@ -19,4 +19,14 @@ export const getWeekNumber = (date: Date) => {
   const weekNumber = Math.floor(differenceInDays / 7) + 1
 
   return weekNumber
+}
+
+export const formateDate = (date: string | Date, format?: string) => {
+  const defaultFormat = 'dd/MM/yyyy'
+
+  const parsedDate = new Date(date)
+
+  const formattedDate = formatter(parsedDate, format ?? defaultFormat)
+
+  return formattedDate
 }

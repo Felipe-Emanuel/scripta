@@ -1,7 +1,7 @@
 'use client'
 
 // import { responsive } from '@features/Graphics/GraphicsUtils'
-import { TApexchartsOptions, TTheme } from '@shared/types'
+import { TApexchartsOptions, TRadialBarOptions, TTheme } from '@shared/types'
 import Chart from 'react-apexcharts'
 
 interface GraphicContentProps {
@@ -10,6 +10,9 @@ interface GraphicContentProps {
   type: 'area' | 'bar' | 'radialBar'
   series: ApexAxisChartSeries | ApexNonAxisChartSeries
   theme: TTheme
+  labels?: string[]
+  gradientToColors?: string[]
+  RadialBarOptions?: TRadialBarOptions
 }
 
 export function GraphicContent({
@@ -18,6 +21,9 @@ export function GraphicContent({
   type,
   series,
   theme,
+  labels,
+  RadialBarOptions,
+  gradientToColors,
 }: GraphicContentProps) {
   const options: TApexchartsOptions = {
     series,
@@ -37,8 +43,7 @@ export function GraphicContent({
     },
     plotOptions: {
       radialBar: {
-        startAngle: -115,
-        endAngle: 115,
+        ...RadialBarOptions,
         hollow: {
           margin: 0,
           size: '70%',
@@ -52,7 +57,7 @@ export function GraphicContent({
       },
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
     },
     legend: {
       fontSize: '10px',
@@ -97,7 +102,7 @@ export function GraphicContent({
       gradient: {
         shade: 'dark',
         type: 'vertical',
-        gradientToColors: ['#0075FF'],
+        gradientToColors,
         stops: [0, 100],
       },
     },
@@ -107,7 +112,7 @@ export function GraphicContent({
     grid: {
       show: false,
     },
-    labels: ['Progresso'],
+    labels,
   }
 
   return (

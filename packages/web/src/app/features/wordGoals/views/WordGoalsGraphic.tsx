@@ -16,6 +16,12 @@ export function WordGoalsGraphic() {
         series={[+series]}
         categories={['Meta']}
         theme="dark"
+        labels={['Progresso']}
+        gradientToColors={['#0075FF']}
+        RadialBarOptions={{
+          startAngle: -115,
+          endAngle: 115,
+        }}
         // yFormatter={() => ['']}
       />
     </Graphics.root>

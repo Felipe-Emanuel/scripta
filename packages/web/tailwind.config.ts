@@ -27,6 +27,7 @@ const config: Config = {
       white: '#ffffff',
 
       primary: '#0075FF',
+      tertiary: '#7551FF',
       error: '#F53C2B',
 
       green: {

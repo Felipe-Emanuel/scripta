@@ -1,4 +1,5 @@
 import { Goal } from '@prisma/client'
+import { formateDate } from '@utils'
 import { prisma } from 'src/lib'
 import { IGoalRepository } from 'src/repositories/GoalRepository'
 
@@ -16,12 +17,15 @@ export const databaseGoalsRepository = (): IGoalRepository => {
     startGoalFilter: Date,
     endGoalFilter: Date,
   ): Promise<Goal[]> => {
+    const gte = new Date(formateDate(startGoalFilter, 'yyyy-MM-dd'))
+    const lte = endGoalFilter
+
     const existingGoals = await prisma.goal.findMany({
       where: {
         email,
         createdAt: {
-          gte: startGoalFilter,
-          lte: endGoalFilter,
+          gte,
+          lte,
         },
       },
       orderBy: {

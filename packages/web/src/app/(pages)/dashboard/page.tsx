@@ -5,6 +5,7 @@ export default function DashboardPage() {
     <Dashboard.root>
       <Dashboard.profile />
       <Dashboard.wordsGoals />
+      <Dashboard.referralTracking />
     </Dashboard.root>
   )
 }

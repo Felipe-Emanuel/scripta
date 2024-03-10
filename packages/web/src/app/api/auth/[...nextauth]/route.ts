@@ -35,16 +35,14 @@ export const authOptions: never = {
           },
         })
 
-        const newUser = await createUser({
+        await createUser({
           email,
           name,
           password: '', // as created by a provider, password will be created in the backend and be sent to the user email address
           hasProvider: true,
         })
 
-        if (newUser) {
-          return true
-        }
+        return true
       } else {
         return false
       }

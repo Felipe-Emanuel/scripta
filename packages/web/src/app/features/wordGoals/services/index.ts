@@ -12,8 +12,6 @@ export const createNewGoal = async ({ email, goals }: TCreateGoalRequest) => {
 
     const { data } = await api.post<TGoalResponse[]>(endpoint, body)
 
-    console.log(data)
-
     if (data) {
       return data[0]
     }
