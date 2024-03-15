@@ -12,6 +12,7 @@ model User {
   name           String
   email          String     @unique
   picture        String?
+  portfolioUrl   String?
   rule           String
   password       String
   accessToken    String
@@ -20,6 +21,18 @@ model User {
   expirationTime DateTime
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
+}
+
+model Gender {
+  id   String @id @default(uuid())
+  name String @unique
+  book Book[]
+}
+
+model Theme {
+  id   String @id @default(uuid())
+  name String @unique
+  book Book[]
 }
 
 model Book {
@@ -34,6 +47,20 @@ model Book {
   conclued     Boolean     @default(false)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+  reactions    Reaction[]
+  Gender       Gender?     @relation(fields: [genderId], references: [id])
+  genderId     String?
+  Theme        Theme?      @relation(fields: [themeId], references: [id])
+  themeId      String?
+  hits         Int
+}
+
+model Reaction {
+  id       String  @id @default(uuid())
+  name     String
+  iconName String
+  Book     Book?   @relation(fields: [bookId], references: [id])
+  bookId   String?
 }
 
 model Character {

@@ -5,13 +5,14 @@ import { profileHeroTV } from '@features/profile/ProfileTV'
 
 export function ProfileHero() {
   return (
-    <Parallax className={profileHeroTV()}>
+    <Parallax className={profileHeroTV({ local: 'root' })}>
       <Image
         src={Hero}
-        width={700}
-        height={600}
+        width={1132}
+        height={755}
+        priority
         alt="Água viva no mar profundo"
-        className="pointer-events-none"
+        className={profileHeroTV({ local: 'image' })}
       />
     </Parallax>
   )

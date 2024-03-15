@@ -1,32 +1,29 @@
-import { VariantProps } from 'tailwind-variants'
-import { ButtonHTMLAttributes } from 'react'
+import { Button, ButtonProps, VariantProps } from '@nextui-org/react'
 import { buttonRootTv } from '@shared/components/Button/ButtonTV'
 import { TRootComponent } from '@shared/types'
 
-type ButtonRootProps = {
-  disabled?: boolean
-  isLoading?: boolean
-  className?: string
-  type?: HTMLButtonElement['type']
-  onClick?: () => void
-} & VariantProps<typeof buttonRootTv> &
-  TRootComponent &
-  ButtonHTMLAttributes<HTMLButtonElement>
+type TButtonProps = ButtonProps & TRootComponent
+type TButtonRootStyles = VariantProps<typeof buttonRootTv>
+type TVariants = TButtonRootStyles['buttonStyle']
+type TButtonRoot = {
+  buttonStyle?: TVariants
+} & TButtonProps
 
 export function ButtonRoot({
-  children,
-  disabled,
-  className,
   variant,
+  color,
+  children,
+  buttonStyle,
   ...props
-}: ButtonRootProps) {
+}: TButtonRoot) {
   return (
-    <button
+    <Button
+      className={buttonRootTv({ buttonStyle })}
+      color={color}
+      variant={variant}
       {...props}
-      disabled={disabled}
-      className={buttonRootTv({ className, variant })}
     >
       {children}
-    </button>
+    </Button>
   )
 }

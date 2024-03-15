@@ -5,5 +5,5 @@ export const popoverTriggerTV = tv({
 })
 
 export const popoverContentWrapperTV = tv({
-  base: 'absolute z-10 -left-40 top-12 size-fit p-2 sm:p-4 flex flex-col gap-4 bg-white/90 rounded-xl',
+  base: 'absolute z-10 -left-40 top-12 size-fit p-2 sm:p-4 flex flex-col gap-4 bg-white/10 backdrop-blur-md rounded-xl ring-1 ring-white/50',
 })

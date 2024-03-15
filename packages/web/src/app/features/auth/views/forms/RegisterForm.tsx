@@ -75,7 +75,7 @@ export function RegisterForm({
     {
       id: id++,
       component: (
-        <Button.root>
+        <Button.root buttonStyle="primary" type="submit">
           <Button.label text="Registrar" />
         </Button.root>
       ),

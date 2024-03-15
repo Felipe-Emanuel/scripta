@@ -5,7 +5,7 @@ import { Main } from '@shared/components/Main'
 import { Toast } from '@shared/components'
 
 export const metadata: Metadata = {
-  title: 'Memorize | Novos',
+  title: 'Painel do Escritor | Novos',
   description: 'Memorize personagens',
 }
 

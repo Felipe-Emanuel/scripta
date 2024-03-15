@@ -22,7 +22,6 @@ export function WordGoalsGraphic() {
           startAngle: -115,
           endAngle: 115,
         }}
-        // yFormatter={() => ['']}
       />
     </Graphics.root>
   )

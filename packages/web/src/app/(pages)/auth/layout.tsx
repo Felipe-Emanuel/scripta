@@ -1,11 +1,10 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Painel do Escritor',
-  description: 'Aprimore-se com o seu dashboard',
+  title: 'Painel do Escritor | Autenticação',
 }
 
-export default function DashboardLayout({
+export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode

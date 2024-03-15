@@ -14,8 +14,9 @@ export const ProviderButtons = () => {
       id: 0,
       component: (
         <Button.root
-          variant="provider"
+          buttonStyle="provider"
           type="button"
+          radius="full"
           onClick={() => logInWithProviders('google')}
         >
           <Button.icon icon={BsGoogle} color="white" />

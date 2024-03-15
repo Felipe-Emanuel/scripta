@@ -29,7 +29,7 @@ export const databaseGoalsRepository = (): IGoalRepository => {
         },
       },
       orderBy: {
-        createdAt: 'asc',
+        createdAt: 'desc',
       },
     })
 
@@ -59,13 +59,16 @@ export const databaseGoalsRepository = (): IGoalRepository => {
   }
 
   const getLastGoal = async (email: string): Promise<Goal | null> => {
-    return (
-      (await prisma.goal.findFirst({
-        where: {
-          email,
-        },
-      })) || null
-    )
+    const existentGaosl = await prisma.goal.findMany({
+      where: {
+        email,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    return existentGaosl[0] || null
   }
 
   return {

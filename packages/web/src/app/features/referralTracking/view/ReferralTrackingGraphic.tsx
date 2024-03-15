@@ -1,13 +1,14 @@
 'use client'
 
 import { Graphics } from '@features/Graphics'
+import { referralTrackingGraphicTV } from '@features/referralTracking/ReferralTrackingTV'
 import { useReferralTrackingController } from '@features/referralTracking/controller'
 
 export function ReferralTrackingGraphic() {
   const { series } = useReferralTrackingController()
 
   return (
-    <div className="hidden sm:flex relative z-0 -right-12 -top-8">
+    <div className={referralTrackingGraphicTV()}>
       <Graphics.root>
         <Graphics.header />
         <Graphics.content
@@ -25,7 +26,6 @@ export function ReferralTrackingGraphic() {
               },
             },
           }}
-          // yFormatter={() => ['']}
         />
       </Graphics.root>
     </div>

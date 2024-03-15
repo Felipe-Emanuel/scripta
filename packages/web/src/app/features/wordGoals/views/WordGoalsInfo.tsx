@@ -1,13 +1,10 @@
 'use client'
 
-import {
-  wordGoalsInputFieldTV,
-  wordGoalsInputRootTV,
-} from '@features/wordGoals/WordGoalsTV'
 import { useWordGoalsController } from '@features/wordGoals/controller'
 import { RightArrow } from '@shared/animations/animatedRightArrow'
 import { Button, Form, Input, Text } from '@shared/components'
 import { FormProvider } from 'react-hook-form'
+import * as tv from '@features/wordGoals/WordGoalsTV'
 
 export function WordGoalsInfo() {
   const {
@@ -21,30 +18,35 @@ export function WordGoalsInfo() {
   } = useWordGoalsController()
 
   return (
-    <div className="flex flex-col gap-4 bg-primary-background rounded-xl p-2 opacity-90 w-full h-16">
-      <div className="flex justify-between items-center w-[90%] m-auto">
+    <div className={tv.wordGoalsInfoWrapperTV()}>
+      <div className={tv.wordGoalsInfoHeaderTV()}>
         <Text text="0%" align="center" color="gray" />
         <Text text={goal} align="center" weight="semi-bold" />
         <Text text="100%" align="center" color="gray" />
       </div>
-      <div className="flex justify-between items-center w-[90%] m-auto h-8">
-        {words && (
+      <div className={tv.wordGoalsInfoContentTV()}>
+        {words && words > 0 ? (
           <Button.root
             disabled={!words}
-            variant="text"
+            radius="full"
+            color="primary"
+            variant="ghost"
             onClick={toggleFormVisible}
+            className="flex border-0"
+            endContent={<RightArrow />}
           >
             <Button.label size="xs" text="Impor meta" />
-            <RightArrow />
           </Button.root>
+        ) : (
+          <></>
         )}
         <FormProvider {...wordGoalsSchema}>
           <Form onSubmit={handleSubmit(onSubmit)} data-testid="form-meta">
             <Input.root
-              className={wordGoalsInputRootTV({ visible: visibleState })}
+              className={tv.wordGoalsInputRootTV({ visible: visibleState })}
             >
               <Input.field
-                className={wordGoalsInputFieldTV({ visible: visibleState })}
+                className={tv.wordGoalsInputFieldTV({ visible: visibleState })}
                 min={100}
                 name="goal"
                 type="number"

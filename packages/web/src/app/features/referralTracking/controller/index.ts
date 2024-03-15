@@ -7,7 +7,7 @@ import {
   TGoalResponse,
   TReferralTrackingHeaderOptions,
 } from '@shared/types'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { MdCalendarMonth } from 'react-icons/md'
 import { IoTodayOutline } from 'react-icons/io5'
 import {
@@ -20,10 +20,13 @@ import {
 } from '@shared/utils/dates'
 import { progressGoal } from '@shared/utils/validation'
 import { months } from '@shared/utils/constants/months'
+import { useQuery } from 'react-query'
+import { cacheName } from '@shared/utils/constants/cacheName'
 
 let id = 0
 
 const DAY_IN_MILLIS = 24 * 60 * 60 * 1000
+const INVALID_GOAL = 0
 
 export const useReferralTrackingController = () => {
   const { sessionCustomer } = useUser()
@@ -59,36 +62,36 @@ export const useReferralTrackingController = () => {
 
     const { firstDay, lastDay } = getMonthDayRange(monthIndex, year)
 
-    console.log(firstDay)
-    console.log(lastDay)
-
     return `de ${firstDay} à ${lastDay} de ${month}`
   }
 
-  const options: TReferralTrackingHeaderOptions[] = [
-    {
-      id: id++,
-      label: 'semana',
-      slug: weekSlug(),
-      icon: IoTodayOutline,
-      options: {
-        filterMethod: 'semana',
-        startGoalFilter: getSundayDate(),
-        endGoalFilter: getSaturdayDate(),
+  const options: TReferralTrackingHeaderOptions[] = useMemo(
+    () => [
+      {
+        id: id++,
+        label: 'semana',
+        slug: weekSlug(),
+        icon: IoTodayOutline,
+        options: {
+          filterMethod: 'semana',
+          startGoalFilter: getSundayDate(),
+          endGoalFilter: getSaturdayDate(),
+        },
       },
-    },
-    {
-      id: id++,
-      label: 'mês',
-      slug: monthSlug(),
-      icon: MdCalendarMonth,
-      options: {
-        filterMethod: 'mês',
-        startGoalFilter: getFirstDayOfMonth(new Date()).toISOString(),
-        endGoalFilter: getLastDayOfMonth(new Date()).toISOString(),
+      {
+        id: id++,
+        label: 'mês',
+        slug: monthSlug(),
+        icon: MdCalendarMonth,
+        options: {
+          filterMethod: 'mês',
+          startGoalFilter: getFirstDayOfMonth(new Date()).toISOString(),
+          endGoalFilter: getLastDayOfMonth(new Date()).toISOString(),
+        },
       },
-    },
-  ]
+    ],
+    [],
+  )
 
   const getGoals = useCallback(async (): Promise<
     TGoalResponse[] | undefined
@@ -115,31 +118,75 @@ export const useReferralTrackingController = () => {
     !!filterOption.endGoalFilter,
   )
 
-  const choiseFilters = async (options: TGoalFiltersOptions) => {
+  const handleChangeGoalFilter = async (options: TGoalFiltersOptions) => {
     setFilterOption(options)
     await getGoals()
   }
 
-  const goalsComplete =
-    (goals && goals?.filter((goal) => goal.goalComplete === true)) ?? []
+  const { data: currentGoal } = useQuery<TGoalResponse>(cacheName.currentGoal)
 
-  const wordsWritten = goals?.reduce((acc, goal) => acc + goal.words, 0) ?? 0
-  const goalsDeclared = goals?.reduce((acc, goal) => acc + goal.goal, 0) ?? 0
+  const [formattedGoals, setFormattedGoals] = useState<TGoalResponse[]>(
+    goals || [],
+  )
 
-  const formattedWords = progressGoal(wordsWritten, goalsDeclared).toFixed(2)
+  useEffect(() => {
+    if (currentGoal && goals?.[0]) {
+      const goalCompletePercent = progressGoal(
+        currentGoal?.words,
+        currentGoal?.goal,
+      )
+
+      const updatedCurrentGoal: TGoalResponse = {
+        ...goals[0],
+        words: currentGoal.words,
+        goal: currentGoal.goal,
+        goalComplete: goalCompletePercent >= 100,
+        goalCompletePercent,
+      }
+
+      const newGoalsArray = goals.map((goal, i) =>
+        i === 0 ? updatedCurrentGoal : goal,
+      )
+
+      setFormattedGoals(newGoalsArray)
+    }
+  }, [goals, currentGoal])
+
+  const reducedGoalsComplete =
+    (formattedGoals &&
+      formattedGoals?.filter(
+        (goal) => goal.goal !== INVALID_GOAL && goal.goalComplete === true,
+      )) ??
+    []
+
+  const goalsComplete = reducedGoalsComplete.length
+
+  const reducedWordsWritten =
+    formattedGoals?.reduce((acc, goal) => acc + goal.words, 0) ?? 0
+
+  const wordsWritten = reducedWordsWritten
+
+  const goalsDeclared =
+    formattedGoals?.reduce((acc, goal) => acc + goal.goal, 0) ?? 0
+
+  const formattedWords =
+    progressGoal(wordsWritten, goalsDeclared).toFixed(1) || 0
   const formattedGoalsComplete =
-    (goals && progressGoal(goalsComplete.length, goals?.length).toFixed(2)) ?? 0
+    (formattedGoals &&
+      progressGoal(goalsComplete, formattedGoals?.length).toFixed(1)) ||
+    0
 
   const series = [+formattedGoalsComplete, +formattedWords]
 
   const currentFilterMethod = filterOption.filterMethod
 
   return {
-    choiseFilters,
+    handleChangeGoalFilter,
     options,
     wordsWritten,
     goalsComplete,
     series,
     currentFilterMethod,
+    filterOption,
   }
 }

@@ -64,9 +64,14 @@ export function ProfileInfo() {
         </div>
       </div>
       <div className={tv.profileleInfoFormWrapperTV({ visible: visibleState })}>
-        <Button.root variant="text" onClick={toggleFormVisible}>
+        <Button.root
+          radius="full"
+          color="primary"
+          variant="ghost"
+          onClick={toggleFormVisible}
+          endContent={<RightArrow />}
+        >
           <Button.label size="xs" text="Atualizar" />
-          <RightArrow />
         </Button.root>
         <FormProvider {...wordCountSchema}>
           <Form onSubmit={handleSubmit(onSubmit)} data-testid="profile-form">

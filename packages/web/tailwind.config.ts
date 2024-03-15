@@ -1,10 +1,12 @@
 import type { Config } from 'tailwindcss'
+import { nextui } from '@nextui-org/react'
 
 const config: Config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     fontFamily: {
@@ -25,6 +27,19 @@ const config: Config = {
       transparent: 'transparent',
       black: '#000000',
       white: '#ffffff',
+
+      blue: {
+        50: "#e6f1fe",
+        100: "#cce3fd",
+        200: "#99c7fb",
+        300: "#66aaf9",
+        400: "#338ef7",
+        500: "#006FEE",
+        600: "#005bc4",
+        700: "#004493",
+        800: "#002e62",
+        900: "#001731",
+      },
 
       primary: '#0075FF',
       tertiary: '#7551FF',
@@ -58,6 +73,7 @@ const config: Config = {
       'single-animate-ping': 'single-animate-ping 500ms linear forwards',
     },
   },
-  plugins: [],
+  darkMode: 'class',
+  plugins: [nextui()],
 }
 export default config

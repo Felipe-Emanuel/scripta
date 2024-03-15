@@ -4,6 +4,7 @@ import { AppThemeProvider } from '@shared/contexts/ThemeContext'
 import { queryClient } from '@shared/services/reactQuery'
 import { ReactNode } from 'react'
 import { QueryClientProvider } from 'react-query'
+import { NextUIProvider } from '@nextui-org/react'
 
 type TProvidersProps = {
   children: ReactNode
@@ -26,7 +27,9 @@ export function Providers({ children }: TProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AllProviders>{children}</AllProviders>
+      <AllProviders>
+        <NextUIProvider>{children}</NextUIProvider>
+      </AllProviders>
     </QueryClientProvider>
   )
 }

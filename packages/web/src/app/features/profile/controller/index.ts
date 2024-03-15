@@ -4,30 +4,24 @@ import {
 } from '@features/profile/ProfileUtils'
 import { updateCurrentGoal, getCurrentGoal } from '@features/profile/services'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocalStorage } from '@shared/hooks/useLocalStorage'
 import { useQueryData, useQueryMutation } from '@shared/hooks/useReactQuery'
 import { useUser } from '@shared/hooks/useUser'
 import { TGoalResponse, TUpdateCurrentGoalRequest } from '@shared/types'
-import { localStorageNames } from '@shared/utils/constants/localStorageNames'
 import { capitalizeName } from '@shared/utils/transformers'
+import { progressGoal } from '@shared/utils/validation'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 export const useProfileController = () => {
-  const { setLocalStorage } = useLocalStorage()
   const { sessionCustomer } = useUser()
   const [isFormVisible, setIsFormVisible] = useState(false)
 
   const toggleFormVisible = () => setIsFormVisible((prev) => !prev)
 
-  const getGoal = useCallback(async () => {
-    if (sessionCustomer) {
-      const currentGoal = await getCurrentGoal(sessionCustomer?.email)
-
-      setLocalStorage(localStorageNames.currentGoal, currentGoal?.words)
-      return currentGoal
-    }
-  }, [sessionCustomer, setLocalStorage])
+  const getGoal = useCallback(
+    async () => await getCurrentGoal(sessionCustomer?.email),
+    [sessionCustomer],
+  )
 
   const {
     data: currentGoal,
@@ -64,17 +58,19 @@ export const useProfileController = () => {
 
   const onSubmit = async (data: TUpdateWordCountSchema) => {
     if (currentGoal) {
+      const goalComplete = progressGoal(data.wordCount, currentGoal.goal)
+
       const createWordCountRequest: TUpdateCurrentGoalRequest = {
         goalId: currentGoal?.id,
         updatedGoal: {
           ...currentGoal,
           words: data.wordCount,
+          goalComplete: goalComplete >= 100,
         },
       }
 
       await mutateAsync(createWordCountRequest)
 
-      setLocalStorage(localStorageNames.currentGoal, data.wordCount)
       reset()
       toggleFormVisible()
     }

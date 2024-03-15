@@ -3,7 +3,7 @@ import { ElementType } from 'react'
 
 export type TReferralTrackingHeaderOptions = {
   id: number
-  label: 'semana' | 'mês' | 'ano'
+  label: TGoalFiltersOptions['filterMethod']
   slug: string
   icon: ElementType
   options: TGoalFiltersOptions

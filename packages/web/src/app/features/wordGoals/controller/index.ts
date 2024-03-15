@@ -5,33 +5,22 @@ import {
 } from '@features/wordGoals/WordGoaldUtils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocalStorage } from '@shared/hooks/useLocalStorage'
-import { useQueryData, useQueryMutation } from '@shared/hooks/useReactQuery'
+import { useQueryMutation } from '@shared/hooks/useReactQuery'
 import { TGoalResponse, TUpdateCurrentGoalRequest } from '@shared/types'
+import { cacheName } from '@shared/utils/constants/cacheName'
 
-import { localStorageNames } from '@shared/utils/constants/localStorageNames'
 import { progressGoal } from '@shared/utils/validation'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useQuery } from 'react-query'
 
 export const useWordGoalsController = () => {
-  const { getLocalStorage } = useLocalStorage()
   const [isFormVisible, setIsFormVisible] = useState(false)
 
   const toggleFormVisible = () => setIsFormVisible((prev) => !prev)
 
-  const getLocalWords = useCallback(async () => {
-    const wordCount: TGoalResponse = getLocalStorage(
-      localStorageNames.currentGoal,
-    )
-
-    return wordCount
-  }, [getLocalStorage])
-
-  const { data: currentGoal, isLoading } = useQueryData(
-    getLocalWords,
-    'currentGoal',
-    '12-hours',
+  const { data: currentGoal, isLoading } = useQuery<TGoalResponse>(
+    cacheName.currentGoal,
   )
 
   const goal = currentGoal?.goal
@@ -44,7 +33,7 @@ export const useWordGoalsController = () => {
     },
   })
 
-  const { handleSubmit } = wordGoalsSchema
+  const { handleSubmit, reset } = wordGoalsSchema
 
   const { mutateAsync } = useQueryMutation<
     TGoalResponse,
@@ -59,14 +48,20 @@ export const useWordGoalsController = () => {
 
   const onSubmit = async (data: TUpdateWordGoalsSchema) => {
     if (currentGoal) {
+      const goalComplete = progressGoal(currentGoal.words, data.goal)
+
       await mutateAsync({
         goalId: currentGoal.id,
         updatedGoal: {
           ...currentGoal,
           goal: data.goal,
+          goalComplete: goalComplete >= 100,
         },
       })
     }
+
+    reset()
+    toggleFormVisible()
   }
 
   return {

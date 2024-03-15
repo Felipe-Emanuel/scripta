@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { throwUserMessages } from 'src/entities/User/utils'
+import 'dotenv/config'
 
 const secretKey = process.env.SECRET_TOKEN_KEY
 
@@ -9,7 +10,7 @@ interface TGenerateToken {
 
 export const generateToken = (data: TGenerateToken): string => {
   if (secretKey) {
-    return jwt?.sign(data, secretKey, { algorithm: 'HS256', expiresIn: 3600 })
+    return jwt?.sign(data, secretKey, { algorithm: 'HS256', expiresIn: '1day' })
   }
 }
 

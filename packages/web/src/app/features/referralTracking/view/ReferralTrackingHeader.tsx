@@ -1,33 +1,30 @@
 'use client'
 
-import { Icon, Text, Title } from '@shared/components'
+import { Button, Icon, Text, Title } from '@shared/components'
 import { Popover } from '@shared/components/Popover'
-import { TReferralTrackingHeaderOptions } from '@shared/types'
-import * as tv from '@features/referralTracking/ReferralTrackingTV'
 import { useReferralTrackingController } from '@features/referralTracking/controller'
 import { capitalizeName } from '@shared/utils/transformers'
+import * as tv from '@features/referralTracking/ReferralTrackingTV'
 
 export function ReferralTrackingHeader() {
-  const { choiseFilters, options, currentFilterMethod } =
+  const { handleChangeGoalFilter, options, currentFilterMethod } =
     useReferralTrackingController()
-
-  const handleChangeGoalFilter = (
-    options: TReferralTrackingHeaderOptions['options'],
-  ) => {
-    choiseFilters(options)
-  }
 
   const renderoptions = options.map((option) => {
     const { id, slug, label, options, icon } = option
 
+    const disabled = currentFilterMethod === label
+
     return (
-      <div
-        className={tv.renderOptionsTV()}
+      <Button.root
+        className={tv.renderOptionsRootTV({ disabled })}
+        disabled={currentFilterMethod === label}
         key={id}
+        as="div"
         onClick={() => handleChangeGoalFilter(options)}
       >
         <div className={tv.renderOptionsContentTV()}>
-          <Text text={label} color="white" weight="bold" />
+          <Text text={capitalizeName(label)} color="white" weight="bold" />
           <Text
             text={slug}
             color="gray"
@@ -40,7 +37,7 @@ export function ReferralTrackingHeader() {
         <div className={tv.renderOptionsIconTV()}>
           <Icon icon={icon} color="primary" size="lg" />
         </div>
-      </div>
+      </Button.root>
     )
   })
 
@@ -62,7 +59,7 @@ export function ReferralTrackingHeader() {
       </div>
 
       <Popover>
-        <Text text="Busque por..." color="black" weight="bold" />
+        <Text text="Busque por..." color="white" weight="bold" />
         {renderoptions}
       </Popover>
     </div>

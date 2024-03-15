@@ -58,7 +58,7 @@ export function AuthForm({ changeAuthPageContent }: AuthFormProps) {
     {
       id: id++,
       component: (
-        <Button.root>
+        <Button.root buttonStyle="primary" type="submit">
           <Button.label text="Entrar" />
         </Button.root>
       ),

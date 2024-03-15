@@ -27,5 +27,6 @@ export const templateTV = tv({
     size: 'fit',
     'flex-direction': 'col',
     background: 'secondary-background',
+    opacity: 100,
   },
 })

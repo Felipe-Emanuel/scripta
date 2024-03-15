@@ -1,6 +1,5 @@
 import { TCacheName, TTimeToRefetchCache } from '@shared/types'
 import { timeToRefetchCache } from '@shared/utils/constants/timeToRefetchCache'
-import { useCallback } from 'react'
 import {
   MutationFunction,
   useMutation,
@@ -71,11 +70,7 @@ export function useQueryData<T>(
 ) {
   const staleTime = timeToRefetchCache[cacheTime]
 
-  const getData = useCallback(async () => {
-    return await getDataFn()
-  }, [getDataFn])
-
-  const { data, ...rest } = useQuery(cacheName, getData, {
+  const { data, ...rest } = useQuery(cacheName, getDataFn, {
     refetchOnWindowFocus: false,
     staleTime,
     enabled,
