@@ -33,7 +33,6 @@ describe('BooksPerformanceTabs', () => {
     const tab = screen.getByRole('tab', {
       name: /fakelabel 1/i,
     })
-    screen.logTestingPlaygroundURL()
 
     act(() => {
       userEvent.click(tab)
