@@ -1,6 +1,7 @@
 import { Book } from '@prisma/client'
 
 export interface IBooksRepository {
-  createBook: (book: Book) => Promise<Book[]>
-  findBookWithExistingTitle: (title: string) => Promise<Book | null>
+  createBook: (book: Book, userEmail: string) => Promise<Book[]>
+  getAllBooks: (userEmail: string) => Promise<Book[]>
+  deleteBook: (bookId: string) => Promise<Book>
 }

@@ -27,6 +27,10 @@ let id = 0
 
 const DAY_IN_MILLIS = 24 * 60 * 60 * 1000
 const INVALID_GOAL = 0
+const date = new Date()
+const year = date.getFullYear()
+const monthIndex = date.getMonth() + 1
+const month = months[monthIndex]
 
 export const useReferralTrackingController = () => {
   const { sessionCustomer } = useUser()
@@ -38,9 +42,6 @@ export const useReferralTrackingController = () => {
   })
 
   const weekSlug = () => {
-    const date = new Date()
-    const monthIndex = date.getMonth() + 1
-    const month = months[monthIndex]
     const lastDateOfMonth = getLastDayOfMonth(date)
     const differenceInDays = Math.floor(
       (lastDateOfMonth.getTime() - date.getTime()) / DAY_IN_MILLIS,
@@ -50,16 +51,11 @@ export const useReferralTrackingController = () => {
       return `Última semana de ${month}`
     }
 
-    const numberOfWeek = getWeekNumber(date)
+    const numberOfWeek = getWeekNumber()
     return `${numberOfWeek}ª semana de ${month}`
   }
 
   const monthSlug = () => {
-    const date = new Date()
-    const year = date.getFullYear()
-    const monthIndex = date.getMonth() + 1
-    const month = months[monthIndex]
-
     const { firstDay, lastDay } = getMonthDayRange(monthIndex, year)
 
     return `de ${firstDay} à ${lastDay} de ${month}`
@@ -93,34 +89,38 @@ export const useReferralTrackingController = () => {
     [],
   )
 
-  const getGoals = useCallback(async (): Promise<
-    TGoalResponse[] | undefined
-  > => {
-    if (sessionCustomer) {
-      const { endGoalFilter, startGoalFilter } = filterOption
+  const getGoals = useCallback(
+    async (
+      options: TGoalFiltersOptions,
+    ): Promise<TGoalResponse[] | undefined> => {
+      if (sessionCustomer) {
+        const param = options.startGoalFilter ? options : filterOption
+        const { endGoalFilter, startGoalFilter } = param
 
-      const body: TGetGoalRequest = {
-        email: sessionCustomer?.email,
-        endGoalFilter,
-        startGoalFilter,
+        const body: TGetGoalRequest = {
+          email: sessionCustomer?.email,
+          endGoalFilter,
+          startGoalFilter,
+        }
+
+        const goals = await getGoalByFilter(body)
+
+        return goals
       }
-
-      const goals = await getGoalByFilter(body)
-
-      return goals
-    }
-  }, [filterOption, sessionCustomer])
+    },
+    [sessionCustomer, filterOption],
+  )
 
   const { data: goals } = useQueryData(
     getGoals,
     'goalsByFilter',
     '12-hours',
-    !!filterOption.endGoalFilter,
+    !!sessionCustomer && !!filterOption.startGoalFilter,
   )
 
   const handleChangeGoalFilter = async (options: TGoalFiltersOptions) => {
     setFilterOption(options)
-    await getGoals()
+    await getGoals(options)
   }
 
   const { data: currentGoal } = useQuery<TGoalResponse>(cacheName.currentGoal)

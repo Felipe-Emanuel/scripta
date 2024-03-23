@@ -2,6 +2,7 @@ import { TCacheName, TTimeToRefetchCache } from '@shared/types'
 import { timeToRefetchCache } from '@shared/utils/constants/timeToRefetchCache'
 import {
   MutationFunction,
+  QueryFunction,
   useMutation,
   useQuery,
   useQueryClient,
@@ -53,7 +54,7 @@ export function useQueryMutation<TResponse, TRequest>(
 
 /**
  * @type T should contain the type of object to be returned and should be apllyied on the getDataFn as exemple
- * @param getDataFn async function to get data from database, local or anywhere. Should receive type of object returned
+ * @param getDataFn async function to get data from database, local or anywhere. Should receive type of object returned and can receive a parameter
  * @param cacheName name of the cache to be created
  * @param cacheTime time of the cache
  * @param enabled optional param to define if this request should be enabled
@@ -63,7 +64,7 @@ export function useQueryMutation<TResponse, TRequest>(
  */
 
 export function useQueryData<T>(
-  getDataFn: () => Promise<T>,
+  getDataFn: (params?: QueryFunction['arguments']) => Promise<T | undefined>,
   cacheName: TCacheName,
   cacheTime: TTimeToRefetchCache,
   enabled?: boolean,

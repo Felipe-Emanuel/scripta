@@ -1,4 +1,4 @@
-import { format as formatter, getDay, addDays, startOfWeek } from 'date-fns'
+import { format as formatter, getDay, addDays } from 'date-fns'
 
 export const formateDate = (date: string | Date, format?: string) => {
   const defaultFormat = 'dd/MM/yyyy'
@@ -45,15 +45,10 @@ export const getLastDayOfMonth = (date: Date) => {
 }
 
 export const getWeekNumber = (date: Date) => {
-  const DAY_IN_MILLIS = 24 * 60 * 60 * 1000
-  const startOfWeekDate = startOfWeek(date)
-  const dayOfWeek = startOfWeekDate.getDay()
-
-  const differenceInDays = Math.floor(
-    (date.getTime() - startOfWeekDate.getTime()) / DAY_IN_MILLIS - dayOfWeek,
-  )
-
-  const weekNumber = Math.floor(differenceInDays / 7) + 1
+  const today = date ?? new Date()
+  const dayOfMonth = today.getDate()
+  const dayOfWeek = today.getDay()
+  const weekNumber = Math.floor((dayOfMonth - dayOfWeek + 10) / 7)
 
   return weekNumber
 }

@@ -17,7 +17,16 @@ export function WordGoalsGraphic() {
         categories={['Meta']}
         theme="dark"
         labels={['Progresso']}
-        gradientToColors={['#0075FF']}
+        fill={{
+          opacity: 1,
+          type: 'gradient',
+          gradient: {
+            shade: 'dark',
+            type: 'vertical',
+            gradientToColors: ['#0075FF', '#7551FF'],
+            stops: [0, 100],
+          },
+        }}
         RadialBarOptions={{
           startAngle: -115,
           endAngle: 115,

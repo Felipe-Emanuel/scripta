@@ -23,36 +23,22 @@ model User {
   updatedAt      DateTime   @updatedAt
 }
 
-model Gender {
-  id   String @id @default(uuid())
-  name String @unique
-  book Book[]
-}
-
-model Theme {
-  id   String @id @default(uuid())
-  name String @unique
-  book Book[]
-}
-
 model Book {
   id           String      @id @default(uuid())
   title        String
   description  String
   publishedUrl String
-  userId       String
-  author       User        @relation(fields: [userId], references: [id])
   heroPathUrl  String
   characters   Character[]
   conclued     Boolean     @default(false)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
   reactions    Reaction[]
-  Gender       Gender?     @relation(fields: [genderId], references: [id])
-  genderId     String?
-  Theme        Theme?      @relation(fields: [themeId], references: [id])
-  themeId      String?
+  Gender       String?
+  Theme        String?
   hits         Int
+  User         User?       @relation(fields: [userEmail], references: [email])
+  userEmail    String?
 }
 
 model Reaction {

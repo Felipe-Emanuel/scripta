@@ -15,9 +15,18 @@ export function ReferralTrackingGraphic() {
           type="radialBar"
           series={series}
           categories={['Meta']}
-          theme="dark"
-          gradientToColors={['#0075FF', '#7551FF']}
           labels={['Metas', 'Palavras']}
+          theme="dark"
+          fill={{
+            opacity: 1,
+            type: 'gradient',
+            gradient: {
+              shade: 'dark',
+              type: 'vertical',
+              gradientToColors: ['#0075FF', '#7551FF'],
+              stops: [0, 100],
+            },
+          }}
           RadialBarOptions={{
             dataLabels: {
               total: {

@@ -67,7 +67,7 @@ export function ProfileInfo() {
         <Button.root
           radius="full"
           color="primary"
-          variant="ghost"
+          variant="light"
           onClick={toggleFormVisible}
           endContent={<RightArrow />}
         >

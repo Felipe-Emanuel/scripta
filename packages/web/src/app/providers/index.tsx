@@ -26,10 +26,10 @@ export function Providers({ children }: TProvidersProps) {
   const AllProviders = composeProviders(AppThemeProvider)
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AllProviders>
-        <NextUIProvider>{children}</NextUIProvider>
-      </AllProviders>
-    </QueryClientProvider>
+    <NextUIProvider>
+      <QueryClientProvider client={queryClient}>
+        <AllProviders>{children}</AllProviders>
+      </QueryClientProvider>
+    </NextUIProvider>
   )
 }

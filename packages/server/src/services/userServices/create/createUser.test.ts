@@ -29,6 +29,7 @@ describe('CreateUser', () => {
   it('should create a new user', async () => {
     const newUser: User = {
       ...body,
+      portfolioUrl: '',
       id: randomUUID(),
       createdAt: new Date(),
       updatedAt: new Date(),

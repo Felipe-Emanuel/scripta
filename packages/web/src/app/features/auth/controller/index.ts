@@ -69,6 +69,7 @@ export const useAuthController = () => {
       })
 
       push(APP_ROUTES.private.dashboard.name)
+
       return createSession({
         cookieName: session,
         value: JSON.stringify(userSession),

@@ -10,6 +10,7 @@ export const templateTV = tv({
     background: {
       'secondary-background': 'bg-secondary-background',
       'primary-background': 'bg-primary-background',
+      'tertiary-background': 'bg-tertiary-background',
     },
     'flex-direction': {
       row: 'flex-row',

@@ -30,7 +30,7 @@ export function WordGoalsInfo() {
             disabled={!words}
             radius="full"
             color="primary"
-            variant="ghost"
+            variant="light"
             onClick={toggleFormVisible}
             className="flex border-0"
             endContent={<RightArrow />}

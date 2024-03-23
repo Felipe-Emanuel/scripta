@@ -3,10 +3,10 @@ import { nextui } from '@nextui-org/react'
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     fontFamily: {
@@ -25,41 +25,30 @@ const config: Config = {
     },
     colors: {
       transparent: 'transparent',
+      default: '#0A102D',
       black: '#000000',
       white: '#ffffff',
-
-      blue: {
-        50: "#e6f1fe",
-        100: "#cce3fd",
-        200: "#99c7fb",
-        300: "#66aaf9",
-        400: "#338ef7",
-        500: "#006FEE",
-        600: "#005bc4",
-        700: "#004493",
-        800: "#002e62",
-        900: "#001731",
-      },
-
       primary: '#0075FF',
       tertiary: '#7551FF',
       error: '#F53C2B',
-
       green: {
         400: '#05CD99',
+        500: '#01B574',
       },
-
       gray: {
         400: '#A0AEC0',
       },
     },
     extend: {
       backgroundImage: {
-        'hero-pattern': "url('/assets/images/background.png')",
         'primary-background':
           'linear-gradient(159.02deg, #272F9D 14.25%, #0D123A 56.45%, #020515 86.14%)',
         'secondary-background':
           'linear-gradient(127.09deg, rgba(6, 11, 40, 0.94) 19.41%, rgba(10, 14, 35, 0.49) 76.65%)',
+        'tertiary-background':
+          'linear-gradient(126.97deg, rgba(6, 11, 40, 0.74) 28.26%, rgba(10, 14, 35, 0.71) 91.2%)',
+        'bar-graphic-background':
+          'linear-gradient(126.97deg, #060C29 28.26%, rgba(4, 12, 48, 0.5) 91.2%)',
       },
     },
     keyframes: {
@@ -74,6 +63,11 @@ const config: Config = {
     },
   },
   darkMode: 'class',
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      addCommonColors: true,
+    }),
+    require('tailwind-scrollbar'),
+  ],
 }
 export default config

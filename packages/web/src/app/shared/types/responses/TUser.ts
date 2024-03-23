@@ -4,7 +4,6 @@ export type TUser = {
   email: string
   picture: string
   rule: string
-  password: string
   accessToken: string
   expirationTime: Date
   createdAt: Date

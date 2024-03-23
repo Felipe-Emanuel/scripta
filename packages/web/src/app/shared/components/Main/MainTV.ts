@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const mainTv = tv({
-  base: 'p-2 sm:p-4 md:p-6 lg:p-8 duration-500 min-h-screen relative overflow-x-hidden bg-primary-background',
+  base: 'dark p-2 sm:p-4 md:p-6 lg:p-8 duration-500 min-h-screen relative overflow-x-hidden bg-cover',
   variants: {
     overflow: {
       hidden: 'overflow-hidden',

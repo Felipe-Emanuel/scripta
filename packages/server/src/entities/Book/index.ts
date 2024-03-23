@@ -6,7 +6,12 @@ import { isAllAttributeFilled } from '@utils'
 
 export const BookEntitie = (book: Book) => {
   const setBook = async () => {
-    if (!book.userId) throw new Error(throwBookMessages.bookWithoutUserId)
+    if (!book.userEmail) throw new Error(throwBookMessages.bookWithoutUserEmail)
+
+    if (!book.title) throw new Error(throwBookMessages.bookWithoutTitle)
+
+    if (!book.description)
+      throw new Error(throwBookMessages.bookWithoutDescription)
 
     return book
   }

@@ -30,6 +30,7 @@ export const textTv = tv({
       white: 'text-white',
       gray: 'text-gray-400',
       error: 'text-error',
+      'green-500': 'text-green-500',
     },
     align: {
       center: 'text-center',

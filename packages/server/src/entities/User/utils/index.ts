@@ -15,4 +15,5 @@ export const throwUserMessages = {
   invalidName: 'Por favor, informe o nome completo.',
   invalidJWT: 'Acesso negado.',
   providerAuthenticated: 'Registrado com o Google.',
+  invalidProvider: 'Provedor inválido.',
 }

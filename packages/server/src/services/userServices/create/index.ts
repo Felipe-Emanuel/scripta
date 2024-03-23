@@ -43,6 +43,7 @@ export const CreateUserService = async ({
 
   const { setUser } = UserEntitie({
     id: uuidv4(),
+    portfolioUrl: '',
     email,
     name,
     password,

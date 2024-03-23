@@ -1,6 +1,5 @@
 'use client'
 
-// import { responsive } from '@features/Graphics/GraphicsUtils'
 import { TApexchartsOptions, TRadialBarOptions, TTheme } from '@shared/types'
 import Chart from 'react-apexcharts'
 
@@ -10,9 +9,13 @@ interface GraphicContentProps {
   type: 'area' | 'bar' | 'radialBar'
   series: ApexAxisChartSeries | ApexNonAxisChartSeries
   theme: TTheme
-  labels?: string[]
+  height?: number | string
+  width?: number | string
   gradientToColors?: string[]
   RadialBarOptions?: TRadialBarOptions
+  labels?: string[]
+  colors?: string[]
+  fill?: ApexFill
 }
 
 export function GraphicContent({
@@ -21,22 +24,23 @@ export function GraphicContent({
   type,
   series,
   theme,
-  labels,
+  height,
+  width,
   RadialBarOptions,
-  gradientToColors,
+  labels = [''],
+  fill = {},
+  colors,
 }: GraphicContentProps) {
   const options: TApexchartsOptions = {
     series,
+    labels,
     theme: {
       mode: theme || 'dark',
     },
     // tooltip: {
     //   y: yFormatter,
     // },
-    // responsive,
     chart: {
-      height: 280,
-      width: 280,
       type,
       fontFamily: '"Poppins", sans-serif',
       background: 'transparent',
@@ -51,21 +55,22 @@ export function GraphicContent({
         },
       },
       bar: {
+        borderRadiusApplication: 'around',
+        distributed: true,
+        rangeBarOverlap: true,
+        rangeBarGroupRows: false,
+        borderRadiusWhenStacked: 'all',
+        hideZeroBarsWhenGrouped: true,
         horizontal: false,
-        columnWidth: 7,
+        columnWidth: 10,
         borderRadius: 2,
       },
     },
     dataLabels: {
-      enabled: true,
+      enabled: false,
     },
     legend: {
-      fontSize: '10px',
-      markers: {
-        radius: 32,
-        width: 12,
-        height: 12,
-      },
+      show: false,
     },
     stroke: {
       show: true,
@@ -83,6 +88,7 @@ export function GraphicContent({
     xaxis: {
       type: 'category',
       labels: {
+        show: false,
         style: {
           fontSize: '10px',
         },
@@ -95,24 +101,19 @@ export function GraphicContent({
       },
       categories,
     },
-
-    fill: {
-      opacity: 1,
-      type: 'gradient',
-      gradient: {
-        shade: 'dark',
-        type: 'vertical',
-        gradientToColors,
-        stops: [0, 100],
-      },
-    },
+    fill,
+    colors,
     noData: {
       text: 'Sem dados por aqui.',
     },
     grid: {
       show: false,
     },
-    labels,
+    tooltip: {
+      y: {
+        formatter: (val) => val.toFixed(0),
+      },
+    },
   }
 
   return (
@@ -120,8 +121,8 @@ export function GraphicContent({
       options={options}
       series={options?.series}
       type={type}
-      height={280}
-      width={280}
+      height={height ?? 280}
+      width={width ?? 280}
     />
   )
 }

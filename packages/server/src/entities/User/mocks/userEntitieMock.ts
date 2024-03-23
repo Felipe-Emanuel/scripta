@@ -7,6 +7,7 @@ export const userEntitieMock: User = {
   email: 'user@prisma.com',
   name: 'John Doe John Doe',
   password: 'A@a12345',
+  portfolioUrl: '',
   rule: 'client',
   picture: fakeBase64,
   accessToken:

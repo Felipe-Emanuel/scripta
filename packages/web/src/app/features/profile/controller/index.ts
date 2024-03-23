@@ -58,7 +58,7 @@ export const useProfileController = () => {
 
   const onSubmit = async (data: TUpdateWordCountSchema) => {
     if (currentGoal) {
-      const goalComplete = progressGoal(data.wordCount, currentGoal.goal)
+      const goalComplete = progressGoal(data.wordCount, currentGoal?.goal)
 
       const createWordCountRequest: TUpdateCurrentGoalRequest = {
         goalId: currentGoal?.id,
@@ -70,10 +70,10 @@ export const useProfileController = () => {
       }
 
       await mutateAsync(createWordCountRequest)
-
-      reset()
-      toggleFormVisible()
     }
+
+    reset()
+    toggleFormVisible()
   }
 
   const visibleState: 'visible' | 'hidden' | undefined = isFormVisible

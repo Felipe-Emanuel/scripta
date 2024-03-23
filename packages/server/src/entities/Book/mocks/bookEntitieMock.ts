@@ -3,13 +3,16 @@ import { Book } from '@prisma/client'
 import { randomUUID } from 'crypto'
 
 export const bookEntitieMock: Book = {
-  conclued: true,
-  createdAt: new Date(),
-  description: 'Book description Fake',
-  heroPathUrl: fakeBase64,
   id: randomUUID(),
-  publishedUrl: 'https://linktobook.com',
-  title: 'Book Title Fake',
+  userEmail: 'foo@example.com',
+  createdAt: new Date(),
   updatedAt: new Date(),
-  userId: randomUUID(),
+  title: 'Book Title Fake',
+  description: 'Book description Fake',
+  Gender: 'Horror',
+  Theme: 'Love',
+  publishedUrl: 'https://linktobook.com',
+  conclued: true,
+  heroPathUrl: fakeBase64,
+  hits: 50,
 }

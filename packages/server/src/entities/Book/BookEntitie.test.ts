@@ -7,28 +7,52 @@ import {
 } from './mocks'
 import { throwBookMessages } from './utils'
 
-it('should create a new book entity', async () => {
-  const { setBook } = BookEntitie(bookEntitieMock)
+describe('setBook', () => {
+  it('should not create a new book entity', async () => {
+    const { setBook } = BookEntitie({
+      ...bookEntitieMock,
+      userEmail: '',
+    })
 
-  const books = await setBook()
+    const sut = setBook()
 
-  expect(bookEntitieMock).toEqual(books)
-  expect(books.title).toEqual('Book Title Fake')
-})
-
-it('should not create a new book entity', async () => {
-  const { setBook } = BookEntitie({
-    ...bookEntitieMock,
-    userId: '',
+    expect(sut).rejects.toThrow(throwBookMessages.bookWithoutUserEmail)
   })
 
-  const sut = setBook()
+  it('should throw a exception about title missing', () => {
+    const { setBook } = BookEntitie({
+      ...bookEntitieMock,
+      title: '',
+    })
 
-  expect(sut).rejects.toThrow(throwBookMessages.bookWithoutUserId)
+    const sut = setBook()
+
+    expect(sut).rejects.toThrow(throwBookMessages.bookWithoutTitle)
+  })
+
+  it('should throw a exception about description missing', () => {
+    const { setBook } = BookEntitie({
+      ...bookEntitieMock,
+      description: '',
+    })
+
+    const sut = setBook()
+
+    expect(sut).rejects.toThrow(throwBookMessages.bookWithoutDescription)
+  })
+
+  it('should create a new book entity', async () => {
+    const { setBook } = BookEntitie(bookEntitieMock)
+
+    const books = await setBook()
+
+    expect(bookEntitieMock).toEqual(books)
+    expect(books.title).toEqual(bookEntitieMock.title)
+  })
 })
 
 it('should check if required fields are valid', () => {
-  expect(bookEntitieMock.userId).not.toBe('')
+  expect(bookEntitieMock.userEmail).not.toBe('')
 })
 
 it('should create a book with all fields filled', () => {

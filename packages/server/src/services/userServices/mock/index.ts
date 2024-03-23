@@ -11,6 +11,7 @@ export const body: TPatchUserRequest = {
 
 export const userMock: User = {
   ...body,
+  portfolioUrl: '',
   id: randomUUID(),
   picture: '',
   name: 'John Doe John Doe',
