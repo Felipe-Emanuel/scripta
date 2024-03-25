@@ -15,4 +15,5 @@ export const bookEntitieMock: Book = {
   conclued: true,
   heroPathUrl: fakeBase64,
   hits: 50,
+  totalWords: 65500,
 }
