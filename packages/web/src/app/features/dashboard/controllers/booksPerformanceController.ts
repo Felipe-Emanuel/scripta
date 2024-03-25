@@ -1,14 +1,11 @@
 import { getUniqueItems } from '@features/booksPerformance/BooksPerformanceUtils'
 import { useQueryData } from '@shared/hooks/useReactQuery'
 import { useUser } from '@shared/hooks/useUser'
-import { TBookPerformanceProperty, TBookResponse, TTab } from '@shared/types'
-import { useCallback, useState } from 'react'
-import { IoIosCloudDone } from 'react-icons/io'
+import { useCallback, useMemo, useState } from 'react'
 import { BsRocketTakeoffFill } from 'react-icons/bs'
-import { PiUsersFourFill } from 'react-icons/pi'
-import { RiEmojiStickerFill } from 'react-icons/ri'
-import { capitalizeName } from '@shared/utils/transformers'
 import { getAllBooks } from '@features/dashboard/services/bookPerformanceServices'
+import { TBookPerformanceProperty, TBookResponse, TTab } from '@shared/types'
+import { ImBooks } from 'react-icons/im'
 
 let id = 0
 
@@ -53,67 +50,105 @@ export const useBooksPerformanceController = () => {
     if (data)
       for (const book of data) {
         const genre = book[property]
-        genderCounts[genre as string] = (genderCounts[genre as string] ?? 0) + 1
+        genderCounts[genre] = (genderCounts[genre] ?? 0) + 1
       }
 
     return genderCounts
   }
 
-  const filtaredByGenreOrTheme = data?.filter((book) =>
-    selectedTheme
-      ? book.Gender.toLowerCase() === selectedGenre &&
-        book.Theme.toLowerCase() === selectedTheme
-      : book.Gender.toLowerCase() === selectedGenre,
+  const filtaredByGenreOrTheme = useMemo(
+    () =>
+      data?.filter((book) =>
+        selectedTheme
+          ? book.Gender.toLowerCase() === selectedGenre &&
+            book.Theme.toLowerCase() === selectedTheme
+          : book.Gender.toLowerCase() === selectedGenre,
+      ),
+    [data, selectedGenre, selectedTheme],
   )
 
-  const filtaredData = selectedGenre ? filtaredByGenreOrTheme : data
+  const allFilteredData = selectedGenre ? filtaredByGenreOrTheme : data
 
-  const genreCounts = countOccurrences(filtaredData, selectedProperty)
+  const genreCounts = useMemo(
+    () => countOccurrences(allFilteredData, selectedProperty),
+    [allFilteredData, selectedProperty],
+  )
+  const allBooks = useMemo(() => Object.keys(genreCounts), [genreCounts])
 
-  const categoriesGenre = Object.keys(genreCounts)
-  const valuesGenre = Object.values(genreCounts)
-  const catgories = Object.values(categoriesGenre)
+  const catgories = useMemo(
+    () =>
+      selectedProperty === 'Gender' && !selectedGenre.length
+        ? allBooks
+        : allFilteredData?.map((book) => book.title) || [],
+    [allBooks, allFilteredData, selectedGenre.length, selectedProperty],
+  )
 
-  const generateSeries = (data: string[]) =>
-    data?.map((category, i) => ({
-      name: capitalizeName(category),
-      data: [valuesGenre][i],
+  const uniqueGenders: { [key: string]: boolean } = {}
+  const filteredDataByGenre: TBookResponse[] | undefined =
+    allFilteredData?.filter((item) => {
+      if (!uniqueGenders[item.Gender]) {
+        uniqueGenders[item.Gender] = true
+        return true
+      }
+      return false
+    })
+
+  const booksByGenreOrTheme = useMemo(() => {
+    return filtaredByGenreOrTheme?.map((book) => ({
+      name: 'Palavras escritas',
+      data: [book.totalWords],
     }))
+  }, [filtaredByGenreOrTheme])
 
-  const series = generateSeries(categoriesGenre)
+  const generateAllBooksSeries = useMemo(() => {
+    return filteredDataByGenre?.map((book) => ({
+      name: 'Livros neste gênero',
+      data: [genreCounts[book.Gender]],
+    }))
+  }, [filteredDataByGenre, genreCounts])
 
-  const allConcluedBooks = filtaredData?.filter(
-    (book) => book.conclued === true,
+  const generateHitsSeries = useMemo(() => {
+    return allFilteredData?.map((book) => ({
+      name: 'Acessos',
+      data: [book.hits],
+    }))
+  }, [allFilteredData])
+
+  const allAccesses = allFilteredData?.reduce((acc, book) => acc + book.hits, 0)
+
+  const handleTabFilter = (value: TBookPerformanceProperty) =>
+    setSelectedProperty(value)
+
+  const handleGenre = (key: string) => setSelectedGenre(key)
+
+  const handleTheme = (key: string) => setSelectedTheme(key)
+
+  const seriesOptions = useMemo(
+    () => ({
+      Gender: selectedGenre.length
+        ? booksByGenreOrTheme
+        : generateAllBooksSeries,
+      hits: generateHitsSeries,
+    }),
+    [
+      booksByGenreOrTheme,
+      generateAllBooksSeries,
+      generateHitsSeries,
+      selectedGenre.length,
+    ],
   )
-  const allAccesses = filtaredData?.reduce((acc, book) => acc + book.hits, 0)
-  const allCharacters = filtaredData?.map((book) => book.characters)
-  const characterLength = allCharacters?.filter((character) => character.length)
-  const allReactions = filtaredData?.filter((book) => book.reaction)
 
-  console.log('series', series)
-
-  const handleTabFilter = (value: TBookPerformanceProperty) => {
-    setSelectedProperty(value)
-    console.log(value)
-  }
-
-  const handleGenre = (key: string, value: TBookPerformanceProperty) => {
-    setSelectedProperty(value)
-    setSelectedGenre(key)
-  }
-
-  const handleTheme = (key: string, value: TBookPerformanceProperty) => {
-    setSelectedProperty(value)
-    setSelectedTheme(key)
-  }
+  const series = seriesOptions[selectedProperty] || []
 
   const tabs: TTab[] = [
     {
       id: id++,
-      icon: IoIosCloudDone,
-      label: 'Concluídos',
-      amount: allConcluedBooks?.length ?? 0,
-      value: 'conclued',
+      icon: ImBooks,
+      label: selectedGenre.length ? 'Livros' : 'Gêneros',
+      amount: selectedGenre.length
+        ? booksByGenreOrTheme?.length || 0
+        : generateAllBooksSeries?.length || 0,
+      value: 'Gender',
     },
     {
       id: id++,
@@ -121,20 +156,6 @@ export const useBooksPerformanceController = () => {
       label: 'Acessos',
       amount: allAccesses ?? 0,
       value: 'hits',
-    },
-    {
-      id: id++,
-      icon: PiUsersFourFill,
-      label: 'Personagens',
-      amount: characterLength?.length ?? 0,
-      value: 'Gender',
-    },
-    {
-      id: id++,
-      icon: RiEmojiStickerFill,
-      label: 'Reações',
-      amount: allReactions?.length ?? 0,
-      value: 'Gender',
     },
   ]
 

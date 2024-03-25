@@ -1,10 +1,13 @@
 import { Graphics } from '@features/Graphics'
+import { booksPerformanceGraphicTV } from '../NookPerformanceTV'
+
+type TSeries = {
+  name: string
+  data: number[]
+}
 
 interface BooksPerformanceGraphicProps {
-  series: {
-    name: string
-    data: number[]
-  }[]
+  series: TSeries[]
   catgories: string[]
 }
 
@@ -12,11 +15,20 @@ export function BooksPerformanceGraphic({
   catgories,
   series,
 }: BooksPerformanceGraphicProps) {
+  const formattedSeries = series.reduce(
+    (acc, serie) => ({
+      ...acc,
+      data: [...acc.data, ...serie.data],
+      name: serie.name,
+    }),
+    { data: [] } as unknown as TSeries,
+  )
+
   return (
-    <Graphics.root className="w-full p-2 bg-bar-graphic-background backdrop-blur-md rounded-2xl h-full">
+    <Graphics.root className={booksPerformanceGraphicTV()}>
       <Graphics.content
         type="bar"
-        series={series}
+        series={[formattedSeries]}
         categories={catgories}
         labels={catgories}
         theme="dark"

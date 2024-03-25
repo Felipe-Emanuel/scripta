@@ -1,9 +1,9 @@
-import { BooksPerformanceTabs } from '@features/booksPerformance/views/BooksPerformanceTabs'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { act } from 'react-dom/test-utils'
 import { TTab } from '@shared/types'
 import { IoIosCloudDone } from 'react-icons/io'
+import BooksPerformanceTabs from '../views/BooksPerformanceTabs'
 
 describe('BooksPerformanceTabs', () => {
   const handleFilter = jest.fn()
@@ -13,7 +13,7 @@ describe('BooksPerformanceTabs', () => {
       icon: IoIosCloudDone,
       id: 0,
       label: 'FakeLabel',
-      value: 'Theme',
+      value: 'hits',
     },
   ]
   const sut = (

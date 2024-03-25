@@ -5,6 +5,6 @@ export type TTab = {
   id: number
   icon: ElementType
   label: string
-  amount: number
+  amount: string | number
   value: TBookPerformanceProperty
 }

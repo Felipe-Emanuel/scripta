@@ -44,7 +44,7 @@ export const getLastDayOfMonth = (date: Date) => {
   return new Date(nextMonthDate.setDate(nextMonthDate.getDate() - 1))
 }
 
-export const getWeekNumber = (date: Date) => {
+export const getWeekNumber = (date?: Date) => {
   const today = date ?? new Date()
   const dayOfMonth = today.getDate()
   const dayOfWeek = today.getDay()

@@ -4,7 +4,6 @@ import { TApexchartsOptions, TRadialBarOptions, TTheme } from '@shared/types'
 import Chart from 'react-apexcharts'
 
 interface GraphicContentProps {
-  // yFormatter: ApexTooltipY
   categories: string[] | number[]
   type: 'area' | 'bar' | 'radialBar'
   series: ApexAxisChartSeries | ApexNonAxisChartSeries
@@ -16,10 +15,10 @@ interface GraphicContentProps {
   labels?: string[]
   colors?: string[]
   fill?: ApexFill
+  responsive?: ApexResponsive[]
 }
 
 export function GraphicContent({
-  // yFormatter,
   categories,
   type,
   series,
@@ -30,16 +29,15 @@ export function GraphicContent({
   labels = [''],
   fill = {},
   colors,
+  responsive = [],
 }: GraphicContentProps) {
   const options: TApexchartsOptions = {
+    responsive,
     series,
     labels,
     theme: {
       mode: theme || 'dark',
     },
-    // tooltip: {
-    //   y: yFormatter,
-    // },
     chart: {
       type,
       fontFamily: '"Poppins", sans-serif',
@@ -62,7 +60,7 @@ export function GraphicContent({
         borderRadiusWhenStacked: 'all',
         hideZeroBarsWhenGrouped: true,
         horizontal: false,
-        columnWidth: 10,
+        columnWidth: 7,
         borderRadius: 2,
       },
     },
@@ -89,9 +87,6 @@ export function GraphicContent({
       type: 'category',
       labels: {
         show: false,
-        style: {
-          fontSize: '10px',
-        },
       },
       axisBorder: {
         show: false,

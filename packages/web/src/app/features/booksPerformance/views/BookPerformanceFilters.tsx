@@ -1,10 +1,7 @@
 import { Text, Title } from '@shared/components'
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
-import {
-  Reaction,
-  TBookPerformanceProperty,
-  TCharacterResponse,
-} from '@shared/types'
+import { Reaction, TCharacterResponse } from '@shared/types'
+import * as tv from '../NookPerformanceTV'
 
 type TUniquePerformance = {
   label: string | number | boolean | Date | TCharacterResponse[] | Reaction[]
@@ -16,8 +13,8 @@ interface BookPerformanceFiltersProps {
   uniqueThemes: TUniquePerformance[]
   selectedGenre: string
   selectedTheme: string
-  handleGenre: (key: string, value: TBookPerformanceProperty) => void
-  handleTheme: (key: string, value: TBookPerformanceProperty) => void
+  handleGenre: (key: string) => void
+  handleTheme: (key: string) => void
 }
 
 export function BookPerformanceFilters({
@@ -29,18 +26,24 @@ export function BookPerformanceFilters({
   handleTheme,
 }: BookPerformanceFiltersProps) {
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className={tv.bookPerformanceFiltersRootTV()}>
       <div>
         <Title
           as="h2"
           title="Desempenho por Gênero/Tema"
           size="md"
-          className="w-full truncate"
+          className={tv.bookPerformanceFiltersTitleTV()}
         />
 
-        <div className="flex gap-2 items-center pt-2">
+        <div className={tv.bookPerformanceFiltersSelectedContentTV()}>
           {selectedGenre && (
-            <Text as="span" text={selectedGenre} color="green-500" size="sm" />
+            <Text
+              data-testid={`selected-genre-${selectedGenre}`}
+              as="span"
+              text={selectedGenre}
+              color="green-500"
+              size="sm"
+            />
           )}
           {selectedGenre && selectedTheme && (
             <>
@@ -51,32 +54,33 @@ export function BookPerformanceFilters({
         </div>
       </div>
 
-      <div className="flex w-fit flex-wrap md:flex-nowrap gap-4">
+      <div className={tv.bookPerformanceFiltersSelectedWrapperTV()}>
         <Autocomplete
           label="Gênero"
-          className="w-full max-w-40 text-gray"
+          className={tv.bookPerformanceFiltersAutocompleteTV()}
           defaultItems={uniqueGenres}
           variant="underlined"
           selectedKey={selectedGenre}
-          onSelectionChange={(key) =>
-            handleGenre(key?.toString() ?? '', 'title')
-          }
-          onClear={() => handleGenre('', 'Gender')}
+          onSelectionChange={(key) => handleGenre(key?.toString() ?? '')}
+          onClear={() => handleGenre('')}
         >
           {(item) => (
-            <AutocompleteItem key={item.value}>{item.value}</AutocompleteItem>
+            <AutocompleteItem
+              data-testId={`item-${item.value}`}
+              key={item.value}
+            >
+              {item.value}
+            </AutocompleteItem>
           )}
         </Autocomplete>
         <Autocomplete
           isDisabled={!selectedGenre}
           label="Tema"
-          className="w-full max-w-40"
+          className={tv.bookPerformanceFiltersAutocompleteItemTV()}
           variant="underlined"
           selectedKey={selectedTheme}
-          onSelectionChange={(key) =>
-            handleTheme(key?.toString() ?? '', 'title')
-          }
-          onClear={() => handleTheme('', 'Gender')}
+          onSelectionChange={(key) => handleTheme(key?.toString() ?? '')}
+          onClear={() => handleTheme('')}
         >
           {uniqueThemes.map((item) => (
             <AutocompleteItem key={item.value} value={item.value}>

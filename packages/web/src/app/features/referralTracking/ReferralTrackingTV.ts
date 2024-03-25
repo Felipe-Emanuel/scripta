@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const referralTrackingRootTV = tv({
-  base: 'w-full sm:max-w-[450px] h-full',
+  base: 'w-full md:max-w-[850px] h-full xl:max-w-[650px]',
 })
 
 export const referralTrackingContentWrapperTV = tv({
@@ -13,7 +13,7 @@ export const referralTrackingGraphicTV = tv({
 })
 
 export const referralTrackingInfoInfoTemplateTV = tv({
-  base: 'bg-primary-background rounded-xl flex flex-col justify-center items-start px-4 md:px-8 min-[500px]:w-44 w-full h-20',
+  base: 'bg-primary-background rounded-xl flex flex-col justify-center items-start px-4 w-full xl:max-w-72 h-20',
 })
 
 export const referralTrackingInfoWrapperTV = tv({

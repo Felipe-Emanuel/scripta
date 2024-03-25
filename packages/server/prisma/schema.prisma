@@ -37,6 +37,7 @@ model Book {
   Gender       String?
   Theme        String?
   hits         Int
+  totalWords   Int?
   User         User?       @relation(fields: [userEmail], references: [email])
   userEmail    String?
 }

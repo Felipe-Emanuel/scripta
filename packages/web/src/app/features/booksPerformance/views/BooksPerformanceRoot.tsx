@@ -1,11 +1,12 @@
 import { Template } from '@shared/components'
 import { TRootComponent } from '@shared/types'
+import { booksPerformanceRootTV } from '../NookPerformanceTV'
 
 export function BooksPerformanceRoot({ children }: TRootComponent) {
   return (
     <Template
       background="tertiary-background"
-      className="h-fit w-full max-w-[652px]"
+      className={booksPerformanceRootTV()}
     >
       {children}
     </Template>

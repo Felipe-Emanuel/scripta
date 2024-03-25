@@ -15,4 +15,5 @@ export type TBookResponse = {
   hits: number
   characters: TCharacterResponse[]
   reaction: Reaction[]
+  totalWords: number
 }

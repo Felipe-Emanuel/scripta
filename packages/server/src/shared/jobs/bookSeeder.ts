@@ -34,6 +34,7 @@ async function createBookWithDetails(genreLabel: string, themeLabel: string) {
     Gender: genreLabel,
     Theme: themeLabel,
     id: uuidv4(),
+    totalWords: Math.random() * 50000,
     createdAt: new Date(),
     updatedAt: new Date(),
     hits: Math.random() * 500,

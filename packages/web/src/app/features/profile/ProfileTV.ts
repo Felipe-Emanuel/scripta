@@ -1,11 +1,11 @@
 import { tv } from 'tailwind-variants'
 
 export const profileRootTV = tv({
-  base: 'duration-300 w-full min-[500px]:w-52 max-w-[450px] md:w-[50%] max-w-[590px] h-44 min-[500px]:h-[320px] relative',
+  base: 'duration-300 w-full flex-1 md:min-w-56 max-w-[590px] h-44 min-[500px]:h-[320px] relative',
 })
 
 export const profileHeroTV = tv({
-  base: 'w-[550px] lg:w-[750px] h-[350px] min-[500px]:min-h-[755px] bg-white/25 -top-10 min-[500px]:-top-44 -left-10',
+  base: 'w-[650px] lg:w-[750px] h-[350px] min-[500px]:min-h-[755px] bg-white/25 -top-10 min-[500px]:-top-44 -left-10',
   variants: {
     local: {
       root: 'absolute',

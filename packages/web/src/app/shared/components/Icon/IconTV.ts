@@ -9,6 +9,7 @@ export const iconTv = tv({
       sm: 'w-3 h-3', // w-12px h-12px
       md: 'w-4 h-4', // w-16px h-16px
       lg: 'w-6 h-6', // w-24px h-24px
+      responsive: 'w-3 h-2 md:w-3 h-3',
     },
     color: {
       primary: 'text-primary',
