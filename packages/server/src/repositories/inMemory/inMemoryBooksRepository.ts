@@ -5,19 +5,22 @@ let books: Book[] = []
 
 export const inMemoryBooksRepository = (): IBooksRepository => {
   const createBook = async (book: Book): Promise<Book[]> => {
-    const updatedBooks = (books = [{ ...book, ...book }])
+    const updatedBooks = (books = [{ ...books, ...book }])
     return updatedBooks
   }
 
-  const findBookWithExistingTitle = async (
-    title: string,
-  ): Promise<Book | null> => {
-    const existingBook = books.find((book) => book.title === title)
-    return existingBook || null
+  const getAllBooks = async (userEmail: string): Promise<Book[]> => {
+    const allBooks = books.filter((book) => book.userEmail === userEmail)
+
+    return allBooks
   }
+
+  const deleteBook = async (bookId: string): Promise<Book> =>
+    books.filter((book) => book.id === bookId)[0]
 
   return {
     createBook,
-    findBookWithExistingTitle,
+    getAllBooks,
+    deleteBook,
   }
 }

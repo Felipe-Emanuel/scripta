@@ -8,7 +8,10 @@
     "paths": {
       "@constants/*": ["src/shared/utils/constants/*"],
       "@utils": ["src/shared/utils/index.ts"],
-      "@types": ["src/shared/types/index.ts"]
+      "@entities/*": ["src/entities/*"],
+      "@types": ["src/shared/types/index.ts"],
+      "@services": ["src/services/index.ts"],
+      "@repositories": ["src/repositories/index.ts"]
     }
   }
 }

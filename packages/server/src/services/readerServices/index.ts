@@ -1,0 +1,6 @@
+export * from './create'
+export * from './getReaderByBook'
+export * from './updateReader'
+export * from './getReaderByAuthor'
+export * from './updateBookReaders'
+export * from './getReaderByEmail'

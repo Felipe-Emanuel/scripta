@@ -8,16 +8,35 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  name      String
-  email     String     @unique
-  picture   String
-  rule      String
-  books     Book[]
-  feedbacks Feedback[]
+  id             String     @id @default(uuid())
+  name           String
+  email          String     @unique
+  picture        String?
+  portfolioUrl   String?
+  rule           String
+  password       String
+  accessToken    String
+  books          Book[]
+  feedbacks      Feedback[]
+  expirationTime DateTime
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  readers        Reader[]
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Reader {
+  id           String   @id @default(uuid())
+  author       User     @relation(fields: [authorEmail], references: [email])
+  picture      String
+  userName     String
+  portfolioUrl String
+  authorEmail  String
+  userEmail    String
+  latitude     Float
+  longitude    Float
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  books        Book[]
 }
 
 model Book {
@@ -25,14 +44,27 @@ model Book {
   title        String
   description  String
   publishedUrl String
-  userId       String
-  author       User        @relation(fields: [userId], references: [id])
   heroPathUrl  String
   characters   Character[]
   conclued     Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  reactions    Reaction[]
+  Gender       String?
+  Theme        String?
+  hits         Int
+  totalWords   Int?
+  readers      Reader[]
+  User         User?       @relation(fields: [userEmail], references: [email])
+  userEmail    String?
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Reaction {
+  id       String  @id @default(uuid())
+  name     String
+  iconName String
+  Book     Book?   @relation(fields: [bookId], references: [id])
+  bookId   String?
 }
 
 model Character {
@@ -49,9 +81,8 @@ model Character {
   relationships     Relationship[]
   book              Book           @relation(fields: [bookId], references: [id])
   bookId            String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 }
 
 model Relationship {
@@ -60,19 +91,28 @@ model Relationship {
   characters       Character @relation(fields: [characterId], references: [id])
   relationshipType String
   intention        String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 model Feedback {
-  id         String @id @default(uuid())
-  user       User   @relation(fields: [userId], references: [id])
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
   userId     String
   type       String
   feedback   String
   screenshot String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Goal {
+  id                  String   @id @default(uuid())
+  email               String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  goalComplete        Boolean
+  goalCompletePercent Float
+  words               Int
+  goal                Int
 }
