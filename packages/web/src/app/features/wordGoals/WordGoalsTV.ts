@@ -25,7 +25,7 @@ export const wordGoalsInputRootTV = tv({
   variants: {
     visible: {
       visible: 'w-16',
-      hidden: 'w-0',
+      hidden: 'w-0 ring-0',
     },
   },
   defaultVariants: {
@@ -37,7 +37,7 @@ export const wordGoalsInputFieldTV = tv({
   base: 'duration-150',
   variants: {
     visible: {
-      visible: 'p-2 ring ring-1',
+      visible: 'p-2',
       hidden: 'p-0 ring-0',
     },
   },

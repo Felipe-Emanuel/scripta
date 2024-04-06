@@ -9,21 +9,20 @@ const { CreateGoalsService, InsertGoalService, UpdateGoalService } = services
 
 const resetGoals = async () => {
   const { getAllUsers } = databaseUserRepository()
-  const { createGoals, getGoalsByFilter, updateGoal, getLastGoal } =
-    databaseGoalsRepository()
+  const { createGoals, getGoalsByFilter, updateGoal, getLastGoal } = databaseGoalsRepository()
 
   const users: User[] = await getAllUsers()
 
   const createGoalAction: services.TCreateGoalsRequest['action'] = {
-    createGoals,
+    createGoals
   }
   const insertGoalAction: services.TInsertGoalServiceRequest['actions'] = {
     getGoalsByFilter,
-    createGoals,
+    createGoals
   }
   const updateGoalAction: services.TUpdateGoalRequest['actions'] = {
     getGoalsByFilter,
-    updateGoal,
+    updateGoal
   }
 
   if (users) {
@@ -39,27 +38,27 @@ const resetGoals = async () => {
           createdAt: new Date(),
           updatedAt: new Date(),
           goal: 0,
-          words: 100,
+          words: 0
         }
 
         if (existentGoal) {
           await UpdateGoalService({
             actions: updateGoalAction,
             goalId: existentGoal.id,
-            updatedGoal: existentGoal,
+            updatedGoal: existentGoal
           })
 
           await InsertGoalService({
             actions: insertGoalAction,
             newGoal,
             endGoalFilter: existentGoal.createdAt,
-            startGoalFilter: existentGoal.createdAt,
+            startGoalFilter: existentGoal.createdAt
           })
         } else {
           CreateGoalsService({
             action: createGoalAction,
             email: user.email,
-            goals: newGoal,
+            goals: newGoal
           })
         }
       } catch (error) {
@@ -69,7 +68,4 @@ const resetGoals = async () => {
   }
 }
 
-export const dailySatisfactionRateJob = cron.schedule(
-  '0 0 * * *',
-  async () => await resetGoals(),
-)
+export const dailySatisfactionRateJob = cron.schedule('0 0 * * *', async () => await resetGoals())

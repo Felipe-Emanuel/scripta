@@ -57,9 +57,15 @@ const config: Config = {
         '50%': { scale: '1.5', opacity: '0.5' },
         '100%': { scale: '1.7', opacity: '0' },
       },
+      ping: {
+        '0%': { scale: '1', opacity: '1' },
+        '50%': { scale: '0.9', opacity: '5' },
+        '100%': { scale: '1', opacity: '1' },
+      },
     },
     animation: {
       'single-animate-ping': 'single-animate-ping 500ms linear forwards',
+      ping: 'ping 1000ms linear infinite',
     },
   },
   darkMode: 'class',

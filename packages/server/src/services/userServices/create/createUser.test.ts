@@ -1,7 +1,7 @@
 import { User } from '@prisma/client'
 import { randomUUID } from 'crypto'
 import { throwUserMessages } from 'src/entities/User/utils'
-import { inMemomoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
+import { inMemoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
 import {
   CreateUserService,
   TCreateUserServiceRequest,
@@ -10,7 +10,7 @@ import {
 
 describe('CreateUser', () => {
   const { createUser, getUserByEmail, patchUserPicture } =
-    inMemomoryUserRepository()
+    inMemoryUserRepository()
 
   const actions = {
     createUser,

@@ -1,10 +1,10 @@
 import { Text, Title } from '@shared/components'
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
-import { Reaction, TCharacterResponse } from '@shared/types'
+import { TReaction, TCharacterResponse } from '@shared/types'
 import * as tv from '../NookPerformanceTV'
 
 type TUniquePerformance = {
-  label: string | number | boolean | Date | TCharacterResponse[] | Reaction[]
+  label: string | number | boolean | Date | TCharacterResponse[] | TReaction[]
   value: string
 }
 

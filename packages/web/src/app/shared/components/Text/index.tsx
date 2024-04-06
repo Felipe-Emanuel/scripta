@@ -5,7 +5,8 @@ import { textTv } from './TextTV'
 export interface TextProps extends VariantProps<typeof textTv> {
   text: ReactNode
   className?: string
-  as?: 'span'
+  htmlFor?: string
+  as?: 'span' | 'small' | 'b' | 'label'
   onClick?: () => void
 }
 
@@ -23,10 +24,7 @@ export function Text({
   const Comp = as ?? 'p'
 
   return (
-    <Comp
-      {...props}
-      className={textTv({ size, weight, color, align, fontFamily, className })}
-    >
+    <Comp {...props} className={textTv({ size, weight, color, align, fontFamily, className })}>
       {text}
     </Comp>
   )

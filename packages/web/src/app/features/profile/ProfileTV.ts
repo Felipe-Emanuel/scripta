@@ -44,7 +44,7 @@ export const profileleInfoInputRootTV = tv({
   variants: {
     visible: {
       visible: 'w-20',
-      hidden: 'w-0',
+      hidden: 'w-0 ring-0',
     },
   },
   defaultVariants: {
@@ -56,7 +56,7 @@ export const profileleInfoInputFieldTV = tv({
   base: 'duration-150',
   variants: {
     visible: {
-      visible: 'p-4 ring ring-1',
+      visible: 'p-2',
       hidden: 'p-0 ring-0',
     },
   },

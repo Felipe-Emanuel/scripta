@@ -1,4 +1,4 @@
-import { Reaction, TCharacterResponse } from '@shared/types'
+import { TReaction, TCharacterResponse } from '@shared/types'
 
 export type TBookResponse = {
   id: string
@@ -14,6 +14,6 @@ export type TBookResponse = {
   Theme: string
   hits: number
   characters: TCharacterResponse[]
-  reaction: Reaction[]
+  reaction: TReaction[]
   totalWords: number
 }

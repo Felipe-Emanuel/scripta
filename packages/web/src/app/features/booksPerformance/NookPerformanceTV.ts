@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const booksPerformanceRootTV = tv({
-  base: 'h-fit w-full max-w-[652px]',
+  base: 'w-full md:max-w-[850px] h-full xl:max-w-[650px]',
 })
 
 export const booksPerformanceGraphicTV = tv({

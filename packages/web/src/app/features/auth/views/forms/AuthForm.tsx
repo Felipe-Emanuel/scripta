@@ -12,13 +12,11 @@ export function AuthForm({ changeAuthPageContent }: AuthFormProps) {
   const authComponents: TArrayComponents[] = [
     {
       id: id++,
-      component: (
-        <Title size="xl" title="Bom ver você novamente!" align="center" />
-      ),
+      component: <Title size="xl" title="Bom ver você novamente!" align="center" />
     },
     {
       id: id++,
-      component: <ProviderButtons />,
+      component: <ProviderButtons />
     },
     {
       id: id++,
@@ -29,31 +27,27 @@ export function AuthForm({ changeAuthPageContent }: AuthFormProps) {
           text="Digite seu e-mail e senha para começar!"
           align="center"
         />
-      ),
+      )
     },
     {
       id: id++,
       component: (
         <Input.root>
-          <Input.label text="E-mail" />
-          <Input.field
-            name="email"
-            id="email"
-            placeholder="Seu endereço de E-mail"
-          />
+          <Input.label text="E-mail" htmlFor="email" />
+          <Input.field name="email" id="email" placeholder="Seu endereço de E-mail" />
           <Input.error field="email" />
         </Input.root>
-      ),
+      )
     },
     {
       id: id++,
       component: (
         <Input.root>
-          <Input.label text="Senha" />
+          <Input.label text="Senha" htmlFor="password" />
           <Input.field name="password" id="password" placeholder="Sua senha" />
           <Input.error field="password" />
         </Input.root>
-      ),
+      )
     },
     {
       id: id++,
@@ -61,11 +55,11 @@ export function AuthForm({ changeAuthPageContent }: AuthFormProps) {
         <Button.root buttonStyle="primary" type="submit">
           <Button.label text="Entrar" />
         </Button.root>
-      ),
+      )
     },
     {
       id: id++,
-      component: <Text text="Não tem uma conta?" align="center" />,
+      component: <Text text="Não tem uma conta?" align="center" />
     },
     {
       id: id++,
@@ -77,8 +71,8 @@ export function AuthForm({ changeAuthPageContent }: AuthFormProps) {
           onClick={changeAuthPageContent}
           align="center"
         />
-      ),
-    },
+      )
+    }
   ]
 
   return (

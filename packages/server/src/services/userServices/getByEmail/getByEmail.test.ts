@@ -1,5 +1,5 @@
 import { throwUserMessages } from '@entities/User/utils'
-import { inMemomoryUserRepository } from '@repositories'
+import { inMemoryUserRepository } from '@repositories'
 import {
   userMock,
   GetUserByEmailService,
@@ -8,7 +8,7 @@ import {
 } from '@services'
 
 describe('GetUserByEmailService', () => {
-  const { createUser, getUserByEmail } = inMemomoryUserRepository()
+  const { createUser, getUserByEmail } = inMemoryUserRepository()
 
   it('should be able to return an exists user by ID', async () => {
     const actions: TCreateUserServiceRequest['actions'] = {

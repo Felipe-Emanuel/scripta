@@ -1,0 +1,69 @@
+﻿UNINTER.inicializar.provaslista = function () {
+
+    var ProvasClass = (function () {
+        var classe = function () {
+           
+            var self = this;
+
+            var urllista = '/avaliacaoUsuario/' + ((UNINTER.viewGenerica.parametros.idUrl && UNINTER.viewGenerica.parametros.idUrl.toLowerCase() == 'vestibular') ? 'true' : 'false') + '/vigenteProvas?cache=' + new Date().getTime();
+            var urlIniciar = '#/ava/provas/{idAvaliacao}/novo/{tentativa}/{idAvaliacaoVinculada}'
+
+            this.Iniciar = function () {
+                UNINTER.viewGenerica.getApp().pageLayout('one-column').set();
+                UNINTER.StorageWrap.setItem('leftSidebarItemView', {});
+                sessionStorage.setItem('appId', '');
+
+                $.get('js/views/ava/avaliacaousuario/avaliacaousuariolista.html?' + Date.now(), function (data) {
+                    $("#theList").html(data).before('<style>.detalhesAvaliacaoUsuario { display: none; }</style>');
+                    UNINTER.inicializar.avaliacaousuariolista(urllista, urlIniciar);
+                    Eventos();
+                });
+
+                Eventos();
+                UNINTER.viewGenerica.setPlaceholderHeight();
+
+                if (UNINTER.StorageWrap.getItem('user').internacional == true && UNINTER.viewGenerica.parametros.idUrl != null && UNINTER.viewGenerica.parametros.idUrl == "vestibular") {
+                    $('#viewavaliacaousuariolista #mensagem').append('<div class="alert alert-warning">Este processo está disponível apenas para candidatos do Brasil. Alunos internacionais devem acessar a prova de vestibular pelo link enviado para seu e-mail ou pelo portal do candidato</div>')
+                };
+            };
+
+            var Eventos = function () {
+
+                $(window).on('hashchange.provas', function (e) {
+                    var hash = window.location.hash.toLowerCase();
+                    if (hash != "#/" && hash.indexOf('provas') == -1) {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+                        $('#logout').trigger('click');
+                        $(window).off('hashchange.provas');
+                    }
+                });
+
+                $('#logoAva').closest('a').attr('href', 'javascript:void(0)');
+
+            };
+
+            this.setMensagem = function (params) {
+
+                if (params.type == void (0) || params.type == null) { params.type = 'danger'; }
+                if (params.strong == void (0) || params.strong == null) { params.strong = ''; }
+                if (params.appendTo == void (0) || params.appendTo == null) { params.appendTo = '#viewavisolista #mensagem'; }
+
+                var opcoes = {
+                    body: params.body,
+                    strong: params.strong,
+                    type: params.type,
+                    appendTo: params.appendTo
+                }
+                $(params.appendTo).empty();
+                UNINTER.flashMessage(opcoes);
+            };
+
+            this.Iniciar();
+
+        }
+        return classe;
+    })();
+
+    new ProvasClass();
+};

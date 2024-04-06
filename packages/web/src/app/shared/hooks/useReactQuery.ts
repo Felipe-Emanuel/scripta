@@ -1,6 +1,7 @@
 import { TCacheName, TTimeToRefetchCache } from '@shared/types'
 import { timeToRefetchCache } from '@shared/utils/constants/timeToRefetchCache'
 import {
+  InitialDataFunction,
   MutationFunction,
   QueryFunction,
   useMutation,
@@ -68,6 +69,7 @@ export function useQueryData<T>(
   cacheName: TCacheName,
   cacheTime: TTimeToRefetchCache,
   enabled?: boolean,
+  initialData?: T | InitialDataFunction<T>,
 ) {
   const staleTime = timeToRefetchCache[cacheTime]
 
@@ -75,6 +77,7 @@ export function useQueryData<T>(
     refetchOnWindowFocus: false,
     staleTime,
     enabled,
+    initialData,
   })
 
   return {

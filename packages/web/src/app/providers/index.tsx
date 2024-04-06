@@ -20,7 +20,7 @@ export function Providers({ children }: TProvidersProps) {
     (props: { children: ReactNode }) =>
       providers.reduceRight(
         (children, Provider) => <Provider {...props}>{children}</Provider>,
-        props.children,
+        props.children
       )
 
   const AllProviders = composeProviders(AppThemeProvider)

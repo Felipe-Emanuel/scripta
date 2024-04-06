@@ -12,10 +12,18 @@ export const databaseUserRepository = (): IUserRepository => {
     return updatedUsers
   }
 
-  const getUserByEmail = async (email: string): Promise<User | null> => {
+  const getUserByEmail = async (
+    email: string,
+    includeBook = false,
+    includeReaders = false,
+  ): Promise<User | null> => {
     const users = await prisma.user.findMany({
       where: {
         email,
+      },
+      include: {
+        books: includeBook,
+        readers: includeReaders,
       },
     })
 

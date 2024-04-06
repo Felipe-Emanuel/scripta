@@ -17,6 +17,7 @@ export const iconTv = tv({
       tertiary: 'text-tertiary',
       black: 'text-black',
       white: 'text-white',
+      gray: 'text-gray-400',
     },
   },
   defaultVariants: {

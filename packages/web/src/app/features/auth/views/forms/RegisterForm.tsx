@@ -9,18 +9,15 @@ interface TRegisterForm {
 
 let id = 0
 
-export function RegisterForm({
-  changeAuthPageContent,
-  strongPasswordMessage,
-}: TRegisterForm) {
+export function RegisterForm({ changeAuthPageContent, strongPasswordMessage }: TRegisterForm) {
   const registerComponents = [
     {
       id: id++,
-      component: <Title size="xl" title="Bem vindo!" align="center" />,
+      component: <Title size="xl" title="Bem vindo!" align="center" />
     },
     {
       id: id++,
-      component: <ProviderButtons />,
+      component: <ProviderButtons />
     },
     {
       id: id++,
@@ -30,47 +27,38 @@ export function RegisterForm({
           align="center"
           color="gray"
         />
-      ),
+      )
     },
     {
       id: id++,
       component: (
         <Input.root>
-          <Input.label text="Nome Completo" />
+          <Input.label text="Nome Completo" htmlFor="name" />
           <Input.field name="name" id="name" placeholder="Seu nome completo" />
           <Input.error field="name" />
         </Input.root>
-      ),
+      )
     },
     {
       id: id++,
       component: (
         <Input.root>
-          <Input.label text="E-mail" />
-          <Input.field
-            name="email"
-            id="email"
-            placeholder="Seu melhor e-mail"
-          />
+          <Input.label text="E-mail" htmlFor="email" />
+          <Input.field name="email" id="email" placeholder="Seu melhor e-mail" />
           <Input.error field="email" />
         </Input.root>
-      ),
+      )
     },
     {
       id: id++,
       component: (
         <Input.root>
-          <Input.label text="Senha" />
+          <Input.label text="Senha" htmlFor="password" />
           <Input.field name="password" id="password" placeholder="Sua senha" />
           <Input.error field="password" />
-          <Text
-            text={strongPasswordMessage}
-            size="sm"
-            color="error"
-            as="span"
-          />
+          <Text text={strongPasswordMessage} size="sm" color="error" as="span" />
         </Input.root>
-      ),
+      )
     },
     {
       id: id++,
@@ -78,11 +66,11 @@ export function RegisterForm({
         <Button.root buttonStyle="primary" type="submit">
           <Button.label text="Registrar" />
         </Button.root>
-      ),
+      )
     },
     {
       id: id++,
-      component: <Text text="Já tem uma conta?" align="center" />,
+      component: <Text text="Já tem uma conta?" align="center" />
     },
     {
       id: id++,
@@ -94,8 +82,8 @@ export function RegisterForm({
           onClick={changeAuthPageContent}
           align="center"
         />
-      ),
-    },
+      )
+    }
   ]
 
   return (

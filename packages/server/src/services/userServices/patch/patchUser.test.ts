@@ -1,5 +1,5 @@
 import { throwUserMessages } from 'src/entities/User/utils'
-import { inMemomoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
+import { inMemoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
 import { CreateUserService } from 'src/services/userServices/create'
 import { userMock, body } from 'src/services/userServices/mock'
 import { PatchUserService } from 'src/services/userServices/patch'
@@ -7,7 +7,7 @@ import { PatchUserService } from 'src/services/userServices/patch'
 describe('PatchUserService', () => {
   it('should be able to patch user picture ', async () => {
     const { createUser, getUserByEmail, patchUserPicture } =
-      inMemomoryUserRepository()
+      inMemoryUserRepository()
 
     const actions = {
       createUser,

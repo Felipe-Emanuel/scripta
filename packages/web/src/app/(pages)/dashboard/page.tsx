@@ -11,7 +11,11 @@ export default function DashboardPage() {
         <Dashboard.wordsGoals />
         <Dashboard.referralTracking />
       </div>
-      <div id="performance-row">
+      <div
+        id="performance-row"
+        className="flex max-[911px]:flex-col-reverse flex-wrap min-[911px]:flex-nowrap gap-4 w-full md:max-w-[850px] min-[1075px]:max-w-full m-auto"
+      >
+        <Dashboard.readers />
         <Dashboard.booksPerformance />
       </div>
     </Dashboard.root>

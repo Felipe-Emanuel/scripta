@@ -1,7 +1,7 @@
 import { User } from '@prisma/client'
 import { UserEntitie } from 'src/entities/User'
 import { throwUserMessages } from 'src/entities/User/utils'
-import { inMemomoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
+import { inMemoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
 
 export type TPatchUserRequest = {
   email: string
@@ -14,7 +14,7 @@ export const PatchUserService = async ({
   email,
   picture,
 }: TPatchUserRequest): Promise<TpatchUserResponse> => {
-  const { patchUserPicture, getUserByEmail } = inMemomoryUserRepository()
+  const { patchUserPicture, getUserByEmail } = inMemoryUserRepository()
 
   const existingUser = await getUserByEmail(email)
 

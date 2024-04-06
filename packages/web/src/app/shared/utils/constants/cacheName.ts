@@ -3,4 +3,6 @@ export const cacheName = {
   goalsByFilter: 'goalsByFilter',
   session: 'session',
   allBooks: 'allBooks',
+  allReaders: 'allReaders',
+  reader: 'reader',
 }

@@ -3,7 +3,7 @@ import { IUserRepository } from 'src/repositories/UserRepository'
 
 let users: User[] = []
 
-export const inMemomoryUserRepository = (): IUserRepository => {
+export const inMemoryUserRepository = (): IUserRepository => {
   const createUser = async (user: User): Promise<User[]> => {
     const updatedUsers = (users = [{ ...user, ...user }])
     return updatedUsers

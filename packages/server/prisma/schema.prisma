@@ -21,6 +21,22 @@ model User {
   expirationTime DateTime
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
+  readers        Reader[]
+}
+
+model Reader {
+  id           String   @id @default(uuid())
+  author       User     @relation(fields: [authorEmail], references: [email])
+  picture      String
+  userName     String
+  portfolioUrl String
+  authorEmail  String
+  userEmail    String
+  latitude     Float
+  longitude    Float
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  books        Book[]
 }
 
 model Book {
@@ -38,6 +54,7 @@ model Book {
   Theme        String?
   hits         Int
   totalWords   Int?
+  readers      Reader[]
   User         User?       @relation(fields: [userEmail], references: [email])
   userEmail    String?
 }
