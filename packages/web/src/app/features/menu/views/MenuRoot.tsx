@@ -1,9 +1,6 @@
 import { TRootComponent } from '@shared/types'
+import { menuRootTV } from '../MenuTV'
 
 export function MenuRoot({ children }: TRootComponent) {
-  return (
-    <div className="w-full flex items-center justify-between max-w-[1500px] m-auto py-4">
-      {children}
-    </div>
-  )
+  return <div className={menuRootTV()}>{children}</div>
 }

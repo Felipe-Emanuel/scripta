@@ -2,35 +2,20 @@
 
 import { Button, Tooltip } from '@nextui-org/react'
 
-import { TRootComponent } from '@shared/types'
-import { menuActions } from '../MenuUtils'
 import { Icon, Text } from '@shared/components'
-import { useUser } from '@shared/hooks/useUser'
-import { useProvidersSession } from '@shared/hooks/useProvidersSession'
-import { useRouter } from 'next/navigation'
-import { APP_ROUTES } from '@shared/utils/constants/app-routes'
+import { TRootComponent } from '@shared/types'
+import * as tv from '../MenuTV'
+import { useMenuController } from '../controller'
 
 export function MenuActions({ children }: TRootComponent) {
-  const { push } = useRouter()
-  const { logOut } = useProvidersSession()
-  const { sessionCustomer } = useUser()
-
-  const handleUserClick = () =>
-    sessionCustomer?.email ? logOut() : push(APP_ROUTES.public.auth.name)
-
-  const actions = menuActions({
-    isAuthenticated: !!sessionCustomer?.email,
-    handleNotificationClick: () => console.log('Notificação'),
-    handleSettingsClick: () => console.log('Configs'),
-    handleUserClick
-  })
+  const { actions } = useMenuController()
 
   return (
-    <div className="flex items-center gap-1 w-fit">
+    <div className={tv.menuActionWrapperTV()}>
       {children}
-      {actions.map((action) => {
+      {actions.map((action, i) => {
         const content = (
-          <div className="flex items-center gap-1">
+          <div className={tv.menuActionContentTV()}>
             <Icon icon={action.icon} size="md" color="gray" />
             {action.label && <Text text={action.label} size="sm" color="gray" />}
           </div>
@@ -38,12 +23,13 @@ export function MenuActions({ children }: TRootComponent) {
 
         return (
           <Button
+            data-testid={`action-${i}`}
             isIconOnly={action.isIconOnly}
             size="sm"
             color="primary"
             variant="light"
             key={action.id}
-            className="flex items-center gap-1"
+            className={tv.menuActionContentTV()}
             onClick={action.handleClick}
           >
             {action.tooltipLabel ? (

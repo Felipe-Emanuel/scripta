@@ -1,20 +1,19 @@
-import { createContext, useCallback, useEffect, useState } from 'react'
+import { useProvidersSession } from '@shared/hooks/useProvidersSession'
+import { useUser } from '@shared/hooks/useUser'
+import { APP_ROUTES } from '@shared/utils/constants/app-routes'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+import { menuActions } from '../MenuUtils'
+import { TMenuSearchDefaultItem } from '@shared/types'
 
-interface HelpSearchContextProps {
-  goTo: {
-    x: number
-    y: number
-  }
-  ref: string
-  updateRef: (value: string) => void
-  clearHelper: () => void
-}
+export const useMenuController = () => {
+  const { push } = useRouter()
+  const { logOut } = useProvidersSession()
+  const { sessionCustomer } = useUser()
 
-export const HelpSearchContext = createContext({} as HelpSearchContextProps)
-
-export function HelpSearchProvider({ children }: { children: React.ReactNode }) {
   const [ref, setRef] = useState('')
   const [goTo, setGoTo] = useState({ x: 0, y: 0 })
+  const [currentHelper, setCurrentHelper] = useState<TMenuSearchDefaultItem | null>(null)
 
   const updateRef = useCallback((value: string) => {
     setRef(value)
@@ -66,9 +65,43 @@ export function HelpSearchProvider({ children }: { children: React.ReactNode }) 
     }
   }, [ref, highlightReference])
 
-  return (
-    <HelpSearchContext.Provider value={{ goTo, ref, updateRef, clearHelper }}>
-      {children}
-    </HelpSearchContext.Provider>
-  )
+  const clearing = useCallback(() => {
+    clearHelper()
+    setCurrentHelper(null)
+  }, [clearHelper])
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        clearing()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyPress)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [clearing])
+
+  const handleUserClick = () =>
+    sessionCustomer?.email ? logOut() : push(APP_ROUTES.public.auth.name)
+
+  const actions = menuActions({
+    isAuthenticated: !!sessionCustomer?.email,
+    handleNotificationClick: () => console.log('Notificação'),
+    handleSettingsClick: () => console.log('Configs'),
+    handleUserClick
+  })
+
+  return {
+    goTo,
+    ref,
+    actions,
+    currentHelper,
+    updateRef,
+    clearHelper,
+    setCurrentHelper,
+    clearing
+  }
 }

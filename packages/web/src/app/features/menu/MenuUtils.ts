@@ -32,7 +32,7 @@ export const getCurrentRoute = (pathname: string): TCurrentLabel => {
     ...combinedArray[1]
   }
 
-  const index = pathname.replace('/', '')
+  const index = pathname?.replace('/', '')
 
   const currentRoute: TCurrentLabel = combinedObject[index as keyof typeof combinedObject]
 
