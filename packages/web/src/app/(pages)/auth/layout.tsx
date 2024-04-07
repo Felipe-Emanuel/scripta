@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Painel do Escritor | Autenticação',
+  title: 'Painel do Escritor | Autenticação'
 }
 
 export default function AuthLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode
 }>) {

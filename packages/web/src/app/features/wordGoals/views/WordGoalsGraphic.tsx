@@ -10,7 +10,7 @@ export function WordGoalsGraphic() {
 
   return (
     <Graphics.root>
-      <Graphics.header text="Taxa de satisfração" />
+      <Graphics.header text="Taxa de satisfação" />
       <Graphics.content
         type="radialBar"
         series={[+series]}
@@ -24,12 +24,12 @@ export function WordGoalsGraphic() {
             shade: 'dark',
             type: 'vertical',
             gradientToColors: ['#0075FF', '#7551FF'],
-            stops: [0, 100],
-          },
+            stops: [0, 100]
+          }
         }}
         RadialBarOptions={{
           startAngle: -115,
-          endAngle: 115,
+          endAngle: 115
         }}
       />
     </Graphics.root>

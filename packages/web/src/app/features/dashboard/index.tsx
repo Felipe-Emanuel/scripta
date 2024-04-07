@@ -3,8 +3,8 @@ import { DashboardProfile } from '@features/dashboard/views/DashboardProfile'
 import { DashboardReferralTracking } from '@features/dashboard/views/DashboardReferralTracking'
 import { DashboardRoot } from '@features/dashboard/views/DashboardRoot'
 import { DashboardWordGoals } from '@features/dashboard/views/DashboardWordGoals'
-import { DasboardReaders } from './views/DasboardReaders'
 import { DashboardSkeleton } from './views/DashboardSkeleton'
+import { DashboardReaders } from './views/DashboardReaders'
 
 export const Dashboard = {
   root: DashboardRoot,
@@ -12,6 +12,6 @@ export const Dashboard = {
   wordsGoals: DashboardWordGoals,
   referralTracking: DashboardReferralTracking,
   booksPerformance: DashboardBooksPerformance,
-  readers: DasboardReaders,
-  skeleton: DashboardSkeleton,
+  readers: DashboardReaders,
+  skeleton: DashboardSkeleton
 }

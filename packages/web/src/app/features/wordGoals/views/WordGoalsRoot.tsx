@@ -3,5 +3,9 @@ import { Template } from '@shared/components'
 import { TRootComponent } from '@shared/types'
 
 export function WordGoalsRoot({ children }: TRootComponent) {
-  return <Template className={wordGoalsRootTV()}>{children}</Template>
+  return (
+    <Template id="word-goals-root" className={wordGoalsRootTV()}>
+      {children}
+    </Template>
+  )
 }

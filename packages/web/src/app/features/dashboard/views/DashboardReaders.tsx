@@ -5,7 +5,7 @@ import { useReadersController } from '../controllers/useReadersController'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Text } from '@shared/components'
 
-export function DasboardReaders() {
+export function DashboardReaders() {
   const { coordinates, readerDetailsProps, bookDetilProps, seeReader } = useReadersController()
 
   return (

@@ -4,7 +4,7 @@ import { readerRootTV } from '../ReaderTV'
 
 export function ReaderRoot({ children }: TRootComponent) {
   return (
-    <Template overflow="hidden" className={readerRootTV()}>
+    <Template id="reader-root" overflow="hidden" className={readerRootTV()}>
       {children}
     </Template>
   )

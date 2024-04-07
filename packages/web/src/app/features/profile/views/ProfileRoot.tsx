@@ -4,11 +4,7 @@ import { TRootComponent } from '@shared/types'
 
 export function ProfileRoot({ children }: TRootComponent) {
   return (
-    <Template
-      overflow="hidden"
-      flex-direction="row"
-      className={profileRootTV()}
-    >
+    <Template id="profile-root" overflow="hidden" flex-direction="row" className={profileRootTV()}>
       {children}
     </Template>
   )

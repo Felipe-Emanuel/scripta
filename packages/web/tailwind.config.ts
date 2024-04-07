@@ -6,12 +6,12 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    '../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    '../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
     fontFamily: {
       inter: '"Inter", sans-serif',
-      'jacques-francois': '"Jacques Francois", serif',
+      'jacques-francois': '"Jacques Francois", serif'
     },
     fontSize: {
       '3xl': '96px',
@@ -21,7 +21,7 @@ const config: Config = {
       md: '16px',
       sm: '14px',
       xs: '12px',
-      xxs: '10px',
+      xxs: '10px'
     },
     colors: {
       transparent: 'transparent',
@@ -33,11 +33,11 @@ const config: Config = {
       error: '#F53C2B',
       green: {
         400: '#05CD99',
-        500: '#01B574',
+        500: '#01B574'
       },
       gray: {
-        400: '#A0AEC0',
-      },
+        400: '#A0AEC0'
+      }
     },
     extend: {
       backgroundImage: {
@@ -49,31 +49,40 @@ const config: Config = {
           'linear-gradient(126.97deg, rgba(6, 11, 40, 0.74) 28.26%, rgba(10, 14, 35, 0.71) 91.2%)',
         'bar-graphic-background':
           'linear-gradient(126.97deg, #060C29 28.26%, rgba(4, 12, 48, 0.5) 91.2%)',
-      },
+        'sidebar-background':
+          'linear-gradient(111.84deg, rgba(6, 11, 38, 0.94) 59.3%, rgba(26, 31, 55, 0) 100%)'
+      }
     },
     keyframes: {
       'single-animate-ping': {
         '0%': { scale: '1.2', opacity: '1' },
         '50%': { scale: '1.5', opacity: '0.5' },
-        '100%': { scale: '1.7', opacity: '0' },
+        '100%': { scale: '1.7', opacity: '0' }
       },
       ping: {
         '0%': { scale: '1', opacity: '1' },
         '50%': { scale: '0.9', opacity: '5' },
-        '100%': { scale: '1', opacity: '1' },
-      },
+        '100%': { scale: '1', opacity: '1' }
+      }
     },
     animation: {
       'single-animate-ping': 'single-animate-ping 500ms linear forwards',
-      ping: 'ping 1000ms linear infinite',
-    },
+      ping: 'ping 1000ms linear infinite'
+    }
   },
   darkMode: 'class',
   plugins: [
     nextui({
       addCommonColors: true,
+      themes: {
+        dark: {
+          colors: {
+            default: 'transparent'
+          }
+        }
+      }
     }),
-    require('tailwind-scrollbar'),
-  ],
+    require('tailwind-scrollbar')
+  ]
 }
 export default config

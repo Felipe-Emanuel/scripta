@@ -18,32 +18,33 @@ export const useProvidersSession = () => {
   const { data: session, isLoading: sessionLoading } = useQueryData(
     getNextAuthSession,
     'session',
-    '12-hours',
+    '12-hours'
   )
 
   const cookieValue = {
     email: session?.user?.email,
     image: session?.user?.image,
     name: session?.user?.name,
-    provider: 'google',
+    provider: 'google'
   }
 
   session?.user &&
     createSession({
       cookieName: cookieSession,
-      value: JSON.stringify(cookieValue),
+      value: JSON.stringify(cookieValue)
     })
 
   const logInWithProviders = async (provider: BuiltInProviderType) =>
     await signIn(provider, {
       redirect: true,
-      callbackUrl: APP_ROUTES.private.dashboard.name,
+      callbackUrl: APP_ROUTES.private.dashboard.name
     })
 
   const logOut = () => {
+    console.log('chamei')
     signOut({
       redirect: true,
-      callbackUrl: APP_ROUTES.public.auth.name,
+      callbackUrl: APP_ROUTES.public.auth.name
     })
 
     deleteCookie(cookieSession)
@@ -53,6 +54,6 @@ export const useProvidersSession = () => {
     session,
     sessionLoading,
     logInWithProviders,
-    logOut,
+    logOut
   }
 }
