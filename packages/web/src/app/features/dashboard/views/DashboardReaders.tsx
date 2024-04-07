@@ -16,7 +16,7 @@ export function DashboardReaders() {
       fallback={<Text align="center" text="Algo errado aconteceu" />}
     >
       <Readers.root>
-        {/* <Readers.map coordinates={coordinates} seeReader={seeReader} /> */}
+        <Readers.map coordinates={coordinates} seeReader={seeReader} />
         <Readers.details {...readerDetailsProps} />
         <Readers.bookDetil {...bookDetilProps} />
       </Readers.root>
