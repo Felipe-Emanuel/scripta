@@ -23,7 +23,7 @@ export function BookPerformanceFilters({
   uniqueGenres,
   uniqueThemes,
   handleGenre,
-  handleTheme,
+  handleTheme
 }: BookPerformanceFiltersProps) {
   return (
     <div className={tv.bookPerformanceFiltersRootTV()}>
@@ -65,10 +65,7 @@ export function BookPerformanceFilters({
           onClear={() => handleGenre('')}
         >
           {(item) => (
-            <AutocompleteItem
-              data-testId={`item-${item.value}`}
-              key={item.value}
-            >
+            <AutocompleteItem data-testid={`item-${item.value}`} key={item.value}>
               {item.value}
             </AutocompleteItem>
           )}

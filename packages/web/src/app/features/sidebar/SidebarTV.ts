@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const sidebarRootTv = tv({
-  base: 'bg-sidebar-background duration-500 z-50 fixed left-0 top-0 bottom-0 p-4 flex flex-col gap-4 items-center overflow-hidden',
+  base: 'bg-sidebar-background duration-500 z-30 fixed left-0 top-0 bottom-0 p-4 flex flex-col gap-4 items-center overflow-hidden',
   variants: {
     isOpen: {
       true: 'w-64',
@@ -14,7 +14,7 @@ export const sidebarRootTv = tv({
 })
 
 export const overflowTv = tv({
-  base: 'fixed top-0 w-screen h-screen z-40 duration-500 pointer-events-none min-[1890px]:hidden',
+  base: 'fixed inset-0 z-30 duration-500 pointer-events-none min-[1890px]:hidden',
   variants: {
     isOpen: {
       true: 'bg-black/50',

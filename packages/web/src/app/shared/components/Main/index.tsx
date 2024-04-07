@@ -24,6 +24,12 @@ export function Main({ children, overflow }: TMain) {
   }, [])
 
   return (
-    <main className={mainTv({ overflow })}>{isClientSide && children}</main>
+    <main className={mainTv({ overflow })}>
+      <div
+        id="overflow-search-helper"
+        className="duration-500 fixed inset-0 pointer-events-none z-40"
+      />
+      {isClientSide && children}
+    </main>
   )
 }

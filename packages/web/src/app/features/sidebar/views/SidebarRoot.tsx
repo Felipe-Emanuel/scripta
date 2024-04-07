@@ -19,6 +19,7 @@ export function SidebarRoot({ children, isOpen, toggleSidebar }: SidebarRootProp
     <>
       <div className={overflowTv({ isOpen })} />
       <aside
+        id="aside"
         onMouseEnter={toggleSidebar}
         onMouseLeave={toggleSidebar}
         className={sidebarRootTv({ isOpen })}

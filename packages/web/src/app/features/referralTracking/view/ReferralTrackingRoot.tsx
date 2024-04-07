@@ -3,5 +3,9 @@ import { Template } from '@shared/components'
 import { TRootComponent } from '@shared/types'
 
 export function ReferralTrackingRoot({ children }: TRootComponent) {
-  return <Template className={referralTrackingRootTV()}>{children}</Template>
+  return (
+    <Template id="referral-tracking" className={referralTrackingRootTV()}>
+      {children}
+    </Template>
+  )
 }
