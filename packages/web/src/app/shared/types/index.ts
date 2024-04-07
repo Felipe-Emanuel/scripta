@@ -15,6 +15,7 @@ export * from './TBookPerformanceProperty'
 export * from './TReader'
 export * from './Tcoordinate'
 export * from './TCurrentTab'
+export * from './TSideBar'
 
 export * from './requests/TAuthRequest'
 export * from './requests/TCreateUserRequest'

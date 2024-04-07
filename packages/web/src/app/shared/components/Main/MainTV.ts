@@ -8,7 +8,7 @@ export const mainTv = tv({
       'scroll-x': 'overflow-x-scroll',
       'scroll-x-hidden': 'overflow-x-hidden',
       'scroll-y': 'overflow-y-scroll flex-col',
-      'scroll-y-hidden': 'overflow-y-hidden',
-    },
-  },
+      'scroll-y-hidden': 'overflow-y-hidden'
+    }
+  }
 })

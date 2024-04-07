@@ -5,7 +5,7 @@ import { useReadersController } from '../controllers/useReadersController'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Text } from '@shared/components'
 
-export function DasboardReaders() {
+export function DashboardReaders() {
   const { coordinates, readerDetailsProps, bookDetilProps, seeReader } = useReadersController()
 
   return (
@@ -16,7 +16,7 @@ export function DasboardReaders() {
       fallback={<Text align="center" text="Algo errado aconteceu" />}
     >
       <Readers.root>
-        <Readers.map coordinates={coordinates} seeReader={seeReader} />
+        {/* <Readers.map coordinates={coordinates} seeReader={seeReader} /> */}
         <Readers.details {...readerDetailsProps} />
         <Readers.bookDetil {...bookDetilProps} />
       </Readers.root>
