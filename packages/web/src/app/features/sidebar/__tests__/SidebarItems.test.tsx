@@ -1,7 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import { SidebarItems } from '../views/SidebarItems'
 
-const renderComponent = () => render(<SidebarItems isOpen />)
+jest.mock('@shared/hooks/contexts/useSidebar', () => ({
+  useSidebar: jest.fn(() => ({
+    isFeedbackOnFocus: false,
+    isOpen: false,
+    getRootProps: jest.fn()
+  }))
+}))
+
+const renderComponent = () => render(<SidebarItems />)
 
 describe('SidebarItems', () => {
   it('Should render correctly', () => {

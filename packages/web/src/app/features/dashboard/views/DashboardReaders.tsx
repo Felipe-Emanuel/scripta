@@ -10,9 +10,7 @@ export function DashboardReaders() {
 
   return (
     <ErrorBoundary
-      onReset={(details) => {
-        console.log(details.reason)
-      }}
+      resetKeys={['enter']}
       fallback={<Text align="center" text="Algo errado aconteceu" />}
     >
       <Readers.root>

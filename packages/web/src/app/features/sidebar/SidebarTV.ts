@@ -34,6 +34,14 @@ export const sidebarHeaderDivisorTv = tv({
   base: 'my-4 w-full h-0.5 bg-gradient-to-r from-transparent via-gray-400 to-transfrom-transparent'
 })
 
+export const sidebarItemsWrapperTv = tv({
+  base: 'flex flex-col items-center justify-between size-full pr-4'
+})
+
+export const sidebarItemsWrapperContentTv = tv({
+  base: 'flex flex-col flex-shrink'
+})
+
 export const sidebarItemsRootTv = tv({
   base: 'flex flex-col mx-2 items-center justify-start w-full'
 })

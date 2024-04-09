@@ -41,7 +41,6 @@ export const useProvidersSession = () => {
     })
 
   const logOut = () => {
-    console.log('chamei')
     signOut({
       redirect: true,
       callbackUrl: APP_ROUTES.public.auth.name
