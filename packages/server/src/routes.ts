@@ -4,6 +4,7 @@ import { bookController } from 'src/controllers/bookController'
 import { goalsController } from 'src/controllers/goalsController'
 import { userController } from 'src/controllers/userController'
 import { readerController } from './controllers/readerController'
+import feedbackController from './controllers/feedbackController'
 
 export const routes = (app: FastifyInstance) => {
   app.register(userController)
@@ -11,4 +12,5 @@ export const routes = (app: FastifyInstance) => {
   app.register(goalsController)
   app.register(bookController)
   app.register(readerController)
+  app.register(feedbackController)
 }

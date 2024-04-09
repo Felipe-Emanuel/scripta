@@ -7,6 +7,7 @@ import { TbChartInfographic } from 'react-icons/tb'
 import { IoCalendarSharp } from 'react-icons/io5'
 import { FaBookOpenReader } from 'react-icons/fa6'
 import { ImBooks } from 'react-icons/im'
+import { MdFeedback } from 'react-icons/md'
 
 let id = 0
 
@@ -50,5 +51,13 @@ export const menuSearchDefaultItem: TMenuSearchDefaultItem[] = [
     tip: 'Aqui você encontra informações valiosas sobre seu desempenho. Filtrando por Acessos você consegue ver seus números em uma visão geral ou filtrada tanto por gênero ou uma combinação de gênero e tema dentro do que você tem escrito na plataforma.',
     ref: 'books-performance-root',
     icon: ImBooks
+  },
+  {
+    id: id++,
+    label: 'Feedback',
+    value: 'Feedback',
+    tip: 'Com o Feedback é onde você contribui com a plataforma. Você pode enviar sugestões, melhorias, reportar bugs e muito mais. Você pode enviar um print para auxiliar o seu texto, tanto arrastando a imagem salva até a área de Feedback ou simplesmente copiando e colando um print na área de texto.',
+    ref: 'feedback-sender',
+    icon: MdFeedback
   }
 ]

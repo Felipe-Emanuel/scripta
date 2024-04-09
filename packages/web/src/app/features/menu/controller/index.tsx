@@ -30,7 +30,7 @@ export const useMenuController = () => {
           overflowSearchHelper.classList.add('bg-black/70', 'pointer-events-auto')
           aside.classList.add('pointer-events-none', 'z-0')
         } else {
-          el?.classList.remove('z-40')
+          el?.classList.remove('z-40', 'brightness-105')
           overflowSearchHelper.classList.remove('bg-black/70', 'pointer-events-auto')
           aside.classList.remove('pointer-events-none', 'z-0')
         }
@@ -45,7 +45,7 @@ export const useMenuController = () => {
     if (el) {
       el.scrollIntoView({ block: 'center', behavior: 'smooth' })
 
-      el.classList.add('z-40')
+      el.classList.add('z-40', 'brightness-105')
 
       const position = el.getBoundingClientRect()
       setGoTo({ x: position.left, y: position.bottom - position.top })
