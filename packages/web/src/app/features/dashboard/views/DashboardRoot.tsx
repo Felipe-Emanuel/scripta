@@ -1,10 +1,11 @@
 import { TRootComponent } from '@shared/types'
 import { Menu } from '@features/menu'
 import { menuSearchDefaultItem } from '../DashboardUtils'
+import { dashboardRootTV } from '../DashboardTV'
 
 export function DashboardRoot({ children }: TRootComponent) {
   return (
-    <div className="flex flex-col gap-4 max-w-[1500px] m-auto pl-20">
+    <div className={dashboardRootTV()}>
       <Menu.root>
         <Menu.pathname />
         <Menu.actions>

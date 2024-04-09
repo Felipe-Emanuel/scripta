@@ -18,7 +18,7 @@ export function FeedbackAbout() {
       {isFeedbackOnFocus ? (
         iconContent
       ) : (
-        <Tooltip disableAnimation showArrow content="Feedback">
+        <Tooltip showArrow content="Feedback">
           {iconContent}
         </Tooltip>
       )}
