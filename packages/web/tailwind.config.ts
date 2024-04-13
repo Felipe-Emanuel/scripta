@@ -31,6 +31,8 @@ const config: Config = {
       primary: '#0075FF',
       tertiary: '#7551FF',
       error: '#F53C2B',
+      warning: '#EF5013',
+
       green: {
         400: '#05CD99',
         500: '#01B574'

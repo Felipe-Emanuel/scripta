@@ -1,8 +1,11 @@
+import { bookEntitieMock } from '@entities/Book/mocks'
 import { formateDate, getWeekNumber, isToday } from 'src/shared/utils/dates'
-import { progressGoal } from 'src/shared/utils/objectValidations'
+import { isAllAttributeFilled, progressGoal } from 'src/shared/utils/objectValidations'
 import {
   generateStrongPass,
-  isPasswordStrong,
+  isBase64,
+  isLink,
+  isPasswordStrong
 } from 'src/shared/utils/stringValidations'
 
 describe('isPasswordStrong', () => {
@@ -86,5 +89,29 @@ describe('formateDate', () => {
     const receive = `${year}/${formattedMonth}/${formattedDay}`
 
     expect(sut).toEqual(receive)
+  })
+})
+
+describe('isAllAttributeFilled', () => {
+  it('should create a book with all fields filled', () => {
+    const areAllFieldsFilled = isAllAttributeFilled(bookEntitieMock)
+
+    expect(areAllFieldsFilled).toBeTruthy()
+  })
+})
+
+describe('isLink', () => {
+  it('should valid if publishedUrl is a URL', () => {
+    const isValidLink = isLink(bookEntitieMock.publishedUrl)
+
+    expect(isValidLink).toBeTruthy()
+  })
+})
+
+describe('isBase64', () => {
+  it('should able to contais a base64 at heroPathUrl', () => {
+    const isValidLink = isBase64(bookEntitieMock.heroPathUrl)
+
+    expect(isValidLink).toBeTruthy()
   })
 })

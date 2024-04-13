@@ -18,9 +18,21 @@ export const inMemoryBooksRepository = (): IBooksRepository => {
   const deleteBook = async (bookId: string): Promise<Book> =>
     books.filter((book) => book.id === bookId)[0]
 
+  const toggleIsActiveBook = async (bookId: string): Promise<Book> => {
+    const existentBook = books.find((book) => book.id === bookId)
+
+    const patchedBook = {
+      ...existentBook,
+      isActive: !existentBook.isActive
+    }
+
+    return patchedBook || null
+  }
+
   return {
     createBook,
     getAllBooks,
     deleteBook,
+    toggleIsActiveBook
   }
 }

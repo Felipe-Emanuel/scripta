@@ -15,19 +15,22 @@ import { IoIosRemoveCircle } from 'react-icons/io'
 import { MdEditSquare } from 'react-icons/md'
 import { FaTrashCan } from 'react-icons/fa6'
 import { CiMenuKebab } from 'react-icons/ci'
+import { BiPowerOff } from 'react-icons/bi'
 
 import { Icon, Text } from '@shared/components'
 import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
 import { useBookInformationController } from '../controller'
 import { DeleteModal } from './modals/DeleteModal'
+import { DesactiveModal } from './modals/DesactiveModal'
 
 interface IconContentProps {
   icon: ElementType
-  color?: 'primary' | 'danger'
+  color?: 'primary' | 'danger' | 'warning' | 'secondary'
 }
 
 export function BookInformationActions() {
-  const { action, toggleDeleting } = useBookInformationController()
+  const { action, toggleDeleting, toggleDesactiving, handleDesactiveBook } =
+    useBookInformationController()
   const { selectedBook } = useBookInformation()
 
   if (!selectedBook) return null
@@ -49,6 +52,12 @@ export function BookInformationActions() {
         isDeleting={action.isDeleting}
         bookTitle={selectedBook?.title}
         toggleDeleting={toggleDeleting}
+      />
+      <DesactiveModal
+        handleDesactiveBook={handleDesactiveBook}
+        isDesactiving={action.isDesactiving}
+        book={selectedBook}
+        toggleDesactiving={toggleDesactiving}
       />
       <Dropdown showArrow className="bg-white/10 backdrop-blur-md ring-1 ring-white/50">
         <DropdownTrigger>
@@ -75,6 +84,24 @@ export function BookInformationActions() {
           </DropdownSection>
 
           <DropdownSection title="Zona de perigo">
+            <DropdownItem
+              textValue="Desativar"
+              onClick={toggleDesactiving}
+              key="desactiving"
+              startContent={
+                <IconContent
+                  icon={BiPowerOff}
+                  color={selectedBook?.isActive ? 'warning' : 'secondary'}
+                />
+              }
+            >
+              <Text
+                weight="semi-bold"
+                text={selectedBook?.isActive ? 'Ocultar' : 'Tornar público'}
+                color={selectedBook?.isActive ? 'warning' : 'green-500'}
+              />
+            </DropdownItem>
+
             <DropdownItem
               textValue="Excluir"
               onClick={toggleDeleting}

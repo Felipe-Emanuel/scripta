@@ -16,4 +16,5 @@ export type TBookResponse = {
   characters: TCharacterResponse[]
   reaction: TReaction[]
   totalWords: number
+  isActive: boolean
 }

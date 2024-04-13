@@ -4,9 +4,10 @@ import { fakeBase64 } from '@constants/fakeBase64'
 
 export const updateBookMock: TUpdateBook = {
   conclued: false,
+  isActive: true,
   description: 'description',
   heroPathUrl: fakeBase64,
   publishedUrl: 'https://link',
   id: randomUUID(),
-  title: 'title',
+  title: 'title'
 }

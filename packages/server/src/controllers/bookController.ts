@@ -9,20 +9,25 @@ import {
   TGetAllBooksServiceRequest,
   DeleteBookService,
   TDeleteBookServiceRequest,
+  PatchActiveBookService,
+  IPatchActiveBookServiceRequest
 } from '@services'
 
 export async function bookController(app: FastifyInstance): Promise<void> {
-  const { getAllBooks, createBook, deleteBook } = databaseBookRepository()
+  const { getAllBooks, createBook, deleteBook, toggleIsActiveBook } = databaseBookRepository()
 
   const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = {
-    getAllBooks,
+    getAllBooks
   }
   const actionCreateBook: TCreateBookServiceRequest['actions'] = {
     createBook,
-    getAllBooks,
+    getAllBooks
   }
   const deleteBookAction: TDeleteBookServiceRequest['action'] = {
-    deleteBook,
+    deleteBook
+  }
+  const patchBookAction: IPatchActiveBookServiceRequest['action'] = {
+    toggleIsActiveBook
   }
 
   app.get('/books/:userEmail', async (req, apply) => {
@@ -34,7 +39,7 @@ export async function bookController(app: FastifyInstance): Promise<void> {
 
     const books = await GetAllBooksService({
       action: actionGetAllBooks,
-      userEmail,
+      userEmail
     })
 
     try {
@@ -55,7 +60,7 @@ export async function bookController(app: FastifyInstance): Promise<void> {
     const newBook = await CreateBookService({
       actions: actionCreateBook,
       book,
-      userEmail,
+      userEmail
     })
 
     try {
@@ -74,17 +79,35 @@ export async function bookController(app: FastifyInstance): Promise<void> {
 
     const deletedBook = await DeleteBookService({
       action: deleteBookAction,
-      bookId,
+      bookId
     })
 
-    if (!deletedBook)
-      apply.status(404).send({ message: globalErrorMessage.unableToDelete })
+    if (!deletedBook) apply.status(404).send({ message: globalErrorMessage.unableToDelete })
 
     try {
       apply.send({
         message: globalErrorMessage.successfullyDeleted,
-        deletedBook,
+        deletedBook
       })
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  app.put('/books/:bookId', async (req, apply) => {
+    const { bookId } = req.params as Partial<IPatchActiveBookServiceRequest>
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    const patchedBook = await PatchActiveBookService({
+      action: patchBookAction,
+      bookId
+    })
+
+    try {
+      apply.send(patchedBook)
     } catch {
       apply.status(500).send({ message: globalErrorMessage.unexpected })
     }

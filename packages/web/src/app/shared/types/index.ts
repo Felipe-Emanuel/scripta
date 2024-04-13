@@ -28,6 +28,7 @@ export * from './requests/TGetGoalRequest'
 export * from './requests/TCreateGoalRequest'
 export * from './requests/TGetReaderByBookRequest'
 export * from './requests/TCreateFeedbackRequest'
+export * from './requests/TBookRequest'
 
 export * from './responses/TUser'
 export * from './responses/TGoalResponse'

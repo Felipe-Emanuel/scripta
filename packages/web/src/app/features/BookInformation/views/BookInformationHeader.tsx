@@ -17,12 +17,6 @@ export function BookInformationHeader() {
     <div className="relative flex flex-col gap-2">
       <div className="flex items-center justify-between w-[calc(100%-3rem)] h-2">
         <Title title={selectedBook?.title} as="h4" />
-
-        {selectedBook?.conclued && (
-          <Chip size="sm" color="success" variant="bordered">
-            Concluído
-          </Chip>
-        )}
       </div>
       <span>
         <Text text={`${selectedBook?.Gender} /`} color="green-500" as="span" />{' '}
@@ -41,6 +35,17 @@ export function BookInformationHeader() {
         color="gray"
         className="w-full max-w-[680px]"
       />
+
+      <div className="flex items-center gap-1">
+        {selectedBook?.conclued && (
+          <Chip size="sm" color="success" variant="bordered">
+            Concluído
+          </Chip>
+        )}
+        <Chip size="sm" color={selectedBook?.isActive ? 'secondary' : 'warning'} variant="bordered">
+          {selectedBook?.isActive ? 'Público' : 'Oculto'}
+        </Chip>
+      </div>
     </div>
   )
 }

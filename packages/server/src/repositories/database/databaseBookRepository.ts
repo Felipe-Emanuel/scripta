@@ -5,7 +5,7 @@ import { IBooksRepository } from '@repositories'
 export const databaseBookRepository = (): IBooksRepository => {
   async function createBook(book: Book): Promise<Book[]> {
     const newBook = await prisma.book.create({
-      data: book,
+      data: book
     })
 
     return [newBook]
@@ -14,15 +14,15 @@ export const databaseBookRepository = (): IBooksRepository => {
   const getAllBooks = async (userEmail: string): Promise<Book[]> => {
     const books = await prisma.book.findMany({
       where: {
-        userEmail,
+        userEmail
       },
       include: {
         characters: true,
-        reactions: true,
+        reactions: true
       },
       orderBy: {
-        createdAt: 'desc',
-      },
+        createdAt: 'desc'
+      }
     })
 
     return books || []
@@ -31,15 +31,37 @@ export const databaseBookRepository = (): IBooksRepository => {
   const deleteBook = async (bookId: string): Promise<Book> => {
     const existentBook = await prisma.book.findUnique({
       where: {
-        id: bookId,
-      },
+        id: bookId
+      }
     })
 
     if (existentBook) {
       return await prisma.book.delete({
         where: {
-          id: existentBook.id,
-        },
+          id: existentBook.id
+        }
+      })
+    }
+
+    return null
+  }
+
+  const toggleIsActiveBook = async (bookId: string): Promise<Book> => {
+    const existentBook = await prisma.book.findUniqueOrThrow({
+      where: {
+        id: bookId
+      }
+    })
+
+    const isActive = existentBook.isActive ? false : true
+
+    if (existentBook) {
+      return await prisma.book.update({
+        where: { id: bookId },
+        data: {
+          ...existentBook,
+          isActive
+        }
       })
     }
 
@@ -50,5 +72,6 @@ export const databaseBookRepository = (): IBooksRepository => {
     getAllBooks,
     createBook,
     deleteBook,
+    toggleIsActiveBook
   }
 }

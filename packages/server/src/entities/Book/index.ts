@@ -10,30 +10,34 @@ export const BookEntitie = (book: Book) => {
 
     if (!book.title) throw new Error(throwBookMessages.bookWithoutTitle)
 
-    if (!book.description)
-      throw new Error(throwBookMessages.bookWithoutDescription)
+    if (!book.description) throw new Error(throwBookMessages.bookWithoutDescription)
 
     return book
   }
 
-  const getBookWithCharacters = async (
-    bookWithCharacters: TBookWithCharacters,
-  ) => {
+  const getBookWithCharacters = async (bookWithCharacters: TBookWithCharacters) => {
     if (bookWithCharacters.characters.length) return bookWithCharacters
 
     throw new Error(throwBookMessages.bookWithoutCharacters)
   }
 
   const updatedBook = async (updatedBook: TUpdateBook) => {
-    if (!isAllAttributeFilled(updatedBook))
-      throw new Error(throwBookMessages.areAllFieldsFilled)
+    if (!isAllAttributeFilled(updatedBook)) throw new Error(throwBookMessages.areAllFieldsFilled)
 
     return updatedBook
+  }
+
+  const toggleIsActiveBook = async () => {
+    return {
+      ...book,
+      isActive: !book.isActive
+    }
   }
 
   return {
     setBook,
     getBookWithCharacters,
     updatedBook,
+    toggleIsActiveBook
   }
 }

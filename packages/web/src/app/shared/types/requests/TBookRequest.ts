@@ -1,4 +1,4 @@
-export type TUpdateBook = {
+export type TBookRequest = {
   id: string
   title: string
   description: string

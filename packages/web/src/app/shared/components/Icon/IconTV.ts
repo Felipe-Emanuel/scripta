@@ -18,7 +18,8 @@ export const iconTv = tv({
       black: 'text-black',
       white: 'text-white',
       gray: 'text-gray-400',
-      danger: 'text-error'
+      danger: 'text-error',
+      warning: 'text-warning'
     }
   },
   defaultVariants: {

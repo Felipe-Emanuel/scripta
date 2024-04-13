@@ -45,9 +45,10 @@ export function DeleteModal({ isDeleting, bookTitle, toggleDeleting }: IDeleteMo
             </ModalHeader>
             <ModalBody>
               <Text
-                text={`Você gostaria realmente de deletar o livro ${bookTitle}`}
+                text={`Você gostaria realmente de deletar o livro ${bookTitle}?`}
                 weight="bold"
               />
+              <Text text="Você não poderá desfazer esta ação." weight="light" color="gray" />
             </ModalBody>
             <ModalFooter>
               <Button

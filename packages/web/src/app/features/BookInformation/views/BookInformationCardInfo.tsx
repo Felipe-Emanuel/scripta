@@ -80,7 +80,7 @@ export function BookInformationCardInfo() {
 
   return (
     <div className="dark:bg-transparent">
-      <div className="flex max-[1023px]:flex-col flex-row max-[1023px]:flex-wrap gap-2 md:gap-4 items-center justify-center md:justify-start">
+      <div className="flex max-[1023px]:flex-col flex-row max-[1023px]:flex-wrap gap-2 items-center justify-center md:justify-start">
         <div className="relative col-span-6 md:col-span-4">
           {selectedBook?.publishedUrl ? (
             <a target="_blank" href={selectedBook?.publishedUrl}>
