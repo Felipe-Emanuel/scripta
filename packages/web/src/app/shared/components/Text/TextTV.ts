@@ -5,7 +5,7 @@ export const textTv = tv({
   variants: {
     fontFamily: {
       inter: 'font-inter',
-      'jacques-francois': 'font-jacques-francois',
+      'jacques-francois': 'font-jacques-francois'
     },
     size: {
       '2xl': 'md:text-lg lg:text-xl xl:text-2xl',
@@ -14,14 +14,14 @@ export const textTv = tv({
       md: 'text-sm md:text-md',
       sm: 'text-xs sm:text-sm',
       xs: 'text-xs',
-      xxs: 'text-xxs',
+      xxs: 'text-xxs'
     },
     weight: {
       bold: 'font-bold',
       normal: 'font-normal',
       light: 'font-light',
       'semi-bold': 'font-500',
-      black: 'font-900',
+      black: 'font-900'
     },
     color: {
       secondary: 'text-green-400',
@@ -30,16 +30,20 @@ export const textTv = tv({
       white: 'text-white',
       gray: 'text-gray-400',
       error: 'text-error',
-      'green-500': 'text-green-500',
+      'green-500': 'text-green-500'
+    },
+    textStyle: {
+      uppercase: 'uppercase',
+      lowercase: 'lowercase'
     },
     align: {
-      center: 'text-center',
-    },
+      center: 'text-center'
+    }
   },
   defaultVariants: {
     size: 'md',
     weight: 'normal',
     fontFamily: 'inter',
-    color: 'white',
-  },
+    color: 'white'
+  }
 })

@@ -63,11 +63,18 @@ const config: Config = {
         '0%': { scale: '1', opacity: '1' },
         '50%': { scale: '0.9', opacity: '5' },
         '100%': { scale: '1', opacity: '1' }
+      },
+      'border-animation': {
+        '0%': { borderColor: 'purple', boxShadow: '0 0 1rem purple' },
+        '33%': { borderColor: 'orange', boxShadow: '0 0 1rem orange' },
+        '66%': { borderColor: 'green', boxShadow: '0 0 1rem pink' },
+        '100%': { borderColor: 'purple', boxShadow: '0 0 1rem purple' }
       }
     },
     animation: {
       'single-animate-ping': 'single-animate-ping 500ms linear forwards',
-      ping: 'ping 1000ms linear infinite'
+      ping: 'ping 1000ms linear infinite',
+      'border-animation': 'border-animation 4s linear infinite'
     }
   },
   darkMode: 'class',

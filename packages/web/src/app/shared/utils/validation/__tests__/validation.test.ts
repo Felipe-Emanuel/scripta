@@ -1,4 +1,4 @@
-import { isPasswordStrong, progressGoal } from '@shared/utils/validation'
+import { formatNumber, isPasswordStrong, progressGoal } from '@shared/utils/validation'
 
 describe('isPasswordStrong', () => {
   it('should able to validate a strong password', () => {
@@ -26,5 +26,13 @@ describe('progressGoal', () => {
     const sut = progressGoal(words, goals)
 
     expect(sut).toEqual(50)
+  })
+})
+
+describe('formatNumber', () => {
+  it('should returns 10.0k', () => {
+    const sut = formatNumber(10000)
+
+    expect(sut).toBe('10.0k')
   })
 })

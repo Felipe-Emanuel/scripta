@@ -19,12 +19,16 @@ export function Text({
   className = '',
   fontFamily,
   align,
+  textStyle,
   ...props
 }: TextProps) {
   const Comp = as ?? 'p'
 
   return (
-    <Comp {...props} className={textTv({ size, weight, color, align, fontFamily, className })}>
+    <Comp
+      {...props}
+      className={textTv({ size, weight, color, align, fontFamily, className, textStyle })}
+    >
       {text}
     </Comp>
   )

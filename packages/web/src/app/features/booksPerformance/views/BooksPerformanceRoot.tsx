@@ -1,6 +1,6 @@
 import { Template } from '@shared/components'
 import { TRootComponent } from '@shared/types'
-import { booksPerformanceRootTV } from '../NookPerformanceTV'
+import { booksPerformanceRootTV } from '../BookPerformanceTV'
 
 export function BooksPerformanceRoot({ children }: TRootComponent) {
   return (

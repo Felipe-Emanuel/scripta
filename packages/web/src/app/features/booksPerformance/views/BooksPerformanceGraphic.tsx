@@ -1,5 +1,5 @@
 import { Graphics } from '@features/Graphics'
-import { booksPerformanceGraphicTV } from '../NookPerformanceTV'
+import { booksPerformanceGraphicTV } from '../BookPerformanceTV'
 
 type TSeries = {
   name: string
@@ -11,17 +11,14 @@ interface BooksPerformanceGraphicProps {
   catgories: string[]
 }
 
-export function BooksPerformanceGraphic({
-  catgories,
-  series,
-}: BooksPerformanceGraphicProps) {
+export function BooksPerformanceGraphic({ catgories, series }: BooksPerformanceGraphicProps) {
   const formattedSeries = series.reduce(
     (acc, serie) => ({
       ...acc,
       data: [...acc.data, ...serie.data],
-      name: serie.name,
+      name: serie.name
     }),
-    { data: [] } as unknown as TSeries,
+    { data: [] } as unknown as TSeries
   )
 
   return (

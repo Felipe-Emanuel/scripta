@@ -23,6 +23,6 @@ export const useLocalStorage = () => {
     getLocalStorage,
     setLocalStorage,
     deleteFromStorage,
-    STORAGE_KEY,
+    STORAGE_KEY
   }
 }

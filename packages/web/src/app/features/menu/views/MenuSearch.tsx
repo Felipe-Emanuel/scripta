@@ -41,7 +41,11 @@ export function MenuSearch({ defaultItems }: IMenuSearchProps) {
         onClear={clearing}
       >
         {(item) => (
-          <AutocompleteItem data-testid={`item-${item.value}`} key={item.ref}>
+          <AutocompleteItem
+            textValue={item.value}
+            data-testid={`item-${item.value}`}
+            key={item.ref}
+          >
             <div className={tv.autocompleteItemWrapperTV()}>
               <div className={tv.autocompleteItemIconTV()}>
                 <Icon icon={item?.icon} size="lg" color="white" />

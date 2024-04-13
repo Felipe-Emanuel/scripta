@@ -5,16 +5,17 @@ import { Button } from '@nextui-org/react'
 import Link from 'next/link'
 
 import { Icon, Text, Title } from '@shared/components'
-import { usePathname } from 'next/navigation'
-import { items } from '../SidebarUtils'
-import * as tv from '../SidebarTV'
+import { usePathname, useParams } from 'next/navigation'
+import { getIsActivePath, items } from '../SidebarUtils'
 import { Feedback } from '@features/feedback'
 import { useSidebar } from '@shared/hooks/contexts/useSidebar'
+import * as tv from '../SidebarTV'
 
 export function SidebarItems() {
   const { isFeedbackOnFocus, isOpen } = useSidebar()
 
   const pathname = usePathname()
+  const params = useParams()
 
   return (
     <div className={tv.sidebarItemsWrapperTv()}>
@@ -26,8 +27,9 @@ export function SidebarItems() {
                 <>
                   <Title as="h6" title={item.section.name} size="md" weight="semi-bold" />
                   {item.section.items?.map((sectionItem) => {
-                    const isActive = pathname === sectionItem.href
+                    const isActive = getIsActivePath(sectionItem, pathname, params)
                     const isDisabled = isFeedbackOnFocus || isActive
+
                     return (
                       <Button
                         as={Link}

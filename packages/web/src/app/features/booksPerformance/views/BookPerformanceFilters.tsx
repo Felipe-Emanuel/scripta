@@ -1,7 +1,7 @@
 import { Text, Title } from '@shared/components'
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
 import { TReaction, TCharacterResponse } from '@shared/types'
-import * as tv from '../NookPerformanceTV'
+import * as tv from '../BookPerformanceTV'
 
 type TUniquePerformance = {
   label: string | number | boolean | Date | TCharacterResponse[] | TReaction[]
@@ -65,7 +65,11 @@ export function BookPerformanceFilters({
           onClear={() => handleGenre('')}
         >
           {(item) => (
-            <AutocompleteItem data-testid={`item-${item.value}`} key={item.value}>
+            <AutocompleteItem
+              textValue={item.value}
+              data-testid={`item-${item.value}`}
+              key={item.value}
+            >
               {item.value}
             </AutocompleteItem>
           )}
@@ -80,7 +84,7 @@ export function BookPerformanceFilters({
           onClear={() => handleTheme('')}
         >
           {uniqueThemes.map((item) => (
-            <AutocompleteItem key={item.value} value={item.value}>
+            <AutocompleteItem textValue={item.value} key={item.value} value={item.value}>
               {item.value}
             </AutocompleteItem>
           ))}

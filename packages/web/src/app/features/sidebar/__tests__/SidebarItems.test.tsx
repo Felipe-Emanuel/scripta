@@ -1,6 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import { SidebarItems } from '../views/SidebarItems'
 
+jest.mock('next/navigation', () => ({
+  usePathname: jest.fn().mockReturnValue('characters'),
+  useParams: jest.fn().mockReturnValue({
+    characters: ['characters', '123abc-bca321']
+  })
+}))
+
 jest.mock('@shared/hooks/contexts/useSidebar', () => ({
   useSidebar: jest.fn(() => ({
     isFeedbackOnFocus: false,

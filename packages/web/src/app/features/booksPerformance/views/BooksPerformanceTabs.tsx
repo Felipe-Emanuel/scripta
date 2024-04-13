@@ -4,17 +4,14 @@ import { Tabs, Tab } from '@nextui-org/react'
 import { Icon, Text } from '@shared/components'
 import { TBookPerformanceProperty, TTab } from '@shared/types'
 import { memo } from 'react'
-import * as tv from '../NookPerformanceTV'
+import * as tv from '../BookPerformanceTV'
 
 interface BooksPerformanceTabsProps {
   handleTabFilter: (value: TBookPerformanceProperty) => void
   tabs: TTab[]
 }
 
-function BooksPerformanceTabs({
-  handleTabFilter,
-  tabs,
-}: BooksPerformanceTabsProps) {
+function BooksPerformanceTabs({ handleTabFilter, tabs }: BooksPerformanceTabsProps) {
   return (
     <Tabs
       data-testid="tablist"
