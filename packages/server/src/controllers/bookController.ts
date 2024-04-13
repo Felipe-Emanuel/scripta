@@ -12,9 +12,14 @@ import {
   PatchActiveBookService,
   IPatchActiveBookServiceRequest
 } from '@services'
+import {
+  IPatchConcluedBookServiceRequest,
+  PatchConcluedBookService
+} from 'src/services/bookServices/patchConclued'
 
 export async function bookController(app: FastifyInstance): Promise<void> {
-  const { getAllBooks, createBook, deleteBook, toggleIsActiveBook } = databaseBookRepository()
+  const { getAllBooks, createBook, deleteBook, toggleIsActiveBook, toggleConcluedBook } =
+    databaseBookRepository()
 
   const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = {
     getAllBooks
@@ -26,8 +31,11 @@ export async function bookController(app: FastifyInstance): Promise<void> {
   const deleteBookAction: TDeleteBookServiceRequest['action'] = {
     deleteBook
   }
-  const patchBookAction: IPatchActiveBookServiceRequest['action'] = {
+  const patchActiveBookAction: IPatchActiveBookServiceRequest['action'] = {
     toggleIsActiveBook
+  }
+  const patchConcluedBookAction: IPatchConcluedBookServiceRequest['action'] = {
+    toggleConcluedBook
   }
 
   app.get('/books/:userEmail', async (req, apply) => {
@@ -95,21 +103,40 @@ export async function bookController(app: FastifyInstance): Promise<void> {
   })
 
   app.put('/books/:bookId', async (req, apply) => {
-    const { bookId } = req.params as Partial<IPatchActiveBookServiceRequest>
+    const { bookId } = req.params as Partial<TPatchBookState>
+    const { where } = req.body as Partial<TPatchBookState>
     const provider = req.headers.provider
     const accessToken = req.headers.authorization
 
     await authorization(provider, accessToken, apply)
 
-    const patchedBook = await PatchActiveBookService({
-      action: patchBookAction,
-      bookId
-    })
+    console.log(where)
 
     try {
-      apply.send(patchedBook)
+      if (where === 'isActive') {
+        const patchedIsActiveBook = await PatchActiveBookService({
+          action: patchActiveBookAction,
+          bookId
+        })
+
+        return apply.send(patchedIsActiveBook)
+      }
+
+      if (where === 'conclued') {
+        const patchedConcluedBook = await PatchConcluedBookService({
+          action: patchConcluedBookAction,
+          bookId
+        })
+
+        return apply.send(patchedConcluedBook)
+      }
     } catch {
       apply.status(500).send({ message: globalErrorMessage.unexpected })
     }
   })
+}
+
+type TPatchBookState = {
+  where: 'conclued' | 'isActive'
+  bookId: string
 }

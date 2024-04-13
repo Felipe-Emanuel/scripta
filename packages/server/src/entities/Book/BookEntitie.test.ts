@@ -108,3 +108,24 @@ describe('toggleIsActiveBook', () => {
     expect(sut.isActive).toBe(true)
   })
 })
+
+describe('toggleIsConcluedBook', () => {
+  const { toggleIsConcluedBook } = BookEntitie(bookEntitieMock)
+
+  it('should desactive a active book', async () => {
+    const sut = await toggleIsConcluedBook()
+
+    expect(sut.conclued).toBe(false)
+  })
+
+  it('should active a desactive book', async () => {
+    const { toggleIsConcluedBook } = BookEntitie({
+      ...bookEntitieMock,
+      conclued: false
+    })
+
+    const sut = await toggleIsConcluedBook()
+
+    expect(sut.conclued).toBe(true)
+  })
+})

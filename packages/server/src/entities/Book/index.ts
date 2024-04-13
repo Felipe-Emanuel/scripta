@@ -34,10 +34,18 @@ export const BookEntitie = (book: Book) => {
     }
   }
 
+  const toggleIsConcluedBook = async () => {
+    return {
+      ...book,
+      conclued: !book.conclued
+    }
+  }
+
   return {
     setBook,
     getBookWithCharacters,
     updatedBook,
-    toggleIsActiveBook
+    toggleIsActiveBook,
+    toggleIsConcluedBook
   }
 }

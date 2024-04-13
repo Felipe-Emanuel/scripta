@@ -29,10 +29,22 @@ export const inMemoryBooksRepository = (): IBooksRepository => {
     return patchedBook || null
   }
 
+  const toggleConcluedBook = async (bookId: string): Promise<Book> => {
+    const existentBook = books.find((book) => book.id === bookId)
+
+    const patchedBook = {
+      ...existentBook,
+      conclued: !existentBook.conclued
+    }
+
+    return patchedBook || null
+  }
+
   return {
     createBook,
     getAllBooks,
     deleteBook,
-    toggleIsActiveBook
+    toggleIsActiveBook,
+    toggleConcluedBook
   }
 }

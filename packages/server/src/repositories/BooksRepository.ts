@@ -5,4 +5,5 @@ export interface IBooksRepository {
   getAllBooks: (userEmail: string) => Promise<Book[]>
   deleteBook: (bookId: string) => Promise<Book>
   toggleIsActiveBook: (bookId: string) => Promise<Book>
+  toggleConcluedBook: (bookId: string) => Promise<Book>
 }

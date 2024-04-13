@@ -4,6 +4,7 @@ import { TMenuSearchDefaultItem } from '@shared/types'
 
 import { MdFeedback } from 'react-icons/md'
 import { BsStarFill } from 'react-icons/bs'
+import { FaInfo } from 'react-icons/fa'
 
 let id = 0
 
@@ -22,7 +23,7 @@ export const menuSearchDefaultItem: TMenuSearchDefaultItem[] = [
     value: 'BookInformationRoot',
     tip: 'Aqui você encontra uma visão geral do livro selecionado, onde consegue, de maneira rápida e fácil, acessar seus personagens, ver informações sobre as reações, acessos, leitores e palavras, além de conseguir acessar diretamente a sua publicação.',
     ref: 'book-information-root',
-    icon: BsStarFill
+    icon: FaInfo
   },
   {
     id: id++,

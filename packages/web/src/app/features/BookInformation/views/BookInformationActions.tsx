@@ -29,8 +29,13 @@ interface IconContentProps {
 }
 
 export function BookInformationActions() {
-  const { action, toggleDeleting, toggleDesactiving, handleDesactiveBook } =
-    useBookInformationController()
+  const {
+    action,
+    toggleDeleting,
+    toggleDesactiving,
+    handlePatchActiveOrConcluedBook,
+    handleDeleteBook
+  } = useBookInformationController()
   const { selectedBook } = useBookInformation()
 
   if (!selectedBook) return null
@@ -49,12 +54,13 @@ export function BookInformationActions() {
   return (
     <div className="absolute top-3 right-4">
       <DeleteModal
+        handleDeleteBook={handleDeleteBook}
         isDeleting={action.isDeleting}
-        bookTitle={selectedBook?.title}
+        book={selectedBook}
         toggleDeleting={toggleDeleting}
       />
       <DesactiveModal
-        handleDesactiveBook={handleDesactiveBook}
+        handleDesactiveBook={handlePatchActiveOrConcluedBook}
         isDesactiving={action.isDesactiving}
         book={selectedBook}
         toggleDesactiving={toggleDesactiving}
@@ -68,6 +74,7 @@ export function BookInformationActions() {
         <DropdownMenu variant="flat" aria-label="Dropdown com ações do livro selecionado">
           <DropdownSection title="Ações">
             <DropdownItem
+              onClick={() => handlePatchActiveOrConcluedBook('conclued')}
               textValue="Concluído"
               key="conclued"
               startContent={<IconContent icon={markAsConcluedIcon} />}

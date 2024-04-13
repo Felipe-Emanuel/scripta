@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
-import { patchActiveBook } from '../services'
+import { deleteBook, patchActiveOrConcluedBook } from '../services'
 import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
+import { TPatchActiveBookRequest } from '@shared/types'
 
 export const useBookInformationController = () => {
   const { choiseBookToSeeInfo, selectedBook } = useBookInformation()
@@ -22,15 +23,29 @@ export const useBookInformationController = () => {
       isDesactiving: !action.isDesactiving
     })
 
-  const handleDesactiveBook = useCallback(async () => {
+  const handlePatchActiveOrConcluedBook = useCallback(
+    async (where: TPatchActiveBookRequest['where']) => {
+      if (selectedBook) {
+        const patchedBook = await patchActiveOrConcluedBook({
+          bookId: selectedBook?.id,
+          where
+        })
+
+        patchedBook && choiseBookToSeeInfo(patchedBook)
+
+        return patchedBook
+      }
+    },
+    [choiseBookToSeeInfo, selectedBook]
+  )
+
+  const handleDeleteBook = useCallback(async () => {
     if (selectedBook) {
-      const patchedBook = await patchActiveBook(selectedBook?.id)
+      const deletedBook = await deleteBook(selectedBook.id)
 
-      patchedBook && choiseBookToSeeInfo(patchedBook)
-
-      return patchedBook
+      return deletedBook
     }
-  }, [choiseBookToSeeInfo, selectedBook])
+  }, [selectedBook])
 
   return {
     isCharactersCardHovered,
@@ -38,6 +53,7 @@ export const useBookInformationController = () => {
     setIsCharactersCardHovered,
     toggleDeleting,
     toggleDesactiving,
-    handleDesactiveBook
+    handlePatchActiveOrConcluedBook,
+    handleDeleteBook
   }
 }

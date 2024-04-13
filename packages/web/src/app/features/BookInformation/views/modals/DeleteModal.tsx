@@ -11,15 +11,22 @@ import {
   useDisclosure
 } from '@nextui-org/react'
 import { Text, Title } from '@shared/components'
+import { TBookResponse } from '@shared/types'
 import { useEffect } from 'react'
 
 interface IDeleteModalProps {
   isDeleting: boolean
-  bookTitle: string
+  book: TBookResponse
   toggleDeleting: () => void
+  handleDeleteBook: () => Promise<TBookResponse | undefined>
 }
 
-export function DeleteModal({ isDeleting, bookTitle, toggleDeleting }: IDeleteModalProps) {
+export function DeleteModal({
+  isDeleting,
+  book,
+  toggleDeleting,
+  handleDeleteBook
+}: IDeleteModalProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   useEffect(() => {
@@ -45,7 +52,7 @@ export function DeleteModal({ isDeleting, bookTitle, toggleDeleting }: IDeleteMo
             </ModalHeader>
             <ModalBody>
               <Text
-                text={`Você gostaria realmente de deletar o livro ${bookTitle}?`}
+                text={`Você gostaria realmente de deletar o livro ${book.title}?`}
                 weight="bold"
               />
               <Text text="Você não poderá desfazer esta ação." weight="light" color="gray" />
@@ -65,6 +72,8 @@ export function DeleteModal({ isDeleting, bookTitle, toggleDeleting }: IDeleteMo
                 variant="light"
                 onPress={() => {
                   onClose()
+                  handleDeleteBook()
+                  toggleDeleting()
                 }}
               >
                 Acredito que sim...

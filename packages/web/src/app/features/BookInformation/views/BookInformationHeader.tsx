@@ -4,6 +4,7 @@ import { Chip } from '@nextui-org/react'
 import { Text, Title } from '@shared/components'
 import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
 import { useUser } from '@shared/hooks/useUser'
+import { capitalizeName } from '@shared/utils/transformers'
 
 const maxDescriptionLength = 150
 
@@ -16,11 +17,11 @@ export function BookInformationHeader() {
   return (
     <div className="relative flex flex-col gap-2">
       <div className="flex items-center justify-between w-[calc(100%-3rem)] h-2">
-        <Title title={selectedBook?.title} as="h4" />
+        <Title title={selectedBook?.title} as="h4" className="truncate" />
       </div>
       <span>
-        <Text text={`${selectedBook?.Gender} /`} color="green-500" as="span" />{' '}
-        <Text text={`${selectedBook?.Theme}`} color="gray" as="span" />
+        <Text text={`${capitalizeName(selectedBook?.Gender)} /`} color="green-500" as="span" />{' '}
+        <Text text={`${capitalizeName(selectedBook?.Theme)}`} color="gray" as="span" />
       </span>
       <Text
         text={`Olá, ${sessionCustomer?.name}, as informações do seu livro estão prontas!`}

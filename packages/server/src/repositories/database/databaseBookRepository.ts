@@ -68,10 +68,33 @@ export const databaseBookRepository = (): IBooksRepository => {
     return null
   }
 
+  const toggleConcluedBook = async (bookId: string): Promise<Book> => {
+    const existentBook = await prisma.book.findUniqueOrThrow({
+      where: {
+        id: bookId
+      }
+    })
+
+    const conclued = existentBook.conclued ? false : true
+
+    if (existentBook) {
+      return await prisma.book.update({
+        where: { id: bookId },
+        data: {
+          ...existentBook,
+          conclued
+        }
+      })
+    }
+
+    return null
+  }
+
   return {
     getAllBooks,
     createBook,
     deleteBook,
-    toggleIsActiveBook
+    toggleIsActiveBook,
+    toggleConcluedBook
   }
 }

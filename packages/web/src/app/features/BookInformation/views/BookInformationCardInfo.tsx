@@ -15,6 +15,7 @@ import { ElementType } from 'react'
 import Link from 'next/link'
 import { APP_ROUTES } from '@shared/utils/constants/app-routes'
 import { useBookInformationController } from '../controller'
+import { useMenuController } from '@features/menu/controller'
 
 type TRenderInfo = {
   icon: ElementType
@@ -25,6 +26,7 @@ type TRenderInfo = {
 }
 
 export function BookInformationCardInfo() {
+  const { clearing } = useMenuController()
   const { selectedBook } = useBookInformation()
   const { isCharactersCardHovered, setIsCharactersCardHovered } = useBookInformationController()
 
@@ -54,6 +56,7 @@ export function BookInformationCardInfo() {
       <>
         {path ? (
           <Link
+            onClick={clearing}
             onMouseEnter={() => setIsCharactersCardHovered(true)}
             onMouseLeave={() => setIsCharactersCardHovered(false)}
             href={path}

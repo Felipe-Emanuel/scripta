@@ -11,14 +11,16 @@ import {
   useDisclosure
 } from '@nextui-org/react'
 import { Text, Title } from '@shared/components'
-import { TBookResponse } from '@shared/types'
+import { TBookResponse, TPatchActiveBookRequest } from '@shared/types'
 import { useEffect } from 'react'
 
 interface IDesactiveModalProps {
   isDesactiving: boolean
   book: TBookResponse
   toggleDesactiving: () => void
-  handleDesactiveBook: () => Promise<TBookResponse | undefined>
+  handleDesactiveBook: (
+    where: TPatchActiveBookRequest['where']
+  ) => Promise<TBookResponse | undefined>
 }
 
 export function DesactiveModal({
@@ -84,7 +86,7 @@ export function DesactiveModal({
                 color={book.isActive ? 'warning' : 'success'}
                 variant="light"
                 onPress={() => {
-                  handleDesactiveBook()
+                  handleDesactiveBook('isActive')
                   onClose()
                   toggleDesactiving()
                 }}
