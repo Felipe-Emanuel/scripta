@@ -1,5 +1,5 @@
 ## Roadmap
-- [Roadmap](ROADMAP.md)
+- [Roadmap](roadmap.md)
 
 ## Memorize: Desbloqueie seu potencial criativo
 
