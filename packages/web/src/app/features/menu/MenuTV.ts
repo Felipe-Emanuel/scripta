@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const menuRootTV = tv({
-  base: 'w-full flex items-center justify-between max-w-[1500px] m-auto py-4'
+  base: 'w-full flex items-center justify-between max-w-[1500px] m-auto pt-4'
 })
 
 export const menuActionWrapperTV = tv({

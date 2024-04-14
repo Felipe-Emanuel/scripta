@@ -6,7 +6,7 @@ import {
   QueryFunction,
   useMutation,
   useQuery,
-  useQueryClient,
+  useQueryClient
 } from 'react-query'
 
 /**
@@ -27,7 +27,7 @@ import {
 export function useQueryMutation<TResponse, TRequest>(
   mutationFn: MutationFunction<TResponse | undefined, TRequest> | undefined,
   cacheName: TCacheName,
-  variablePath?: keyof TRequest,
+  variablePath?: keyof TRequest
 ) {
   const queryClient = useQueryClient()
 
@@ -42,14 +42,14 @@ export function useQueryMutation<TResponse, TRequest>(
 
       queryClient.setQueryData([cacheName], () => ({
         ...data,
-        ...newData,
+        ...newData
       }))
-    },
+    }
   })
 
   return {
     mutateAsync,
-    ...rest,
+    ...rest
   }
 }
 
@@ -59,6 +59,7 @@ export function useQueryMutation<TResponse, TRequest>(
  * @param cacheName name of the cache to be created
  * @param cacheTime time of the cache
  * @param enabled optional param to define if this request should be enabled
+ * @param initialData optional param to define a default value to this data
  * @returns data and all methods from useQuery
  * @example const getDataFn = (): TWordCount => ({}) as TWordCount
  * @example const { data } = useQueryData(getDataFn, 'wordCounters', '12-hours')
@@ -69,7 +70,7 @@ export function useQueryData<T>(
   cacheName: TCacheName,
   cacheTime: TTimeToRefetchCache,
   enabled?: boolean,
-  initialData?: T | InitialDataFunction<T>,
+  initialData?: T | InitialDataFunction<T>
 ) {
   const staleTime = timeToRefetchCache[cacheTime]
 
@@ -77,11 +78,11 @@ export function useQueryData<T>(
     refetchOnWindowFocus: false,
     staleTime,
     enabled,
-    initialData,
+    initialData
   })
 
   return {
     data,
-    ...rest,
+    ...rest
   }
 }
