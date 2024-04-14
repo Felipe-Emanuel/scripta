@@ -4,7 +4,7 @@ import { fakeBase64 } from '@constants/fakeBase64'
 
 export const updateBookMock: TUpdateBook = {
   conclued: false,
-  isActive: true,
+  isActive: false,
   description: 'description',
   heroPathUrl: fakeBase64,
   publishedUrl: 'https://link',

@@ -5,15 +5,15 @@ import { BsEmojiHeartEyes } from 'react-icons/bs'
 import { HiTrophy } from 'react-icons/hi2'
 import { FaBook } from 'react-icons/fa'
 
-import { Card, CardHeader, CardFooter, Image, Button } from '@nextui-org/react'
+import { Card, CardHeader, CardFooter, Button } from '@nextui-org/react'
 import NextImage from 'next/image'
 
 import { useHighlightController } from '../controller'
-import { Parallax } from '@shared/components/Parallax'
 import { Icon, Text } from '@shared/components'
 import HighlightFallback from '@assets/images/highlight-fallback.png'
 import { formatNumber } from '@shared/utils/validation'
 import { ElementType } from 'react'
+import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
 
 type TRenderInfo = {
   label: string
@@ -21,6 +21,7 @@ type TRenderInfo = {
 }
 
 export function HighlightCard() {
+  const { selectedBook, choiseBookToSeeInfo } = useBookInformation()
   const { highestHitsBook } = useHighlightController()
 
   const RenderInfo = ({ icon, label }: TRenderInfo) => (
@@ -34,7 +35,7 @@ export function HighlightCard() {
 
   const cardContent = (
     <>
-      <CardHeader className="absolute z-10 top-1 flex-col items-start">
+      <CardHeader className="absolute z-10 top-0 flex-col pb-8 items-start bg-gradient-to-b from-black/75 via-black/50 to-transparent">
         <Text
           text="Seu destaque"
           weight="bold"
@@ -62,21 +63,26 @@ export function HighlightCard() {
           />
         </span>
       </CardHeader>
-      <Parallax className="absolute w-[410px] min-h-full bg-white/25 -top-4 -left-5">
-        <Image
-          removeWrapper
-          width={410}
-          alt="Card example background"
-          className="z-0 object-cover"
-          src={highestHitsBook.heroPathUrl}
-        />
-      </Parallax>
+      <NextImage
+        fill
+        alt="image do livro de destaque"
+        className="z-0 min-h-full"
+        src={highestHitsBook.heroPathUrl}
+      />
       <CardFooter className="absolute flex flex-col gap-1 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
         <div className="w-full flex items-center justify-between">
           <Text weight="bold" text={highestHitsBook.title} size="sm" />
-          <Button className="text-tiny" color="primary" radius="full" size="sm">
-            Detalhes
-          </Button>
+          {highestHitsBook.id !== selectedBook?.id && (
+            <Button
+              onClick={() => choiseBookToSeeInfo(highestHitsBook)}
+              className="text-tiny"
+              color="primary"
+              radius="full"
+              size="sm"
+            >
+              Detalhes
+            </Button>
+          )}
         </div>
         <div className="flex items-center justify-between gap-1 flex-wrap md:flex-nowrap w-full">
           <div className="flex flex-col gap-1">

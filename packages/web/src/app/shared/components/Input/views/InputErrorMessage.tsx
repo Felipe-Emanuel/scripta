@@ -3,6 +3,7 @@
 import { useFormContext } from 'react-hook-form'
 import { getErrors } from '../InputUtils'
 import { Text } from '@shared/components'
+import { errorTV } from '../InputTV'
 
 interface ErrorMessageProps {
   field: string
@@ -10,7 +11,7 @@ interface ErrorMessageProps {
 
 export function ErrorMessage({ field }: ErrorMessageProps) {
   const {
-    formState: { errors },
+    formState: { errors }
   } = useFormContext()
 
   const fieldError = getErrors(errors, field)
@@ -19,6 +20,7 @@ export function ErrorMessage({ field }: ErrorMessageProps) {
 
   return (
     <Text
+      className={errorTV()}
       as="span"
       weight="bold"
       color="error"

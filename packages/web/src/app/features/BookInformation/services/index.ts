@@ -1,5 +1,5 @@
 import { api } from '@shared/services/axios/api'
-import { TBookResponse, TPatchActiveBookRequest } from '@shared/types'
+import { TBookResponse, TPatchActiveBookRequest, TUpdateBookRequest } from '@shared/types'
 import { toast } from 'react-toastify'
 
 export const patchActiveOrConcluedBook = async ({ bookId, where }: TPatchActiveBookRequest) => {
@@ -34,6 +34,24 @@ export const deleteBook = async (bookId: string) => {
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(`Erro ao deletar o livro ${bookId}, ${err.message}`)
+    }
+  }
+}
+
+export const updateBook = async (bookId: string, updatedBook: TUpdateBookRequest) => {
+  try {
+    const endpoint = `updateBook/${bookId}`
+
+    const body: TUpdateBookRequest = {
+      ...updatedBook
+    }
+
+    const { data } = await api.put<TBookResponse>(endpoint, body)
+
+    return data
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new Error(`Erro ao atualizar o livro ${bookId}, ${err.message}`)
     }
   }
 }

@@ -1,5 +1,6 @@
 import { Book } from '@prisma/client'
 import { IBooksRepository } from '../BooksRepository'
+import { TUpdateBookService } from '@types'
 
 let books: Book[] = []
 
@@ -40,11 +41,21 @@ export const inMemoryBooksRepository = (): IBooksRepository => {
     return patchedBook || null
   }
 
+  const updateBook = async (bookId: string, updatedBook: TUpdateBookService): Promise<Book> => {
+    const existentBook = books.find((book) => book.id === bookId)
+
+    return {
+      ...existentBook,
+      ...updatedBook
+    }
+  }
+
   return {
     createBook,
     getAllBooks,
     deleteBook,
     toggleIsActiveBook,
-    toggleConcluedBook
+    toggleConcluedBook,
+    updateBook
   }
 }

@@ -30,6 +30,7 @@ export * from './requests/TGetReaderByBookRequest'
 export * from './requests/TCreateFeedbackRequest'
 export * from './requests/TBookRequest'
 export * from './requests/TPatchActiveBookRequest'
+export * from './requests/TUpdateBookRequest'
 
 export * from './responses/TUser'
 export * from './responses/TGoalResponse'

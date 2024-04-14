@@ -1,6 +1,7 @@
 import { prisma } from 'src/lib'
 import { Book } from '@prisma/client'
 import { IBooksRepository } from '@repositories'
+import { TUpdateBookService } from '@types'
 
 export const databaseBookRepository = (): IBooksRepository => {
   async function createBook(book: Book): Promise<Book[]> {
@@ -28,8 +29,30 @@ export const databaseBookRepository = (): IBooksRepository => {
     return books || []
   }
 
+  const updateBook = async (bookId: string, updatedBook: TUpdateBookService): Promise<Book> => {
+    const existentBook = await prisma.book.findUniqueOrThrow({
+      where: {
+        id: bookId
+      }
+    })
+
+    if (existentBook) {
+      return await prisma.book.update({
+        where: {
+          id: bookId
+        },
+        data: {
+          ...existentBook,
+          ...updatedBook
+        }
+      })
+    }
+
+    return null
+  }
+
   const deleteBook = async (bookId: string): Promise<Book> => {
-    const existentBook = await prisma.book.findUnique({
+    const existentBook = await prisma.book.findUniqueOrThrow({
       where: {
         id: bookId
       }
@@ -95,6 +118,7 @@ export const databaseBookRepository = (): IBooksRepository => {
     createBook,
     deleteBook,
     toggleIsActiveBook,
-    toggleConcluedBook
+    toggleConcluedBook,
+    updateBook
   }
 }

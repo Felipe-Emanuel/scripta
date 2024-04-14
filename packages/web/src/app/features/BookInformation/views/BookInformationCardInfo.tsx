@@ -1,8 +1,6 @@
 'use client'
 
-import { Image, Tooltip } from '@nextui-org/react'
-import { Icon, Template, Text } from '@shared/components'
-import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
+import { Image } from '@nextui-org/react'
 
 import { FaUserSecret } from 'react-icons/fa'
 import { BsEmojiHeartEyes } from 'react-icons/bs'
@@ -10,20 +8,11 @@ import { HiTrophy } from 'react-icons/hi2'
 import { FaBook } from 'react-icons/fa'
 import { FaExternalLinkSquareAlt } from 'react-icons/fa'
 
-import { formatNumber } from '@shared/utils/validation'
-import { ElementType } from 'react'
-import Link from 'next/link'
+import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
 import { APP_ROUTES } from '@shared/utils/constants/app-routes'
-import { useBookInformationController } from '../controller'
 import { useMenuController } from '@features/menu/controller'
-
-type TRenderInfo = {
-  icon: ElementType
-  label: string
-  qtd: number
-  path?: string
-  animation?: string
-}
+import { useBookInformationController } from '../controller'
+import RenderInfo from './components/RenderInfo'
 
 export function BookInformationCardInfo() {
   const { clearing } = useMenuController()
@@ -34,46 +23,10 @@ export function BookInformationCardInfo() {
 
   if (!selectedBook) return null
 
-  const RenderInfo = ({ icon, label, qtd, path, animation }: TRenderInfo) => {
-    const content = (
-      <Template
-        flex-direction="row"
-        className="flex items-center justify-between p-0 md:p-0 lg:p-4 lg:w-40"
-      >
-        <div className="hidden lg:flex flex-col">
-          <Text text={label} size="xs" color="gray" />
-          <Text text={`${formatNumber(qtd ?? 0)}`} as="small" size="lg" />
-        </div>
-        <Tooltip showArrow content={`${formatNumber(qtd ?? 0)} ${label}`}>
-          <div className="rounded-lg bg-primary p-2 flex items-center justify-center">
-            <Icon className={animation} icon={icon} color="white" size="md" />
-          </div>
-        </Tooltip>
-      </Template>
-    )
-
-    return (
-      <>
-        {path ? (
-          <Link
-            onClick={clearing}
-            onMouseEnter={() => setIsCharactersCardHovered(true)}
-            onMouseLeave={() => setIsCharactersCardHovered(false)}
-            href={path}
-          >
-            {content}
-          </Link>
-        ) : (
-          content
-        )}
-      </>
-    )
-  }
-
   const hero = (
     <Image
       alt="Album cover"
-      className="object-cover"
+      className="object-cover w-full h-40"
       height={200}
       shadow="md"
       src={selectedBook?.heroPathUrl}
@@ -84,7 +37,7 @@ export function BookInformationCardInfo() {
   return (
     <div className="dark:bg-transparent">
       <div className="flex max-[1023px]:flex-col flex-row max-[1023px]:flex-wrap gap-2 items-center justify-center md:justify-start">
-        <div className="relative col-span-6 md:col-span-4">
+        <div className="relative w-full h-40">
           {selectedBook?.publishedUrl ? (
             <a target="_blank" href={selectedBook?.publishedUrl}>
               {hero}
@@ -99,6 +52,8 @@ export function BookInformationCardInfo() {
             <div className="relative size-full">
               <div className="absolute inset-0 animate-border-animation rounded-2xl bg-tertiary" />
               <RenderInfo
+                clearing={clearing}
+                setIsCharactersCardHovered={setIsCharactersCardHovered}
                 path={`${APP_ROUTES.private.characters.name}/${selectedBook?.id}`}
                 animation={
                   isCharactersCardHovered ? 'animate-appearance-in' : 'animate-appearance-in'

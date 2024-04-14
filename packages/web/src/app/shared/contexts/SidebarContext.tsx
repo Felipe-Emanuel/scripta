@@ -14,7 +14,7 @@ import {
 import { DropzoneRootProps, useDropzone } from 'react-dropzone'
 import { isBase64 } from '@memorize/server/src/shared/utils/stringValidations'
 import { toast } from 'react-toastify'
-import { extrairBase64 } from '@shared/utils/transformers'
+import { extractBase64 } from '@shared/utils/transformers'
 
 type THandleSelectionEventChange = {
   target: {
@@ -59,7 +59,7 @@ export const SidebarProvider = ({ children }: TRootComponent) => {
 
   const firstValue = useMemo(() => Array.from(type.values())[0], [type])
   const feedbackType = feedbackTypes.find((f) => f.label === firstValue)
-  const screenshot = extrairBase64(String(image))
+  const screenshot = extractBase64(String(image))
 
   const toggleSidebar = () => !isFeedbackOnFocus && setIsOpen((prev) => !prev)
 

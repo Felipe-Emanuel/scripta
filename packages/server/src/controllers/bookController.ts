@@ -10,16 +10,29 @@ import {
   DeleteBookService,
   TDeleteBookServiceRequest,
   PatchActiveBookService,
-  IPatchActiveBookServiceRequest
+  IPatchActiveBookServiceRequest,
+  UpdateBookService,
+  TUpdateBookServiceRequest
 } from '@services'
 import {
   IPatchConcluedBookServiceRequest,
   PatchConcluedBookService
 } from 'src/services/bookServices/patchConclued'
 
+type TPatchBookState = {
+  where: 'conclued' | 'isActive'
+  bookId: string
+}
+
 export async function bookController(app: FastifyInstance): Promise<void> {
-  const { getAllBooks, createBook, deleteBook, toggleIsActiveBook, toggleConcluedBook } =
-    databaseBookRepository()
+  const {
+    getAllBooks,
+    createBook,
+    deleteBook,
+    toggleIsActiveBook,
+    toggleConcluedBook,
+    updateBook
+  } = databaseBookRepository()
 
   const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = {
     getAllBooks
@@ -36,6 +49,9 @@ export async function bookController(app: FastifyInstance): Promise<void> {
   }
   const patchConcluedBookAction: IPatchConcluedBookServiceRequest['action'] = {
     toggleConcluedBook
+  }
+  const updateBookAction: TUpdateBookServiceRequest['action'] = {
+    updateBook
   }
 
   app.get('/books/:userEmail', async (req, apply) => {
@@ -110,8 +126,6 @@ export async function bookController(app: FastifyInstance): Promise<void> {
 
     await authorization(provider, accessToken, apply)
 
-    console.log(where)
-
     try {
       if (where === 'isActive') {
         const patchedIsActiveBook = await PatchActiveBookService({
@@ -134,9 +148,25 @@ export async function bookController(app: FastifyInstance): Promise<void> {
       apply.status(500).send({ message: globalErrorMessage.unexpected })
     }
   })
-}
 
-type TPatchBookState = {
-  where: 'conclued' | 'isActive'
-  bookId: string
+  app.put('/updateBook/:bookId', async (req, apply) => {
+    const { bookId } = req.params as Partial<TUpdateBookServiceRequest>
+    const { book } = req.body as Partial<TUpdateBookServiceRequest>
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    const newBook = await UpdateBookService({
+      action: updateBookAction,
+      bookId,
+      book
+    })
+
+    try {
+      apply.send(newBook)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
 }

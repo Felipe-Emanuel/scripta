@@ -22,6 +22,7 @@ import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
 import { useBookInformationController } from '../controller'
 import { DeleteModal } from './modals/DeleteModal'
 import { DesactiveModal } from './modals/DesactiveModal'
+import { EditModal } from './modals/EditModal'
 
 interface IconContentProps {
   icon: ElementType
@@ -33,11 +34,11 @@ export function BookInformationActions() {
     action,
     toggleDeleting,
     toggleDesactiving,
+    toggleEditing,
     handlePatchActiveOrConcluedBook,
     handleDeleteBook
   } = useBookInformationController()
   const { selectedBook } = useBookInformation()
-
   if (!selectedBook) return null
 
   const markAsConcluedIcon = selectedBook?.conclued ? IoIosRemoveCircle : IoMdDoneAll
@@ -53,6 +54,7 @@ export function BookInformationActions() {
 
   return (
     <div className="absolute top-3 right-4">
+      <EditModal toggleEditing={toggleEditing} book={selectedBook} isEditing={action.isEditing} />
       <DeleteModal
         handleDeleteBook={handleDeleteBook}
         isDeleting={action.isDeleting}
@@ -82,6 +84,7 @@ export function BookInformationActions() {
               <Text weight="semi-bold" text={markAsConcluedText} />
             </DropdownItem>
             <DropdownItem
+              onClick={toggleEditing}
               textValue="Editar"
               key="edit"
               startContent={<IconContent icon={MdEditSquare} />}

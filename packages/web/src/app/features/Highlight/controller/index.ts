@@ -20,7 +20,12 @@ export const useHighlightController = () => {
     return books || []
   }, [sessionCustomer?.email])
 
-  const { data: books } = useQueryData(getBooks, 'allBooks', '12-hours', !cachedBooks?.length)
+  const { data: books, refetch } = useQueryData(
+    getBooks,
+    'allBooks',
+    '12-hours',
+    !cachedBooks?.length
+  )
 
   const userBooks = cachedBooks?.length ? cachedBooks : books
 
@@ -39,6 +44,7 @@ export const useHighlightController = () => {
   }, [choiseBookToSeeInfo, highestHitsBook])
 
   return {
-    highestHitsBook
+    highestHitsBook,
+    refetch
   }
 }

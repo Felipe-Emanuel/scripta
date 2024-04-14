@@ -2,10 +2,12 @@ import { ErrorMessage } from '@shared/components/Input/views/InputErrorMessage'
 import { InputField } from '@shared/components/Input/views/InputField'
 import { InputLabel } from '@shared/components/Input/views/InputLabel'
 import { InputRoot } from '@shared/components/Input/views/InputRoot'
+import { InputTextarea } from './views/InputTextarea'
 
 export const Input = {
   root: InputRoot,
   label: InputLabel,
   field: InputField,
-  error: ErrorMessage,
+  textarea: InputTextarea,
+  error: ErrorMessage
 }

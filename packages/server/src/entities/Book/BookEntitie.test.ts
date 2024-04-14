@@ -71,20 +71,34 @@ describe('updatedBook', () => {
   it('should update a book', async () => {
     const { updatedBook } = BookEntitie(bookEntitieMock)
 
-    const sut = await updatedBook(updateBookMock)
+    const sut = await updatedBook({
+      ...bookEntitieMock,
+      ...updateBookMock
+    })
 
-    expect(sut).toEqual(updateBookMock)
+    expect(sut.description).toEqual(updateBookMock.description)
   })
 
   it('should return a throw error by required filds', async () => {
     const { updatedBook } = BookEntitie(bookEntitieMock)
 
     const sut = updatedBook({
-      ...updateBookMock,
+      ...bookEntitieMock,
       title: ''
     })
 
     expect(sut).rejects.toThrow(throwBookMessages.areAllFieldsFilled)
+  })
+
+  it('should trhow about invalid publised url', async () => {
+    const { updatedBook } = BookEntitie(bookEntitieMock)
+
+    const sut = updatedBook({
+      ...bookEntitieMock,
+      publishedUrl: 'unexpected-url'
+    })
+
+    expect(sut).rejects.toThrow(throwBookMessages.invalidPublishedUrl)
   })
 })
 

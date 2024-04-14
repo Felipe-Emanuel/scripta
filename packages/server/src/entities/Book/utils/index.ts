@@ -7,5 +7,6 @@ export const throwBookMessages = {
   alreadyExists: 'Já existe um livro registrado com este título.',
   missingBookId: 'ID do livro é necessário.',
   emailMissing: 'Livro sem email vinculado.',
-  concluedRequired: 'O estado do concluído é obrigatório.'
+  concluedRequired: 'O estado do concluído é obrigatório.',
+  invalidPublishedUrl: 'A URL de publicação é inválida.'
 }
