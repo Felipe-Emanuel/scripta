@@ -1,3 +1,6 @@
+## Roadmap
+- [Roadmap](ROADMAP.md)
+
 ## Memorize: Desbloqueie seu potencial criativo
 
 **Memorize** é um projeto que oferece aos escritores um conjunto de ferramentas visuais e informações valiosas para otimizar sua produtividade e aprimorar suas histórias.
@@ -30,6 +33,3 @@ A versão mínima viável (MVP) do Memorize se concentrará em funcionalidades b
 
 * **Integração com PNL:** Futuramente, pretendo integrar IA para análise de texto, sugestões e melhorias em tempo real.
 * **Narrativa Viva:** Planejo incorporar IA para análise de texto, identificação de sentimentos das personagens, intenção de falas e emoções, proporcionando uma experiência única de escrita.
-
-## Conteúdo
-- [Roadmap](ROADMAP.md)
