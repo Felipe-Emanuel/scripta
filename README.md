@@ -32,5 +32,4 @@ A versão mínima viável (MVP) do Memorize se concentrará em funcionalidades b
 * **Narrativa Viva:** Planejo incorporar IA para análise de texto, identificação de sentimentos das personagens, intenção de falas e emoções, proporcionando uma experiência única de escrita.
 
 ## Conteúdo
-- [Licença](LICENSE)
 - [Roadmap](ROADMAP.md)
