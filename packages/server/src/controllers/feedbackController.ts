@@ -8,8 +8,8 @@ import {
   TGetFeedbackServiceRequest
 } from '@services'
 import { FastifyInstance } from 'fastify'
-import { authorization } from './utils'
 import { globalErrorMessage } from '@utils'
+import { authorization } from 'src/middlewares'
 
 type TGetFeedback = {
   adminEmail: string

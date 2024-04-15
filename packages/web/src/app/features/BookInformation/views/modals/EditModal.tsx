@@ -16,13 +16,14 @@ import { FormProvider } from 'react-hook-form'
 
 import { BiTrash } from 'react-icons/bi'
 
-import { useBookInformationController } from '@features/BookInformation/controller'
-import { motionProps } from '@features/feedback/FeedbackUtils'
 import { Icon, Input, Text, Title } from '@shared/components'
 import { useDragAndPasteImage } from '@shared/hooks/useDragAndPasteImage'
 import { TBookResponse } from '@shared/types'
 import { capitalizeName } from '@shared/utils/transformers'
 import { formatNumber } from '@shared/utils/validation'
+import { useBookInformationController } from '@features/BookInformation/controller'
+import { motionProps } from '@features/feedback/FeedbackUtils'
+import * as tv from '@features/BookInformation/BookInformationTV'
 
 interface IEditModalProps {
   isEditing: boolean
@@ -52,37 +53,29 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
       onOpenChange={onOpenChange}
       motionProps={motionProps}
     >
-      <ModalContent className="bg-[#121214] max-[280px]:overflow-y-scroll max-[280px]:h-screen scrollbar-hide">
+      <ModalContent className={tv.editModalTV()}>
         {(onClose) => (
           <>
             <ModalHeader>
               <Title as="h3" title="Edição" size="md" color="white" />
             </ModalHeader>
             <FormProvider {...editSchema}>
-              <ModalBody
-                as="form"
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col gap-6"
-              >
-                <div className="flex max-[280px]:flex-col gap-4 w-full items-center ">
-                  <div
-                    onPaste={onPaste}
-                    {...getRootProps()}
-                    className="relative w-44 flex items-center justify-center cursor-pointer"
-                  >
+              <ModalBody as="form" onSubmit={handleSubmit(onSubmit)} className={tv.modalBodyTV()}>
+                <div className={tv.modalBodyHeroSideTV()}>
+                  <div onPaste={onPaste} {...getRootProps()} className={tv.dragAndPasteTV()}>
                     {image && (
                       <Button
                         onClick={clearimage}
                         variant="light"
                         isIconOnly
-                        className="absolute top-1 right-1"
+                        className={tv.clearImageButtonTV()}
                       >
                         <Icon color="danger" icon={BiTrash} size="responsive" />
                       </Button>
                     )}
 
                     {isDragActive && (
-                      <div className="absolute inset-0 p-2 flex items-center justify-center bg-black/50">
+                      <div className={tv.isDragingFallbackTV()}>
                         <Text text="Solte aqui" />
                       </div>
                     )}
@@ -93,19 +86,19 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
                         height={400}
                         alt="Imagem de capa do livro"
                         src={String(image) || book.heroPathUrl}
-                        className="flex-shrink-0 rounded-2xl bg-cover h-44 w-32 size-full"
+                        className={tv.copyAndPasteHeroTV()}
                       />
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-4 w-full">
+                  <div className={tv.inputsWrapperTV()}>
                     <Input.root>
                       <Input.label text="Título" htmlFor="title" />
                       <Input.field name="title" placeholder={book.title} />
                       <Input.error field="title" />
                     </Input.root>
 
-                    <div className="flex gap-4 w-full">
+                    <div className={tv.inputSideTV()}>
                       <Input.root>
                         <Input.label text="Gênero" htmlFor="gender" />
                         <Input.field name="gender" placeholder={capitalizeName(book.Gender)} />
@@ -119,7 +112,7 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
                       </Input.root>
                     </div>
 
-                    <div className="flex gap-4 w-full">
+                    <div className={tv.inputSideTV()}>
                       <Input.root>
                         <Input.label text="Link de publicação" htmlFor="publishedUrl" />
                         <Input.field name="publishedUrl" placeholder={book.publishedUrl} />
@@ -140,7 +133,7 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2">
+                <div className={tv.inputDescriptionTV()}>
                   <Input.label text="Descrição" htmlFor="description" />
                   <Input.textarea
                     isInvalid={!!errors.description}

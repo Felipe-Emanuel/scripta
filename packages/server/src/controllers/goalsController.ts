@@ -1,7 +1,6 @@
 import { globalErrorMessage, progressGoal } from '@utils'
 import { isToday } from 'date-fns'
 import { FastifyInstance } from 'fastify'
-import { authorization } from 'src/controllers/utils'
 import { databaseGoalsRepository } from '@repositories'
 import {
   TGetGoalsByFilterServiceRequest,
@@ -11,25 +10,25 @@ import {
   TUpdateGoalRequest,
   UpdateGoalService,
   TGetLastGoalRequest,
-  GetLastGoalService,
+  GetLastGoalService
 } from '@services'
+import { authorization } from 'src/middlewares'
 
 export async function goalsController(app: FastifyInstance): Promise<void> {
-  const { getGoalsByFilter, createGoals, updateGoal, getLastGoal } =
-    databaseGoalsRepository()
+  const { getGoalsByFilter, createGoals, updateGoal, getLastGoal } = databaseGoalsRepository()
 
   const getByFilterGoalAction: TGetGoalsByFilterServiceRequest['actions'] = {
-    getGoalsByFilter,
+    getGoalsByFilter
   }
   const createGoalAction: TCreateGoalsRequest['action'] = {
-    createGoals,
+    createGoals
   }
   const updateGoalActions: TUpdateGoalRequest['actions'] = {
     getGoalsByFilter,
-    updateGoal,
+    updateGoal
   }
   const getLastGoalAction: TGetLastGoalRequest['action'] = {
-    getLastGoal,
+    getLastGoal
   }
 
   // cria uma nova meta caso o job já não o tenha feito
@@ -48,13 +47,13 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
       ...goal,
       email,
       goalComplete: false,
-      goalCompletePercent: progressGoal(goal.words, goal.goal),
+      goalCompletePercent: progressGoal(goal.words, goal.goal)
     }
 
     const newGoal = await CreateGoalsService({
       action: createGoalAction,
       email,
-      goals: newGoals,
+      goals: newGoals
     })
 
     try {
@@ -77,7 +76,7 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
       actions: getByFilterGoalAction,
       email,
       endGoalFilter,
-      startGoalFilter,
+      startGoalFilter
     })
 
     try {
@@ -98,7 +97,7 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
     const updateGoal = await UpdateGoalService({
       actions: updateGoalActions,
       goalId,
-      updatedGoal,
+      updatedGoal
     })
 
     try {
@@ -118,7 +117,7 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
 
     const lastGoal = await GetLastGoalService({
       action: getLastGoalAction,
-      email,
+      email
     })
 
     try {

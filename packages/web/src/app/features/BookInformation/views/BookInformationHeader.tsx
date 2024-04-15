@@ -1,10 +1,12 @@
 'use client'
 
 import { Chip } from '@nextui-org/react'
+
 import { Text, Title } from '@shared/components'
 import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
 import { useUser } from '@shared/hooks/useUser'
 import { capitalizeName } from '@shared/utils/transformers'
+import * as tv from '../BookInformationTV'
 
 const maxDescriptionLength = 150
 
@@ -15,10 +17,8 @@ export function BookInformationHeader() {
   if (!selectedBook) return null
 
   return (
-    <div className="relative flex flex-col gap-2">
-      <div className="flex items-center justify-between w-[calc(100%-3rem)] h-2">
-        <Title title={selectedBook?.title} as="h4" className="truncate" />
-      </div>
+    <div className={tv.bookInformationHeaderWrapperTV()}>
+      <Title title={selectedBook?.title} as="h4" className="truncate" />
       <span>
         <Text
           text={`${capitalizeName(selectedBook?.Gender ?? '')} /`}
@@ -28,26 +28,36 @@ export function BookInformationHeader() {
         <Text text={`${capitalizeName(selectedBook?.Theme ?? '')}`} color="gray" as="span" />
       </span>
       <Text
-        text={`Olá, ${sessionCustomer?.name}, as informações do seu livro estão prontas!`}
+        text={`Olá, ${capitalizeName(sessionCustomer?.name)}, as informações do seu livro estão prontas!`}
         as="small"
         size="sm"
-        className="hidden lg:flex"
+        className={tv.welcomeTV()}
       />
       <Text
         text={`${selectedBook?.description?.substring(0, maxDescriptionLength)}...`}
         as="small"
         size="xs"
         color="gray"
-        className="w-full max-w-[680px]"
+        className={tv.descriptionTV()}
       />
 
-      <div className="flex items-center gap-1">
+      <div className={tv.chipsWrapperTV()}>
         {selectedBook?.conclued && (
-          <Chip size="sm" color="success" variant="bordered">
+          <Chip
+            data-testid="book-incofmation-header-chip"
+            size="sm"
+            color="success"
+            variant="bordered"
+          >
             Concluído
           </Chip>
         )}
-        <Chip size="sm" color={selectedBook?.isActive ? 'secondary' : 'warning'} variant="bordered">
+        <Chip
+          data-testid="book-incofmation-header-chip"
+          size="sm"
+          color={selectedBook?.isActive ? 'secondary' : 'warning'}
+          variant="bordered"
+        >
           {selectedBook?.isActive ? 'Público' : 'Oculto'}
         </Chip>
       </div>

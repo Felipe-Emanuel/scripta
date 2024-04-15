@@ -1,19 +1,20 @@
 'use client'
 
+import { ElementType } from 'react'
+import { Card, CardHeader, CardFooter, Button } from '@nextui-org/react'
+import NextImage from 'next/image'
+
 import { FaUserSecret } from 'react-icons/fa'
 import { BsEmojiHeartEyes } from 'react-icons/bs'
 import { HiTrophy } from 'react-icons/hi2'
 import { FaBook } from 'react-icons/fa'
 
-import { Card, CardHeader, CardFooter, Button } from '@nextui-org/react'
-import NextImage from 'next/image'
-
-import { useHighlightController } from '../controller'
 import { Icon, Text } from '@shared/components'
 import HighlightFallback from '@assets/images/highlight-fallback.png'
 import { formatNumber } from '@shared/utils/validation'
-import { ElementType } from 'react'
 import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
+import { useHighlightController } from '../controller'
+import * as tv from '../HighlightTV'
 
 type TRenderInfo = {
   label: string
@@ -35,13 +36,13 @@ export function HighlightCard() {
 
   const cardContent = (
     <>
-      <CardHeader className="absolute z-10 top-0 flex-col pb-8 items-start bg-gradient-to-b from-black/75 via-black/50 to-transparent">
+      <CardHeader className={tv.cardHeaderTV()}>
         <Text
           text="Seu destaque"
           weight="bold"
           color="gray"
           textStyle="uppercase"
-          className="text-tiny pointer-events-none"
+          className={tv.cardHeaderTitleTV()}
         />
         <span>
           <Text
@@ -50,7 +51,7 @@ export function HighlightCard() {
             weight="bold"
             size="xxs"
             textStyle="uppercase"
-            className="text-tiny pointer-events-none text-green-500/75"
+            className={tv.cardHeaderGenderTV()}
           />{' '}
           <Text
             as="small"
@@ -59,18 +60,18 @@ export function HighlightCard() {
             color="gray"
             size="xxs"
             textStyle="uppercase"
-            className="text-tiny pointer-events-none"
+            className={tv.cardHeaderThemeTV()}
           />
         </span>
       </CardHeader>
       <NextImage
         fill
         alt="image do livro de destaque"
-        className="z-0 min-h-full"
+        className={tv.nextImageTV()}
         src={highestHitsBook.heroPathUrl}
       />
-      <CardFooter className="absolute flex flex-col gap-1 bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10">
-        <div className="w-full flex items-center justify-between">
+      <CardFooter className={tv.cardFooterTV()}>
+        <div className={tv.cardFooterContentWrapperTV()}>
           <Text weight="bold" text={highestHitsBook.title} size="sm" />
           {highestHitsBook.id !== selectedBook?.id && (
             <Button
@@ -84,8 +85,8 @@ export function HighlightCard() {
             </Button>
           )}
         </div>
-        <div className="flex items-center justify-between gap-1 flex-wrap md:flex-nowrap w-full">
-          <div className="flex flex-col gap-1">
+        <div className={tv.cardFooterContentTV()}>
+          <div className={tv.cardFooterContentCardTV()}>
             <RenderInfo
               label={`${formatNumber(highestHitsBook.hits || 0)} Acessos`}
               icon={HiTrophy}
@@ -95,7 +96,7 @@ export function HighlightCard() {
               icon={BsEmojiHeartEyes}
             />
           </div>
-          <div className="flex flex-col gap-1">
+          <div className={tv.cardFooterContentCardTV()}>
             <RenderInfo
               label={`${formatNumber(highestHitsBook.totalWords || 0)} Palavras`}
               icon={FaBook}
@@ -117,9 +118,9 @@ export function HighlightCard() {
         src={HighlightFallback}
         width={1000}
         height={765}
-        className="bg-cover absolute inset-0 z-0"
+        className={tv.highlightFallbackImageTV()}
       />
-      <CardHeader className="absolute z-10 top-1 flex-col items-start">
+      <CardHeader className={tv.cardHeaderWrapperTV()}>
         <Text
           text="Seu destaque aparecerá aqui"
           weight="bold"
@@ -128,7 +129,7 @@ export function HighlightCard() {
           className="text-tiny"
         />
       </CardHeader>
-      <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+      <CardFooter className={tv.cardFooterWrapperTV()}>
         <div>
           <Text as="b" weight="semi-bold" text="Adicione um livro para começar" />
         </div>
@@ -140,7 +141,7 @@ export function HighlightCard() {
   )
 
   return (
-    <Card isFooterBlurred className="w-full max-w-[300px] h-[400px] overflow-hidden">
+    <Card isFooterBlurred className={tv.cardWrapperTV()}>
       {highestHitsBook.id ? cardContent : cardContentFallback}
     </Card>
   )

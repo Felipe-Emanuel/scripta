@@ -1,6 +1,5 @@
 import { globalErrorMessage } from '@utils'
 import { FastifyInstance } from 'fastify'
-import { authorization } from 'src/controllers/utils'
 import { databaseBookRepository } from '@repositories'
 import {
   CreateBookService,
@@ -18,6 +17,7 @@ import {
   IPatchConcluedBookServiceRequest,
   PatchConcluedBookService
 } from 'src/services/bookServices/patchConclued'
+import { authorization } from 'src/middlewares'
 
 type TPatchBookState = {
   where: 'conclued' | 'isActive'

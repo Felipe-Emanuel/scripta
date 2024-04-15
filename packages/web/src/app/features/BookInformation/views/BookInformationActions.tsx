@@ -19,10 +19,11 @@ import { BiPowerOff } from 'react-icons/bi'
 
 import { Icon, Text } from '@shared/components'
 import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
-import { useBookInformationController } from '../controller'
 import { DeleteModal } from './modals/DeleteModal'
 import { DesactiveModal } from './modals/DesactiveModal'
 import { EditModal } from './modals/EditModal'
+import { useBookInformationController } from '../controller'
+import * as tv from '../BookInformationTV'
 
 interface IconContentProps {
   icon: ElementType
@@ -39,6 +40,7 @@ export function BookInformationActions() {
     handleDeleteBook
   } = useBookInformationController()
   const { selectedBook } = useBookInformation()
+
   if (!selectedBook) return null
 
   const markAsConcluedIcon = selectedBook?.conclued ? IoIosRemoveCircle : IoMdDoneAll
@@ -47,13 +49,13 @@ export function BookInformationActions() {
     : 'Marcar como concluído'
 
   const IconContent = ({ icon, color = 'primary' }: IconContentProps) => (
-    <div className="bg-white p-2 rounded-xl flex items-center justify-center">
+    <div className={tv.iconContentTV()}>
       <Icon icon={icon} color={color} />
     </div>
   )
 
   return (
-    <div className="absolute top-3 right-4">
+    <div className={tv.infoActionsWrapperTV()}>
       <EditModal toggleEditing={toggleEditing} book={selectedBook} isEditing={action.isEditing} />
       <DeleteModal
         handleDeleteBook={handleDeleteBook}
@@ -67,7 +69,7 @@ export function BookInformationActions() {
         book={selectedBook}
         toggleDesactiving={toggleDesactiving}
       />
-      <Dropdown showArrow className="bg-white/10 backdrop-blur-md ring-1 ring-white/50">
+      <Dropdown showArrow className={tv.infoActionsDropdownTV()}>
         <DropdownTrigger>
           <Button color="secondary" isIconOnly variant="light">
             <Icon icon={CiMenuKebab} color="white" />
@@ -76,6 +78,7 @@ export function BookInformationActions() {
         <DropdownMenu variant="flat" aria-label="Dropdown com ações do livro selecionado">
           <DropdownSection title="Ações">
             <DropdownItem
+              data-testid="dorpdown-item-book-information-action-conclud"
               onClick={() => handlePatchActiveOrConcluedBook('conclued')}
               textValue="Concluído"
               key="conclued"
@@ -84,6 +87,7 @@ export function BookInformationActions() {
               <Text weight="semi-bold" text={markAsConcluedText} />
             </DropdownItem>
             <DropdownItem
+              data-testid="dorpdown-item-book-information-action-edit"
               onClick={toggleEditing}
               textValue="Editar"
               key="edit"
@@ -95,6 +99,7 @@ export function BookInformationActions() {
 
           <DropdownSection title="Zona de perigo">
             <DropdownItem
+              data-testid="dorpdown-item-book-information-action-desactive"
               textValue="Desativar"
               onClick={toggleDesactiving}
               key="desactiving"
@@ -113,6 +118,7 @@ export function BookInformationActions() {
             </DropdownItem>
 
             <DropdownItem
+              data-testid="dorpdown-item-book-information-action-delete"
               textValue="Excluir"
               onClick={toggleDeleting}
               key="trash"

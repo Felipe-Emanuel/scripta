@@ -1,6 +1,5 @@
 import { FastifyInstance } from 'fastify'
 
-import { authorization } from './utils'
 import { databaseReaderRepository, databaseUserRepository } from '@repositories'
 import { globalErrorMessage } from '@utils'
 import {
@@ -14,12 +13,11 @@ import {
   TGetReaderByAuthorRequest,
   TGetReaderByBookRequest,
   TGetReaderByEmailRequest,
-  // TUpdateBookReadersRequest,
   TUpdateReaderRequest,
-  // UpdateBookReadersService,
-  UpdateReaderService,
+  UpdateReaderService
 } from '@services'
 import { throwReaderMessages } from '@entities/Reader/utils'
+import { authorization } from 'src/middlewares'
 
 export async function readerController(app: FastifyInstance) {
   const {
@@ -27,50 +25,38 @@ export async function readerController(app: FastifyInstance) {
     getAllReadersByBook,
     updateReader,
     getAllReadersByAuthor,
-    // createOnlyBookReader,
-    getReaderFromEmail,
+    getReaderFromEmail
   } = databaseReaderRepository()
 
   const { getUserByEmail } = databaseUserRepository()
 
   const createReaderAction: TCreateReaderRequest['action'] = {
-    createReader,
+    createReader
   }
 
   const getReaderByBookAction: TGetReaderByBookRequest['action'] = {
-    getAllReadersByBook,
+    getAllReadersByBook
   }
 
   const updateReaderAction: TUpdateReaderRequest['action'] = {
-    updateReader,
+    updateReader
   }
 
   const getReadersByAuthorAction: TGetReaderByAuthorRequest['action'] = {
-    getAllReadersByAuthor,
+    getAllReadersByAuthor
   }
 
-  // const updateBookReaderAction: TUpdateBookReadersRequest['action'] = {
-  //   createOnlyBookReader,
-  // }
-
   const getReaderByEmailAction: TGetReaderByEmailRequest['action'] = {
-    getReaderFromEmail,
+    getReaderFromEmail
   }
 
   const getUserByEmailAction: TGetByEmailRequest['action'] = {
-    getUserByEmail,
+    getUserByEmail
   }
 
   app.post('/readers', async (req, apply) => {
-    const {
-      userEmail,
-      bookId,
-      location,
-      picture,
-      portfolioUrl,
-      userName,
-      authorEmail,
-    } = req.body as Partial<TCreateReaderRequest>
+    const { userEmail, location, picture, portfolioUrl, userName, authorEmail } =
+      req.body as Partial<TCreateReaderRequest>
     const provider = req.headers.provider
     const accessToken = req.headers.authorization
 
@@ -80,56 +66,30 @@ export async function readerController(app: FastifyInstance) {
       action: getUserByEmailAction,
       email: authorEmail,
       includeBook: false,
-      includeReaders: true,
+      includeReaders: true
     })
 
-    const existentReader = author?.readers?.find(
-      (reader) => reader.userEmail === userEmail,
-    )
+    const existentReader = author?.readers?.find((reader) => reader.userEmail === userEmail)
 
     if (existentReader) {
       return apply.send({ message: throwReaderMessages.alreadyExists })
     }
 
-    // try {
-    const newReader = await CreateReaderService({
-      action: createReaderAction,
-      userEmail,
-      location,
-      bookId,
-      picture,
-      portfolioUrl,
-      userName,
-      authorEmail,
-    })
-    // envia notificação de novo leitor para o usuário, informando o livro que ele acessou
-    return apply.send(newReader)
-
-    // if (existentReader) {
-    //   // envia notificação de novo leitor para o livro, informando o livro que ele acessou
-
-    //   // serviço para adicionar novo leitor no book
-    //   const newReaderAtBook = await UpdateBookReadersService({
-    //     action: updateBookReaderAction,
-    //     bookId,
-    //     newReader: {
-    //       ...location,
-    //       userEmail,
-    //       picture,
-    //       portfolioUrl,
-    //       userName,
-    //       authorEmail,
-    //       id: '',
-    //       createdAt: undefined,
-    //       updatedAt: undefined
-    //     },
-    //   })
-
-    //   return apply.send(newReaderAtBook)
-    // }
-    // } catch {
-    //   apply.status(500).send({ message: globalErrorMessage.unexpected })
-    // }
+    try {
+      const newReader = await CreateReaderService({
+        action: createReaderAction,
+        userEmail,
+        location,
+        picture,
+        portfolioUrl,
+        userName,
+        authorEmail
+      })
+      // envia notificação de novo leitor para o usuário, informando o livro que ele acessou
+      return apply.send(newReader)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
   })
 
   app.get('/reader/:email/:bookId', async (req, apply) => {
@@ -142,7 +102,7 @@ export async function readerController(app: FastifyInstance) {
     const readers = await GetReaderByBook({
       action: getReaderByBookAction,
       bookId,
-      email,
+      email
     })
 
     try {
@@ -164,7 +124,7 @@ export async function readerController(app: FastifyInstance) {
       action: updateReaderAction,
       newReader,
       email,
-      readerId,
+      readerId
     })
 
     try {
@@ -183,7 +143,7 @@ export async function readerController(app: FastifyInstance) {
 
     const existentReader = await GetReaderByEmailService({
       action: getReaderByEmailAction,
-      readerEmail,
+      readerEmail
     })
 
     try {
@@ -202,7 +162,7 @@ export async function readerController(app: FastifyInstance) {
 
     const readers = await GetReaderByAuthorService({
       action: getReadersByAuthorAction,
-      authorEmail,
+      authorEmail
     })
 
     try {
