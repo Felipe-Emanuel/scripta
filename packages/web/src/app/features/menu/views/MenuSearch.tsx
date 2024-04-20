@@ -30,7 +30,7 @@ export function MenuSearch({ defaultItems }: IMenuSearchProps) {
     <>
       <Autocomplete
         aria-label="Busca por ajuda"
-        placeholder="Busque por algo..."
+        placeholder="Busque por ajuda..."
         className={tv.autocompleteTV()}
         startContent={<Icon icon={IoSearch} color="gray" size="lg" />}
         radius="full"

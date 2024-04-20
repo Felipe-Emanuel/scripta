@@ -54,7 +54,6 @@ export function BookInformationCardInfo() {
       <div className={tv.renderInfoWrapperTV()}>
         <div className={tv.characterSideWrapperTV()}>
           <div className={tv.characterSideContentTV()}>
-            <div className={tv.characterSideAnimationTV()} />
             <RenderInfo
               clearing={clearing}
               setIsCharactersCardHovered={setIsCharactersCardHovered}

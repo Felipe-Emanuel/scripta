@@ -15,7 +15,7 @@ type TCreateBookServiceResponse = Book
 export const CreateBookService = async ({
   actions,
   book,
-  userEmail,
+  userEmail
 }: TCreateBookServiceRequest): Promise<TCreateBookServiceResponse> => {
   const { createBook, getAllBooks } = actions
 
@@ -33,7 +33,7 @@ export const CreateBookService = async ({
     id: uuiv4(),
     createdAt: new Date(),
     updatedAt: new Date(),
-    hits: 0,
+    hits: 0
   })
 
   const newBook = await setBook()

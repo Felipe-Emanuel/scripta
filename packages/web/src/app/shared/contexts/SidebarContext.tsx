@@ -1,20 +1,13 @@
+import React from 'react'
+import { DropzoneRootProps, useDropzone } from 'react-dropzone'
+import { toast } from 'react-toastify'
+
 import { feedbackTypes } from '@features/feedback/FeedbackUtils'
 import { useUser } from '@shared/hooks/useUser'
 import { TCreateFeedbackRequest, TRootComponent } from '@shared/types'
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState
-} from 'react'
-import { DropzoneRootProps, useDropzone } from 'react-dropzone'
-import { isBase64 } from '@memorize/server/src/shared/utils/stringValidations'
-import { toast } from 'react-toastify'
 import { extractBase64 } from '@shared/utils/transformers'
+
+import { isBase64 } from '@memorize/server/src/shared/utils/stringValidations'
 
 type THandleSelectionEventChange = {
   target: {
@@ -33,31 +26,31 @@ type TCreateContext = {
   changeImageAlert: boolean
   createFeedbackRequest: TCreateFeedbackRequest
   image: string | ArrayBuffer | null
-  setFeedback: (value: SetStateAction<string>) => void
+  setFeedback: (value: React.SetStateAction<string>) => void
   handleSelectionChange: (e: THandleSelectionEventChange) => void
   toggleFeedbackFocused: () => void
   clearimage: () => void
   toggleSidebar: () => void
   closeFeedbackFocused: () => void
   clearAll: () => void
-  setChangeImageAlert: Dispatch<SetStateAction<boolean>>
+  setChangeImageAlert: React.Dispatch<React.SetStateAction<boolean>>
   getRootProps: <T extends DropzoneRootProps>(props?: T | undefined) => T
   onPaste: (event: React.ClipboardEvent<HTMLDivElement>) => void
-  handleFileChange: (event: ChangeEvent<HTMLInputElement>) => void
+  handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const SidebarContext = createContext({} as TCreateContext)
+export const SidebarContext = React.createContext({} as TCreateContext)
 
 export const SidebarProvider = ({ children }: TRootComponent) => {
   const { sessionCustomer } = useUser()
-  const [isFeedbackOnFocus, setIsFeedbackOnFocus] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
-  const [changeImageAlert, setChangeImageAlert] = useState(false)
-  const [type, setType] = useState<Set<string>>(new Set([]))
-  const [feedback, setFeedback] = useState('')
-  const [image, setImage] = useState<string | ArrayBuffer | null>('')
+  const [isFeedbackOnFocus, setIsFeedbackOnFocus] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [changeImageAlert, setChangeImageAlert] = React.useState(false)
+  const [type, setType] = React.useState<Set<string>>(new Set([]))
+  const [feedback, setFeedback] = React.useState('')
+  const [image, setImage] = React.useState<string | ArrayBuffer | null>('')
 
-  const firstValue = useMemo(() => Array.from(type.values())[0], [type])
+  const firstValue = React.useMemo(() => Array.from(type.values())[0], [type])
   const feedbackType = feedbackTypes.find((f) => f.label === firstValue)
   const screenshot = extractBase64(String(image))
 
@@ -79,13 +72,13 @@ export const SidebarProvider = ({ children }: TRootComponent) => {
 
   const isDisabled = !feedback || !firstValue
 
-  useEffect(() => {
+  React.useEffect(() => {
     const initialFeedback = feedbackTypes.find((feedback) => feedback.label === firstValue)
     setFeedback(initialFeedback?.initialFeedback ?? '')
   }, [firstValue])
 
-  const handleFileChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       if (image) {
         return setChangeImageAlert(true)
       }
@@ -102,7 +95,7 @@ export const SidebarProvider = ({ children }: TRootComponent) => {
     [image]
   )
 
-  const getImageFromClipboard = useCallback(() => {
+  const getImageFromClipboard = React.useCallback(() => {
     if (image) {
       return null
     }
@@ -141,7 +134,7 @@ export const SidebarProvider = ({ children }: TRootComponent) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
+  React.useEffect(() => {
     isFeedbackOnFocus && getImageFromClipboard()
   }, [getImageFromClipboard, isFeedbackOnFocus])
 

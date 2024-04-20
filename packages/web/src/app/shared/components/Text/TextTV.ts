@@ -38,7 +38,8 @@ export const textTv = tv({
       lowercase: 'lowercase'
     },
     align: {
-      center: 'text-center'
+      center: 'text-center',
+      start: 'text-start'
     }
   },
   defaultVariants: {

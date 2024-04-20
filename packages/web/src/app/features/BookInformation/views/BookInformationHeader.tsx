@@ -46,7 +46,7 @@ export function BookInformationHeader() {
           <Chip
             data-testid="book-incofmation-header-chip"
             size="sm"
-            color="success"
+            color="secondary"
             variant="bordered"
           >
             Concluído
@@ -54,8 +54,8 @@ export function BookInformationHeader() {
         )}
         <Chip
           data-testid="book-incofmation-header-chip"
+          color="secondary"
           size="sm"
-          color={selectedBook?.isActive ? 'secondary' : 'warning'}
           variant="bordered"
         >
           {selectedBook?.isActive ? 'Público' : 'Oculto'}

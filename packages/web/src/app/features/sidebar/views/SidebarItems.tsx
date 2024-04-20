@@ -25,7 +25,7 @@ export function SidebarItems() {
             <section key={item.section.id} className={tv.sidebarItemsRootTv()}>
               {item.section.items && item.section.items?.length && (
                 <>
-                  <Title as="h6" title={item.section.name} size="md" weight="semi-bold" />
+                  <Title as="h6" title={item.section.name} size="md" weight="bold" color="gray" />
                   {item.section.items?.map((sectionItem) => {
                     const isActive = getIsActivePath(sectionItem, pathname, params)
                     const isDisabled = isFeedbackOnFocus || isActive
@@ -37,7 +37,7 @@ export function SidebarItems() {
                         color={isActive ? 'primary' : 'default'}
                         key={sectionItem.id}
                         fullWidth
-                        className={`my-2 relative duration-500
+                        className={`my-2 relative duration-500 hover:bg-primary/25
                             ${isOpen ? '' : 'max-[1890px]:bg-transparent'}
                             ${isDisabled ? 'pointer-events-none' : 'pointer-events-auto'}
                           `}

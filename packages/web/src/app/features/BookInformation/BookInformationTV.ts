@@ -36,10 +36,6 @@ export const characterSideContentTV = tv({
   base: 'relative size-full'
 })
 
-export const characterSideAnimationTV = tv({
-  base: 'absolute inset-0 animate-border-animation rounded-2xl bg-tertiary'
-})
-
 export const hitsSideWrapperTV = tv({
   base: 'flex lg:flex-col gap-2 md:gap-4'
 })

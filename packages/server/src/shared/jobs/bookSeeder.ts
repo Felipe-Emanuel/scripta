@@ -9,7 +9,7 @@ import { prisma } from 'src/lib'
 import { v4 as uuidv4 } from 'uuid'
 import {
   genres,
-  themes,
+  themes
 } from '../../../../web/src/app/features/booksPerformance/BooksPerformanceUtils'
 
 const combinedObject = [genres, themes].map((array) => {
@@ -38,6 +38,7 @@ async function createBookWithDetails(genreLabel: string, themeLabel: string) {
     createdAt: new Date(),
     updatedAt: new Date(),
     hits: Math.random() * 500,
+    isActive: true
   }
 
   try {
@@ -45,12 +46,10 @@ async function createBookWithDetails(genreLabel: string, themeLabel: string) {
       data: book,
       include: {
         characters: true,
-        reactions: true,
-      },
+        reactions: true
+      }
     })
-    console.log(
-      `Book with genre "${genreLabel}" and theme "${themeLabel}" created successfully.`,
-    )
+    console.log(`Book with genre "${genreLabel}" and theme "${themeLabel}" created successfully.`)
   } catch (error) {
     console.error('Error creating book:', error)
   }
@@ -75,6 +74,6 @@ export const bookSeederJob = cron.schedule(
     }
   },
   {
-    scheduled: false,
-  },
+    scheduled: false
+  }
 )

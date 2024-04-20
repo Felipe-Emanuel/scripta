@@ -3,6 +3,7 @@ import { Books } from '@features/books'
 export default function BooksPage() {
   return (
     <Books.root>
+      <Books.newBook />
       <section
         id="book-info"
         className="flex items-center justify-center flex-wrap md:flex-nowrap gap-4"

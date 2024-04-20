@@ -1,10 +1,4 @@
-import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import { ReactNode, createContext, useCallback, useEffect, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { TTheme } from '@shared/types'
 
@@ -35,17 +29,14 @@ export function AppThemeProvider({ children }: AppThemeProviderProps) {
   }
 
   const getSystemThemePreference = useCallback(() => {
-    const prefersDarkMode = window.matchMedia(
-      '(prefers-color-scheme: dark)',
-    ).matches
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
     if (!prefersDarkMode) setIsSystem(true)
     return prefersDarkMode ? 'dark' : 'light'
   }, [])
 
   useEffect(() => {
     const themeValue: TTheme = getLocalStorage(localStorageThemeName)
-    const defaultTheme =
-      themeValue === null ? getSystemThemePreference() : themeValue
+    const defaultTheme = themeValue === null ? getSystemThemePreference() : themeValue
     setTheme(defaultTheme)
   }, [getLocalStorage, getSystemThemePreference])
 
@@ -54,7 +45,7 @@ export function AppThemeProvider({ children }: AppThemeProviderProps) {
       value={{
         isSystem,
         theme,
-        changeTheme,
+        changeTheme
       }}
     >
       {children}
