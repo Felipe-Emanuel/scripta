@@ -3,7 +3,7 @@ import { TBookRequest, TCreateBookRequest } from '@shared/types'
 
 export const createBook = async ({ userEmail, book }: TCreateBookRequest) => {
   try {
-    const endpoint = `/books:${userEmail}`
+    const endpoint = `/books/${userEmail}`
 
     const body: TCreateBookRequest = {
       userEmail,

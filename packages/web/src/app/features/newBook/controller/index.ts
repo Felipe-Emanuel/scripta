@@ -4,11 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useUser } from '@shared/hooks/useUser'
 import { TCreateBookRequest } from '@shared/types'
-import { useQueryMutation } from '@shared/hooks/useReactQuery'
 import { TCreateBookSchema, createBookSchema } from '../NewBookUtils'
 import { createBook } from '../services'
 import { useDebounce } from '@shared/hooks/useDebounce'
 import { useDraft } from '@shared/hooks/useDraft'
+import { useMutation, useQueryClient } from 'react-query'
+import { cacheName } from '@shared/utils/constants/cacheName'
+import { getAllBooks } from '@features/Highlight/services'
 
 const DELAY_TO_SEE_FORM = 600 // in ms
 
@@ -33,11 +35,13 @@ export const useNewBookController = () => {
       if (sessionCustomer) {
         const { email: userEmail } = sessionCustomer
 
+        const { gender, theme, ...dataWithoutGenderAndTheme } = data
+
         const book: TCreateBookRequest['book'] = {
-          ...data,
-          Gender: data.gender,
+          ...dataWithoutGenderAndTheme,
+          Gender: gender,
           heroPathUrl: String(draft?.heroPathUrl),
-          Theme: data.theme,
+          Theme: theme,
           publishedUrl: data.publishedUrl ?? ''
         }
 
@@ -52,7 +56,20 @@ export const useNewBookController = () => {
     [draft, sessionCustomer]
   )
 
-  const { mutateAsync } = useQueryMutation(createNewBook, 'allBooks')
+  const queryClient = useQueryClient()
+
+  const { mutateAsync } = useMutation({
+    mutationKey: cacheName.allBooks,
+    mutationFn: createNewBook,
+    async onSuccess() {
+      if (sessionCustomer) {
+        const { email: userEmail } = sessionCustomer
+        const allbooks = await getAllBooks(userEmail)
+
+        queryClient.setQueryData([cacheName.allBooks], () => allbooks)
+      }
+    }
+  })
 
   const bookSchema = useForm<TCreateBookSchema>({
     resolver: zodResolver(createBookSchema),
@@ -65,7 +82,7 @@ export const useNewBookController = () => {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors }
+    formState: { errors, isSubmitSuccessful }
   } = bookSchema
 
   const onSubmit = async (data: TCreateBookSchema) => {
@@ -117,9 +134,11 @@ export const useNewBookController = () => {
     isFirstAccess,
     conclued,
     isActive,
+    isSubmitSuccessful,
     handleSubmit,
     onSubmit,
     setValue,
-    watch
+    watch,
+    clearDraft
   }
 }

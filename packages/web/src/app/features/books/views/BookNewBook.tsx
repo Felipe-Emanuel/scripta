@@ -20,6 +20,7 @@ export function BookNewBook() {
       <NewBook.bookPathname showForm={showForm} />
       <NewBook.trigger handleToggleCreateBook={handleToggleCreateBook} />
       <NewBook.formWrapper
+        handleToggleCreateBook={handleToggleCreateBook}
         handleBackFormState={handleBackFormState}
         handleNextFormState={handleNextFormState}
         state={state}

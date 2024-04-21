@@ -8,8 +8,10 @@ import { NewBookFormActions } from './components/NewBookFormActions'
 import { useNewBookController } from '../controller'
 import { newBookWrapperFormVariants } from '../NewBookUtils'
 import { newBookFormWrapperRootTV, newBookFormWrapperTV } from '../NewBookTV'
+import { useEffect } from 'react'
 
 interface INewBookFormWrapperProps extends TRootComponent {
+  handleToggleCreateBook: () => void
   handleBackFormState: () => void
   handleNextFormState: () => void
   showForm: boolean
@@ -21,9 +23,19 @@ export function NewBookFormWrapper({
   children,
   state,
   handleNextFormState,
-  handleBackFormState
+  handleBackFormState,
+  handleToggleCreateBook
 }: INewBookFormWrapperProps) {
-  const { bookSchema, isFirstAccess, handleSubmit, onSubmit } = useNewBookController()
+  const { bookSchema, isFirstAccess, isSubmitSuccessful, handleSubmit, onSubmit, clearDraft } =
+    useNewBookController()
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      handleToggleCreateBook()
+      clearDraft()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSubmitSuccessful])
 
   return (
     <AnimatePresence>
