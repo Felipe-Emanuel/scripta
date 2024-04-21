@@ -1,5 +1,7 @@
-import { State } from '@features/books/BooksUtils'
 import { Button } from '@nextui-org/react'
+
+import { State } from '@features/books/BooksUtils'
+import { newBookFormActionsTV } from '@features/newBook/NewBookTV'
 import { Icon, Text } from '@shared/components'
 
 import { IoChevronBack, IoChevronForward, IoCloudDone } from 'react-icons/io5'
@@ -20,11 +22,11 @@ export function NewBookFormActions({
   const isLastStateOfNewBookForm = state.stage === 'OVERVIEW'
   const submitButtonIcon = isLastStateOfNewBookForm ? IoCloudDone : IoChevronForward
 
+  const progressPositive = state.progress > 1
+
   return (
-    <div
-      className={`flex items-center ${state.progress > 1 ? 'justify-between' : 'justify-end'} w-full py-2 md:py-4`}
-    >
-      {state.progress > 1 && (
+    <div className={newBookFormActionsTV({ progressPositive })}>
+      {progressPositive && (
         <Button
           size="sm"
           onClick={handleBackFormState}

@@ -1,12 +1,14 @@
-import { TCreateBookSchemaWithImage } from '@features/newBook/controller'
-import { Button, Chip, Image, ScrollShadow, Tooltip } from '@nextui-org/react'
-import { Icon, Text, Title } from '@shared/components'
-import { useDraft } from '@shared/hooks/useDraft'
-import { capitalizeName } from '@shared/utils/transformers'
 import { FaBook } from 'react-icons/fa'
+import { Button, Chip, Image, ScrollShadow, Tooltip } from '@nextui-org/react'
 
 import { isLink } from '@memorize/server/src/shared/utils/stringValidations'
+
+import { TCreateBookSchemaWithImage } from '@features/newBook/controller'
+import { useDraft } from '@shared/hooks/useDraft'
 import { formatNumber } from '@shared/utils/validation'
+import { capitalizeName } from '@shared/utils/transformers'
+import { Icon, Text, Title } from '@shared/components'
+import * as tv from './NewBookFormsTV'
 
 export function NewBookOverviewForm() {
   const { draft } = useDraft<TCreateBookSchemaWithImage>('newBook')
@@ -18,15 +20,15 @@ export function NewBookOverviewForm() {
   const bookTitle = `${capitalizeName(draft?.title).substring(0, 35)}${ellipsis}`
 
   return (
-    <div className="flex flex-wrap sm:flex-nowrap gap-4 md:gap-6">
-      <div className="flex gap-2 w-full">
+    <div className={tv.newBookOverviewFormTV()}>
+      <div className={tv.newBookOverviewFormHeroSideTV()}>
         <Image
           removeWrapper
           alt="Imagem escolhida para capa do livro"
           src={draft?.heroPathUrl}
-          className="h-40 sm:h-52 w-32 sm:w-40"
+          className={tv.newBookOverviewFormHeroTV()}
         />
-        <div className="flex flex-col justify-between py-1">
+        <div className={tv.newBookOverviewFormHeroSideInfoTV()}>
           <Tooltip showArrow content={capitalizeName(draft?.title)}>
             <div>
               <Text text={bookTitle} size="md" />
@@ -50,19 +52,22 @@ export function NewBookOverviewForm() {
               weight="bold"
             />
           </span>
-          <div className="flex gap-2">
+          <div className={tv.newBookOverviewFormHeroSideChipsTV()}>
             {draft?.conclued && (
               <Chip size="sm" color="secondary" variant="bordered">
-                <Text text="Concluído" className="text-[8px]" />
+                <Text text="Concluído" className={tv.newBookOverviewFormHeroSideChipsTextTV()} />
               </Chip>
             )}
             <Chip size="sm" color="secondary" variant="bordered">
-              <Text text={draft?.isActive ? 'Público' : 'Oculto'} className="text-[8px]" />
+              <Text
+                text={draft?.isActive ? 'Público' : 'Oculto'}
+                className={tv.newBookOverviewFormHeroSideChipsTextTV()}
+              />
             </Chip>
           </div>
-          <div className="flex items-center gap-2">
+          <div className={tv.newBookOverviewFormHeroSideTotalWordsTV()}>
             <Tooltip showArrow content={draft?.totalWords}>
-              <div className="rounded-lg bg-primary sm:p-2 flex items-center justify-center">
+              <div className={tv.newBookOverviewFormHeroSideIconWrapperTV()}>
                 <Icon icon={FaBook} color="white" size="md" />
               </div>
             </Tooltip>
@@ -77,7 +82,7 @@ export function NewBookOverviewForm() {
           ) : (
             <Button
               disabled
-              className="pointer-events-none opacity-50"
+              className={tv.newBookOverviewFormHeroSideButtonFallbackTV()}
               color="secondary"
               variant="bordered"
               size="sm"
@@ -89,9 +94,9 @@ export function NewBookOverviewForm() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className={tv.newBookOverviewFormDescriptionSideTV()}>
         <Title as="h2" size="md" title="Descrição" />
-        <ScrollShadow hideScrollBar className="w-full max-w-96 h-44">
+        <ScrollShadow hideScrollBar className={tv.newBookOverviewFormDescriptionSideContentTV()}>
           <Text text={draft?.description} color="gray" size="sm" />
         </ScrollShadow>
       </div>

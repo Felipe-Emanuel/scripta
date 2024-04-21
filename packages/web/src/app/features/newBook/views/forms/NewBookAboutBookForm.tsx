@@ -1,10 +1,11 @@
 import { generateRandomStringForExemple } from '@features/newBook/NewBookUtils'
-import { titlesExemples } from '@shared/utils/constants/titlesExemples'
-import { Input } from '@shared/components'
-import { genres, themes } from '@shared/utils/constants/genresAndThemes'
 import { TCreateBookSchemaWithImage, useNewBookController } from '@features/newBook/controller'
-import { useDraft } from '@shared/hooks/useDraft'
+import { titlesExemples } from '@shared/utils/constants/titlesExemples'
+import { genres, themes } from '@shared/utils/constants/genresAndThemes'
 import { formatNumber } from '@shared/utils/validation'
+import { Input } from '@shared/components'
+import { useDraft } from '@shared/hooks/useDraft'
+import * as tv from './NewBookFormsTV'
 
 export function NewBookAboutBookForm() {
   const { draft } = useDraft<TCreateBookSchemaWithImage>('newBook')
@@ -13,8 +14,8 @@ export function NewBookAboutBookForm() {
   const toggle = (field: 'conclued' | 'isActive', value: boolean) => setValue(field, value)
 
   return (
-    <div className="size-full flex max-[499px]:flex-wrap gap-6 flex-shrink-0">
-      <div id="left-side" className="flex flex-col gap-6 w-full">
+    <div className={tv.newBookAboutBookFormTV()}>
+      <div className={tv.newBookAboutBookSideTV()}>
         <Input.root>
           <Input.label text="Título" htmlFor="title" />
           <Input.field
@@ -42,8 +43,8 @@ export function NewBookAboutBookForm() {
           <Input.error field="description" />
         </Input.root>
       </div>
-      <div id="right-side" className="flex flex-col gap-6 w-full">
-        <div className="flex items-center gap-6">
+      <div className={tv.newBookAboutBookSideTV()}>
+        <div className={tv.newBookAboutBookGenreAndThemeTV()}>
           <Input.root>
             <Input.label text="Gênero" htmlFor="gender" />
             <Input.field
@@ -76,8 +77,8 @@ export function NewBookAboutBookForm() {
           <Input.error field="totalWords" />
         </Input.root>
 
-        <div className="w-full flex items-center justify-between">
-          <div className="w-full flex flex-col gap-2">
+        <div className={tv.newBookAboutBookSwitchSideTV()}>
+          <div className={tv.newBookAboutBookSwitchTV()}>
             <Input.label align="start" text="Público?" />
             <Input.switch
               defaultSelected={draft?.isActive ?? isActive}
@@ -88,7 +89,7 @@ export function NewBookAboutBookForm() {
             />
           </div>
 
-          <div className="w-full flex flex-col gap-2">
+          <div className={tv.newBookAboutBookSwitchTV()}>
             <Input.label align="start" text="Concluído?" />
             <Input.switch
               defaultSelected={draft?.conclued ?? conclued}

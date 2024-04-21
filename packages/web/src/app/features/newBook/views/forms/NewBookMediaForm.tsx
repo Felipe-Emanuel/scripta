@@ -1,10 +1,13 @@
-import { TCreateBookSchemaWithImage } from '@features/newBook/controller'
+import { BiTrashAlt } from 'react-icons/bi'
+
+import { useEffect, useState } from 'react'
 import { Button, Image } from '@nextui-org/react'
+
+import { TCreateBookSchemaWithImage } from '@features/newBook/controller'
+import { useDragAndPasteImage } from '@shared/hooks/useDragAndPasteImage'
 import { Icon, Text } from '@shared/components'
 import { useDraft } from '@shared/hooks/useDraft'
-import { useDragAndPasteImage } from '@shared/hooks/useDragAndPasteImage'
-import { useEffect, useState } from 'react'
-import { BiTrashAlt } from 'react-icons/bi'
+import * as tv from './NewBookFormsTV'
 
 export function NewBookMediaForm() {
   const { updateDraft, draft } = useDraft<TCreateBookSchemaWithImage>('newBook')
@@ -33,10 +36,10 @@ export function NewBookMediaForm() {
   }
 
   return (
-    <div className="size-full flex max-[499px]:flex-wrap gap-2 items-center justify-evenly flex-shrink-0">
+    <div className={tv.newBookMediaFormTV()}>
       <div
         {...getRootProps()}
-        className={`h-[13.5rem] w-44 rounded-xl flex flex-col gap-2 items-center justify-center border-dotted border-2 border-white/50 duration-500 ${currentImage ? 'opacity-50 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}
+        className={tv.newBookMediaFormDragAndPasteTV({ currentImage: !!currentImage })}
       >
         <Text
           text={isDragActive ? 'Solte sua capa aqui' : 'Arraste sua capa aqui'}
@@ -44,15 +47,15 @@ export function NewBookMediaForm() {
         />
         <Text text="Recomendado: 400x300 ou superior" size="xs" align="center" color="gray" />
       </div>
-      <div className="h-[13.5rem] w-44">
+      <div className={tv.newBookMediaFormContentWrapperTV()}>
         {currentImage ? (
-          <div className="relative size-full rounded-xl">
+          <div className={tv.newBookMediaFormHeroWrapperTV()}>
             <Button
               isIconOnly
               color="danger"
               variant="solid"
               size="sm"
-              className="absolute top-2 right-2 z-20"
+              className={tv.newBookMediaFormTrashImageTV()}
               onClick={clearing}
             >
               <Icon icon={BiTrashAlt} color="white" />
@@ -63,11 +66,11 @@ export function NewBookMediaForm() {
               height={400}
               width={300}
               src={String(useImage ? image : currentImage)}
-              className="bg-cover object-cover size-full rounded-xl"
+              className={tv.newBookMediaFormHeroTV()}
             />
           </div>
         ) : (
-          <div className="size-full flex items-center justify-center">
+          <div className={tv.newBookMediaFormHeroFallbackTV()}>
             <Text text="Sua capa aparecerá aqui..." />
           </div>
         )}
