@@ -28,6 +28,7 @@ export function NewBookFormActions({
     <div className={newBookFormActionsTV({ progressPositive })}>
       {progressPositive && (
         <Button
+          data-testid="new-book-form-action"
           size="sm"
           onClick={handleBackFormState}
           type="button"
@@ -39,6 +40,7 @@ export function NewBookFormActions({
         </Button>
       )}
       <Button
+        data-testid="new-book-form-action"
         size="sm"
         color="primary"
         onClick={() => (isLastStateOfNewBookForm ? handleNewBookSubmit() : handleNextFormState())}

@@ -12,8 +12,15 @@ export function NewBookProgressBar({ stage }: INewBookProgressBarProps) {
     const isCurrent = progress.type === stage
 
     return (
-      <div key={progress.id} className={tv.newBookProgressBarContentWrapperTV()}>
-        <div className={tv.newBookProgressBarMarkerTV({ isCurrent })} />
+      <div
+        key={progress.id}
+        data-testid="new-book-progress-pointer"
+        className={tv.newBookProgressBarContentWrapperTV()}
+      >
+        <div
+          data-testid={`pointer-${progress.type}`}
+          className={tv.newBookProgressBarMarkerTV({ isCurrent })}
+        />
         <Text text={progress.label} />
       </div>
     )

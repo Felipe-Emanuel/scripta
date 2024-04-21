@@ -52,6 +52,7 @@ export function NewBookMediaForm() {
         {currentImage ? (
           <div className={tv.newBookMediaFormHeroWrapperTV()}>
             <Button
+              data-testid="new-book-media-form-trash-hero"
               isIconOnly
               color="danger"
               variant="solid"

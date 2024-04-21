@@ -24,6 +24,7 @@ export function NewBookOverviewForm() {
       <div className={tv.newBookOverviewFormHeroSideTV()}>
         {draft?.heroPathUrl ? (
           <Image
+            data-testid="new-book-overview-form-hero"
             removeWrapper
             alt="Imagem escolhida para capa do livro"
             src={draft?.heroPathUrl}
@@ -108,6 +109,7 @@ export function NewBookOverviewForm() {
         <Title as="h2" size="md" title="Descrição" />
         <ScrollShadow hideScrollBar className={tv.newBookOverviewFormDescriptionSideContentTV()}>
           <Text
+            data-testid="new-book-overview-form-description"
             text={
               draft?.description ||
               'Adicione uma descrição com até 1000 palavras que resuma bem o seu livro. Seja criativo e direto!'

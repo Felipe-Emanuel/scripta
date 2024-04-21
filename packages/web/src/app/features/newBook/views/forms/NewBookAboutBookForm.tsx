@@ -28,7 +28,7 @@ export function NewBookAboutBookForm() {
 
         <Input.root>
           <Input.textarea
-            isInvalid={!!errors.description}
+            isInvalid={!!errors?.description}
             name="description"
             variant="bordered"
             maxLength={1000}
@@ -38,7 +38,7 @@ export function NewBookAboutBookForm() {
             placeholder="Descreva sua obra..."
             className="text-white"
             defaultValue={draft?.description}
-            errorMessage={errors.description?.message}
+            errorMessage={errors?.description?.message}
           />
           <Input.error field="description" />
         </Input.root>
@@ -81,6 +81,7 @@ export function NewBookAboutBookForm() {
           <div className={tv.newBookAboutBookSwitchTV()}>
             <Input.label align="start" text="Público?" />
             <Input.switch
+              data-testid="new-book-about-book-form-is-active"
               defaultSelected={draft?.isActive ?? isActive}
               name="isActive"
               onChange={() => {
@@ -92,6 +93,7 @@ export function NewBookAboutBookForm() {
           <div className={tv.newBookAboutBookSwitchTV()}>
             <Input.label align="start" text="Concluído?" />
             <Input.switch
+              data-testid="new-book-about-book-form-conclued"
               defaultSelected={draft?.conclued ?? conclued}
               name="conclued"
               onChange={() => {
