@@ -13,7 +13,7 @@ export function NewBookAboutBookForm() {
   const toggle = (field: 'conclued' | 'isActive', value: boolean) => setValue(field, value)
 
   return (
-    <div className="size-full flex gap-6 flex-shrink-0">
+    <div className="size-full flex max-[499px]:flex-wrap gap-6 flex-shrink-0">
       <div id="left-side" className="flex flex-col gap-6 w-full">
         <Input.root>
           <Input.label text="Título" htmlFor="title" />
@@ -30,6 +30,8 @@ export function NewBookAboutBookForm() {
             isInvalid={!!errors.description}
             name="description"
             variant="bordered"
+            maxLength={1000}
+            max={1000}
             maxRows={6}
             minRows={6}
             placeholder="Descreva sua obra..."

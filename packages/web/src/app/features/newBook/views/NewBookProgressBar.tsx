@@ -25,7 +25,7 @@ export function NewBookProgressBar({ stage }: INewBookProgressBarProps) {
   }
 
   return (
-    <div className="relative w-full max-w-[50rem] flex items-center justify-between bg-primary h-1 mb-20 md:mb-16 rounded-full">
+    <div className="relative w-full max-w-[50rem] flex items-center justify-between bg-primary h-1 mb-12 lg:mt-24 md:mb-16 rounded-full">
       <div className={progressBarWhiteBarTV({ stage: stage })} />
       {progressInfo.map((progress) => progressPointer(progress))}
     </div>

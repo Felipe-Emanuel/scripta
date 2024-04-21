@@ -1,5 +1,5 @@
 import { TCreateBookSchemaWithImage } from '@features/newBook/controller'
-import { Button, Chip, Image, ScrollShadow } from '@nextui-org/react'
+import { Button, Chip, Image, ScrollShadow, Tooltip } from '@nextui-org/react'
 import { Icon, Text, Title } from '@shared/components'
 import { useDraft } from '@shared/hooks/useDraft'
 import { capitalizeName } from '@shared/utils/transformers'
@@ -13,21 +13,30 @@ export function NewBookOverviewForm() {
 
   const isUrl = isLink(draft?.publishedUrl ?? '')
 
+  const ellipsis = draft?.title.length > 35 ? '...' : ''
+
+  const bookTitle = `${capitalizeName(draft?.title).substring(0, 35)}${ellipsis}`
+
   return (
-    <div className="flex gap-6">
-      <div className="flex gap-2">
+    <div className="flex flex-wrap sm:flex-nowrap gap-4 md:gap-6">
+      <div className="flex gap-2 w-full">
         <Image
           removeWrapper
           alt="Imagem escolhida para capa do livro"
           src={draft?.heroPathUrl}
-          className="h-52"
+          className="h-40 sm:h-52 w-32 sm:w-40"
         />
-        <div className="flex flex-col gap-4">
-          <Title title={capitalizeName(draft?.title)} />
+        <div className="flex flex-col justify-between py-1">
+          <Tooltip showArrow content={capitalizeName(draft?.title)}>
+            <div>
+              <Text text={bookTitle} size="md" />
+            </div>
+          </Tooltip>
           <span>
             <Text
               textStyle="uppercase"
               as="small"
+              size="xs"
               text={`${capitalizeName(draft?.gender)} /`}
               color="green-500"
               weight="bold"
@@ -35,6 +44,7 @@ export function NewBookOverviewForm() {
             <Text
               textStyle="uppercase"
               as="small"
+              size="xs"
               text={capitalizeName(draft?.theme)}
               color="gray"
               weight="bold"
@@ -43,17 +53,19 @@ export function NewBookOverviewForm() {
           <div className="flex gap-2">
             {draft?.conclued && (
               <Chip size="sm" color="secondary" variant="bordered">
-                Concluído
+                <Text text="Concluído" className="text-[8px]" />
               </Chip>
             )}
             <Chip size="sm" color="secondary" variant="bordered">
-              {draft?.isActive ? 'Público' : 'Oculto'}
+              <Text text={draft?.isActive ? 'Público' : 'Oculto'} className="text-[8px]" />
             </Chip>
           </div>
           <div className="flex items-center gap-2">
-            <div className="rounded-lg bg-primary p-2 flex items-center justify-center">
-              <Icon icon={FaBook} color="white" size="md" />
-            </div>
+            <Tooltip showArrow content={draft?.totalWords}>
+              <div className="rounded-lg bg-primary sm:p-2 flex items-center justify-center">
+                <Icon icon={FaBook} color="white" size="md" />
+              </div>
+            </Tooltip>
             <Text text={`${formatNumber(draft?.totalWords) ?? 0} Palavras`} />
           </div>
           {draft?.publishedUrl && isUrl ? (

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, wrap } from 'framer-motion'
+import { ScrollShadow } from '@nextui-org/react'
 import { variants } from '../NewBookUtils'
-import { Title } from '@shared/components'
+import { Text } from '@shared/components'
 import { NewBookAboutBookForm } from './forms/NewBookAboutBookForm'
 import { NewBookMediaForm } from './forms/NewBookMediaForm'
 import { NewBookSocialForm } from './forms/NewBookSocialForm'
@@ -35,8 +36,11 @@ export function NewBookAnimatedForm({
   )
 
   return (
-    <div className="bg-primary-background flex flex-col gap-6 rounded-2xl md:p-6 h-80 overflow-y-hidden overflow-x-scroll scrollbar-hide">
-      <Title title={String(title)} />
+    <ScrollShadow
+      hideScrollBar
+      className="bg-primary-background flex flex-col gap-6 rounded-2xl md:p-6 h-80 overflow-y-scroll sm:overflow-y-hidden overflow-x-scroll"
+    >
+      <Text text={String(title)} size="lg" className="pt-4 pl-4" />
       <div className="flex items-center gap-6 w-full">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
@@ -54,6 +58,6 @@ export function NewBookAnimatedForm({
           />
         </AnimatePresence>
       </div>
-    </div>
+    </ScrollShadow>
   )
 }

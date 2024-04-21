@@ -26,21 +26,23 @@ export function NewBookFormActions({
     >
       {state.progress > 1 && (
         <Button
+          size="sm"
           onClick={handleBackFormState}
           type="button"
           variant="bordered"
           color="secondary"
           startContent={<Icon icon={IoChevronBack} size="md" color="white" />}
         >
-          <Text text={state.lastLabel} color="white" />
+          <Text size="sm" text={state.lastLabel} color="white" />
         </Button>
       )}
       <Button
+        size="sm"
         color="primary"
         onClick={() => (isLastStateOfNewBookForm ? handleNewBookSubmit() : handleNextFormState())}
         endContent={<Icon icon={submitButtonIcon} size="md" color="white" />}
       >
-        <Text text={isLastStateOfNewBookForm ? 'Publicar' : state.label} />
+        <Text size="sm" text={isLastStateOfNewBookForm ? 'Publicar' : state.label} />
       </Button>
     </div>
   )

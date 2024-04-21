@@ -29,10 +29,10 @@ export function NewBookFormWrapper({
     <AnimatePresence>
       <motion.div
         transition={{ duration: 0.2 }}
-        animate={!showForm ? 'showCreateBookForm' : 'hideCreateBookForm'}
+        animate={showForm ? 'showCreateBookForm' : 'hideCreateBookForm'}
         exit="exit"
         variants={newBookWrapperFormVariants}
-        className={`fixed duration-500 inset-0 z-0 bg-primary-background flex items-center justify-center pl-24 md:pl-28 pr-2 md:pr-4 ${isFirstAccess ? 'hidden' : 'visible'}`}
+        className={`fixed duration-500 inset-0 z-0 bg-primary-background flex items-center justify-center pt-12 pl-24 md:pl-28 pr-2 md:pr-4 ${isFirstAccess ? 'hidden' : 'visible'}`}
       >
         <FormProvider {...bookSchema}>
           <Form

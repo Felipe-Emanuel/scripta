@@ -1,3 +1,3 @@
 export const drafts = {
-  newBook: 'new-book'
+  newBook: 'newBook'
 }

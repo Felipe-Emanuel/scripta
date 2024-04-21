@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 export const createBookSchema = z.object({
   conclued: z.boolean().default(false),
-  description: z.string().min(10, 'Mínimo de 10 palavras').max(500, 'Máximo de 500 palavras'),
+  description: z.string().min(10, 'Mínimo de 10 palavras').max(1000, 'Máximo de 1000 palavras'),
   gender: z.string().min(3, 'Mínimo de 3 palavras').max(25, 'Máximo de 25 palavras'),
   isActive: z.boolean().default(true),
   publishedUrl: z.string().url('URL inválida!').nullable(),

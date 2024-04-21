@@ -94,6 +94,7 @@ export const useNewBookController = () => {
   useEffect(() => {
     setValue('conclued', draft?.conclued ?? false)
     setValue('isActive', draft?.isActive ?? true)
+    setValue('totalWords', draft?.totalWords ?? 0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -116,6 +117,7 @@ export const useNewBookController = () => {
     isActive,
     handleSubmit,
     onSubmit,
-    setValue
+    setValue,
+    watch
   }
 }

@@ -33,12 +33,15 @@ export function NewBookMediaForm() {
   }
 
   return (
-    <div className="size-full flex gap-2 items-center justify-evenly flex-shrink-0">
+    <div className="size-full flex max-[499px]:flex-wrap gap-2 items-center justify-evenly flex-shrink-0">
       <div
         {...getRootProps()}
         className={`h-[13.5rem] w-44 rounded-xl flex flex-col gap-2 items-center justify-center border-dotted border-2 border-white/50 duration-500 ${currentImage ? 'opacity-50 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}
       >
-        <Text text={isDragActive ? 'Solte sua capa aqui' : 'Arraste sua capa aqui'} />
+        <Text
+          text={isDragActive ? 'Solte sua capa aqui' : 'Arraste sua capa aqui'}
+          align="center"
+        />
         <Text text="Recomendado: 400x300 ou superior" size="xs" align="center" color="gray" />
       </div>
       <div className="h-[13.5rem] w-44">
