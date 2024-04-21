@@ -17,11 +17,12 @@ export function NewBookMediaForm() {
   const currentImage = draft?.heroPathUrl || image
 
   useEffect(() => {
-    updateDraft({
-      ...draft,
-      heroPathUrl: String(currentImage)
-    })
-
+    if (draft || image) {
+      updateDraft({
+        ...draft,
+        heroPathUrl: String(currentImage)
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentImage])
 

@@ -66,6 +66,10 @@ export const newBookOverviewFormHeroTV = tv({
   base: 'h-40 sm:h-52 w-32 sm:w-40'
 })
 
+export const newBookOverviewFormHeroFallbackTV = tv({
+  base: 'h-40 sm:h-52 w-32 sm:w-40 border-dotted border-2 rounded-xl border-white/50 bg-white/10'
+})
+
 export const newBookOverviewFormHeroSideInfoTV = tv({
   base: 'flex flex-col justify-between py-1'
 })

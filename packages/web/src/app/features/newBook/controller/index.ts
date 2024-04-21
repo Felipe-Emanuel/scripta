@@ -92,9 +92,11 @@ export const useNewBookController = () => {
   const newBookKeys = keys.find((key) => newBook[key as keyof typeof newBook])
 
   useEffect(() => {
-    setValue('conclued', draft?.conclued ?? false)
-    setValue('isActive', draft?.isActive ?? true)
-    setValue('totalWords', draft?.totalWords ?? 0)
+    if (draft) {
+      setValue('conclued', draft?.conclued ?? false)
+      setValue('isActive', draft?.isActive ?? true)
+      setValue('totalWords', draft?.totalWords ?? 0)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

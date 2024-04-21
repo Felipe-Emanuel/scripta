@@ -22,24 +22,34 @@ export function NewBookOverviewForm() {
   return (
     <div className={tv.newBookOverviewFormTV()}>
       <div className={tv.newBookOverviewFormHeroSideTV()}>
-        <Image
-          removeWrapper
-          alt="Imagem escolhida para capa do livro"
-          src={draft?.heroPathUrl}
-          className={tv.newBookOverviewFormHeroTV()}
-        />
+        {draft?.heroPathUrl ? (
+          <Image
+            removeWrapper
+            alt="Imagem escolhida para capa do livro"
+            src={draft?.heroPathUrl}
+            className={tv.newBookOverviewFormHeroTV()}
+          />
+        ) : (
+          <div className={tv.newBookOverviewFormHeroFallbackTV()} />
+        )}
         <div className={tv.newBookOverviewFormHeroSideInfoTV()}>
-          <Tooltip showArrow content={capitalizeName(draft?.title)}>
+          {draft?.title.length > 35 ? (
+            <Tooltip showArrow content={capitalizeName(draft?.title)}>
+              <div>
+                <Text text={bookTitle.length ? bookTitle : 'Seu título'} size="md" />
+              </div>
+            </Tooltip>
+          ) : (
             <div>
-              <Text text={bookTitle} size="md" />
+              <Text text={bookTitle.length ? bookTitle : 'Seu título'} size="md" />
             </div>
-          </Tooltip>
+          )}
           <span>
             <Text
               textStyle="uppercase"
               as="small"
               size="xs"
-              text={`${capitalizeName(draft?.gender)} /`}
+              text={`${capitalizeName(draft?.gender || 'Gênero')} /`}
               color="green-500"
               weight="bold"
             />{' '}
@@ -47,7 +57,7 @@ export function NewBookOverviewForm() {
               textStyle="uppercase"
               as="small"
               size="xs"
-              text={capitalizeName(draft?.theme)}
+              text={capitalizeName(draft?.theme || 'Tema')}
               color="gray"
               weight="bold"
             />
@@ -97,7 +107,14 @@ export function NewBookOverviewForm() {
       <div className={tv.newBookOverviewFormDescriptionSideTV()}>
         <Title as="h2" size="md" title="Descrição" />
         <ScrollShadow hideScrollBar className={tv.newBookOverviewFormDescriptionSideContentTV()}>
-          <Text text={draft?.description} color="gray" size="sm" />
+          <Text
+            text={
+              draft?.description ||
+              'Adicione uma descrição com até 1000 palavras que resuma bem o seu livro. Seja criativo e direto!'
+            }
+            color="gray"
+            size="sm"
+          />
         </ScrollShadow>
       </div>
     </div>
