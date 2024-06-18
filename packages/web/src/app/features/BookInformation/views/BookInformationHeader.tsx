@@ -3,7 +3,7 @@
 import { Chip } from '@nextui-org/react'
 
 import { Text, Title } from '@shared/components'
-import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
+import { useBook } from '@shared/hooks/contexts/useBook'
 import { useUser } from '@shared/hooks/useUser'
 import { capitalizeName } from '@shared/utils/transformers'
 import * as tv from '../BookInformationTV'
@@ -12,7 +12,7 @@ const maxDescriptionLength = 150
 
 export function BookInformationHeader() {
   const { sessionCustomer } = useUser()
-  const { selectedBook } = useBookInformation()
+  const { selectedBook } = useBook()
 
   if (!selectedBook) return null
 

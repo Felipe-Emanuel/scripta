@@ -1,6 +1,5 @@
 'use client'
 
-import React, { ElementType } from 'react'
 import {
   Dropdown,
   DropdownTrigger,
@@ -18,17 +17,14 @@ import { CiMenuKebab } from 'react-icons/ci'
 import { BiPowerOff } from 'react-icons/bi'
 
 import { Icon, Text } from '@shared/components'
-import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
+import { useBook } from '@shared/hooks/contexts/useBook'
 import { DeleteModal } from './modals/DeleteModal'
-import { DesactiveModal } from './modals/DesactiveModal'
 import { EditModal } from './modals/EditModal'
-import { useBookInformationController } from '../controller'
-import * as tv from '../BookInformationTV'
+import { DesactiveModal } from './modals/DesactiveModal'
+import { IconContent } from './components/IconContent'
+import { useBookController } from '../controller'
 
-interface IconContentProps {
-  icon: ElementType
-  color?: 'primary' | 'danger' | 'warning' | 'secondary'
-}
+import * as tv from '../BookInformationTV'
 
 export function BookInformationActions() {
   const {
@@ -38,8 +34,8 @@ export function BookInformationActions() {
     toggleEditing,
     handlePatchActiveOrConcluedBook,
     handleDeleteBook
-  } = useBookInformationController()
-  const { selectedBook } = useBookInformation()
+  } = useBookController()
+  const { selectedBook } = useBook()
 
   if (!selectedBook) return null
 
@@ -47,12 +43,6 @@ export function BookInformationActions() {
   const markAsConcluedText = selectedBook?.conclued
     ? 'Remover dos concluídos'
     : 'Marcar como concluído'
-
-  const IconContent = ({ icon, color = 'primary' }: IconContentProps) => (
-    <div className={tv.iconContentTV()}>
-      <Icon icon={icon} color={color} />
-    </div>
-  )
 
   return (
     <div className={tv.infoActionsWrapperTV()}>

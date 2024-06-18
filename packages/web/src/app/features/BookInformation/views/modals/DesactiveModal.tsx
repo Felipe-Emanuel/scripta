@@ -12,7 +12,6 @@ import {
 } from '@nextui-org/react'
 import { Text, Title } from '@shared/components'
 import { TBookResponse, TPatchActiveBookRequest } from '@shared/types'
-import { useEffect } from 'react'
 
 interface IDesactiveModalProps {
   isDesactiving: boolean
@@ -29,11 +28,7 @@ export function DesactiveModal({
   toggleDesactiving,
   handleDesactiveBook
 }: IDesactiveModalProps) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-
-  useEffect(() => {
-    isDesactiving && onOpen()
-  }, [isDesactiving, onOpen])
+  const { onOpenChange } = useDisclosure()
 
   return (
     <Modal
@@ -42,9 +37,10 @@ export function DesactiveModal({
       shadow="md"
       size="md"
       backdrop="blur"
-      isOpen={isOpen}
+      isOpen={isDesactiving}
       onOpenChange={onOpenChange}
       motionProps={motionProps}
+      onClose={toggleDesactiving}
     >
       <ModalContent className="bg-[#121214]">
         {(onClose) => (
@@ -73,13 +69,7 @@ export function DesactiveModal({
               />
             </ModalBody>
             <ModalFooter>
-              <Button
-                color="primary"
-                onPress={() => {
-                  onClose()
-                  toggleDesactiving()
-                }}
-              >
+              <Button color="primary" onPress={onClose}>
                 Por hora não...
               </Button>
               <Button
@@ -88,7 +78,6 @@ export function DesactiveModal({
                 onPress={() => {
                   handleDesactiveBook('isActive')
                   onClose()
-                  toggleDesactiving()
                 }}
               >
                 {book.isActive ? 'Por enquanto...' : 'Sim, gostaria!'}

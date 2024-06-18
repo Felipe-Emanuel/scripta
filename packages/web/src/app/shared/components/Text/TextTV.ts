@@ -35,7 +35,8 @@ export const textTv = tv({
     },
     textStyle: {
       uppercase: 'uppercase',
-      lowercase: 'lowercase'
+      lowercase: 'lowercase',
+      capitalize: 'capitalize'
     },
     align: {
       center: 'text-center',

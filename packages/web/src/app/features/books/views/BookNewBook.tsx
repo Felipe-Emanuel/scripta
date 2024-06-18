@@ -1,30 +1,20 @@
 'use client'
 
 import { NewBook } from '@features/newBook'
-import { useBooksController } from '../controller'
+import { useNewBookController } from '../controller/newBookController'
 
 export function BookNewBook() {
-  const {
-    showForm,
-    state,
-    form,
-    direction,
-    handleToggleCreateBook,
-    handleNextFormState,
-    handleBackFormState,
-    generateFormTitle
-  } = useBooksController()
+  const { state, form, direction, handleNextFormState, handleBackFormState, generateFormTitle } =
+    useNewBookController()
 
   return (
     <NewBook.root>
-      <NewBook.bookPathname showForm={showForm} />
-      <NewBook.trigger handleToggleCreateBook={handleToggleCreateBook} />
+      <NewBook.bookPathname />
+      <NewBook.trigger />
       <NewBook.formWrapper
-        handleToggleCreateBook={handleToggleCreateBook}
         handleBackFormState={handleBackFormState}
         handleNextFormState={handleNextFormState}
         state={state}
-        showForm={showForm}
       >
         <NewBook.progress stage={state.stage!} />
         <NewBook.animatedForm

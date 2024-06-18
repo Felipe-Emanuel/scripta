@@ -23,14 +23,14 @@ jest.mock('react-query', () => ({
   }))
 }))
 
-jest.mock('@shared/hooks/contexts/useBookInformation', () => ({
-  useBookInformation: jest.fn(() => ({
+jest.mock('@shared/hooks/contexts/useBook', () => ({
+  useBook: jest.fn(() => ({
     selectedBook: BookResultMock
   }))
 }))
 
 jest.mock('../controller', () => ({
-  useBookInformationController: jest.fn(() => ({
+  useBookController: jest.fn(() => ({
     action,
     toggleDeleting,
     toggleDesactiving,

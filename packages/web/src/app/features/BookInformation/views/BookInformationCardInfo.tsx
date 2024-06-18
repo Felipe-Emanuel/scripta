@@ -8,17 +8,17 @@ import { HiTrophy } from 'react-icons/hi2'
 import { FaBook } from 'react-icons/fa'
 import { FaExternalLinkSquareAlt } from 'react-icons/fa'
 
-import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
+import { useBook } from '@shared/hooks/contexts/useBook'
 import { APP_ROUTES } from '@shared/utils/constants/app-routes'
 import { useMenuController } from '@features/menu/controller'
-import { useBookInformationController } from '../controller'
+import { useBookController } from '../controller'
 import RenderInfo from './components/RenderInfo'
 import * as tv from '../BookInformationTV'
 
 export function BookInformationCardInfo() {
   const { clearing } = useMenuController()
-  const { selectedBook } = useBookInformation()
-  const { isCharactersCardHovered, setIsCharactersCardHovered } = useBookInformationController()
+  const { selectedBook } = useBook()
+  const { isCharactersCardHovered, setIsCharactersCardHovered } = useBookController()
 
   const characterIcon = isCharactersCardHovered ? FaExternalLinkSquareAlt : FaUserSecret
 

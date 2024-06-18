@@ -5,7 +5,16 @@ export const newBookRootTV = tv({
 })
 
 export const newBookTriggerTV = tv({
-  base: 'z-30 relative'
+  base: 'z-30',
+  variants: {
+    showForm: {
+      true: 'fixed',
+      false: 'relative'
+    }
+  },
+  defaultVariants: {
+    showForm: false
+  }
 })
 
 export const newBookTriggerIconDraftTV = tv({
@@ -59,7 +68,7 @@ export const newBookPathnameTV = tv({
 })
 
 export const newBookFormWrapperRootTV = tv({
-  base: 'fixed duration-500 inset-0 z-0 bg-primary-background flex items-center justify-center pt-12 pl-24 md:pl-28 pr-2 md:pr-4',
+  base: 'fixed duration-500 inset-0 z-0 overflow-hidden bg-primary-background flex items-center justify-center pt-12 pl-24 md:pl-28 pr-2 md:pr-4',
   variants: {
     isFirstAccess: {
       true: 'hidden',

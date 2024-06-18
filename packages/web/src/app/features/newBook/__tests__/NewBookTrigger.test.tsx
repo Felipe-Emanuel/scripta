@@ -4,9 +4,16 @@ import { useDraft } from '@shared/hooks/useDraft'
 import userEvent from '@testing-library/user-event'
 
 const handleToggleCreateBook = jest.fn()
+const showForm = false
 
-const renderComponent = () =>
-  render(<NewBookTrigger handleToggleCreateBook={handleToggleCreateBook} />)
+jest.mock('@shared/hooks/contexts/useBook', () => ({
+  useBook: jest.fn(() => ({
+    handleToggleCreateBook,
+    showForm
+  }))
+}))
+
+const renderComponent = () => render(<NewBookTrigger />)
 
 describe('NewBookTrigger', () => {
   it('Should render correctly', () => {

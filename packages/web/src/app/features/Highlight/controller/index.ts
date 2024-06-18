@@ -5,11 +5,11 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useQueryClient } from 'react-query'
 import { getAllBooks } from '../services'
 import { useUser } from '@shared/hooks/useUser'
-import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
+import { useBook } from '@shared/hooks/contexts/useBook'
 
 export const useHighlightController = () => {
   const { sessionCustomer } = useUser()
-  const { choiseBookToSeeInfo } = useBookInformation()
+  const { choiseBookToSeeInfo } = useBook()
 
   const qyeryClient = useQueryClient()
   const cachedBooks = qyeryClient.getQueryData<TBookResponse[]>(cacheName.allBooks)

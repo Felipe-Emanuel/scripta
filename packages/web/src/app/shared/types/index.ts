@@ -25,6 +25,7 @@ export * from './TProgressBarWhiteBarTV'
 export * from './TProgressInfo'
 export * from './TArrayExemple'
 export * from './TNewBookFormState'
+export * from './TBookcContentSelector'
 
 export * from './requests/TAuthRequest'
 export * from './requests/TCreateUserRequest'

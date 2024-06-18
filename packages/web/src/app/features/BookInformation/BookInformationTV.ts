@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const bookInformationRootTV = tv({
-  base: 'w-full max-[1023px]:max-w-[300px] lg:w-fit h-[400px] md:p-4 flex flex-col items-center lg:items-start justify-center overflow-hidden'
+  base: 'w-full max-[1023px]:max-w-[300px] lg:w-[650px] 2xl:w-[1030px] h-[400px] md:p-4 flex flex-col items-center lg:items-start justify-center overflow-hidden'
 })
 
 export const bookInformationHeaderWrapperTV = tv({
@@ -45,7 +45,7 @@ export const publishedHeroWrapperTV = tv({
 })
 
 export const heroTV = tv({
-  base: 'object-cover w-full h-40'
+  base: 'object-cover w-32 h-40'
 })
 
 export const iconContentTV = tv({

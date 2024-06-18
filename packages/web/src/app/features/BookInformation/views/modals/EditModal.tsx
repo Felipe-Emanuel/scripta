@@ -11,7 +11,7 @@ import {
 } from '@nextui-org/react'
 
 import Image from 'next/image'
-import { useEffect } from 'react'
+import React from 'react'
 import { FormProvider } from 'react-hook-form'
 
 import { BiTrash } from 'react-icons/bi'
@@ -21,7 +21,7 @@ import { useDragAndPasteImage } from '@shared/hooks/useDragAndPasteImage'
 import { TBookResponse } from '@shared/types'
 import { capitalizeName } from '@shared/utils/transformers'
 import { formatNumber } from '@shared/utils/validation'
-import { useBookInformationController } from '@features/BookInformation/controller'
+import { useBookController } from '@features/BookInformation/controller'
 import { motionProps } from '@features/feedback/FeedbackUtils'
 import * as tv from '@features/BookInformation/BookInformationTV'
 
@@ -32,15 +32,9 @@ interface IEditModalProps {
 }
 
 export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { onOpenChange } = useDisclosure()
   const { isDragActive, image, getRootProps, onPaste, clearimage } = useDragAndPasteImage()
-  const { editSchema, errors, isValid, handleSubmit, onSubmit } = useBookInformationController(
-    String(image)
-  )
-
-  useEffect(() => {
-    isEditing && onOpen()
-  }, [isEditing, onOpen])
+  const { editSchema, errors, isValid, handleSubmit, onSubmit } = useBookController(String(image))
 
   return (
     <Modal
@@ -49,9 +43,10 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
       size="2xl"
       placement="center"
       backdrop="blur"
-      isOpen={isOpen}
+      isOpen={isEditing}
       onOpenChange={onOpenChange}
       motionProps={motionProps}
+      onClose={toggleEditing}
     >
       <ModalContent className={tv.editModalTV()}>
         {(onClose) => (
@@ -147,13 +142,7 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
                 </div>
 
                 <ModalFooter>
-                  <Button
-                    color="danger"
-                    onPress={() => {
-                      onClose()
-                      toggleEditing()
-                    }}
-                  >
+                  <Button color="danger" onPress={onClose}>
                     Cancelar
                   </Button>
                   <Button
@@ -166,7 +155,6 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
                       }
 
                       onClose()
-                      toggleEditing()
                       clearimage()
                     }}
                   >

@@ -4,14 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { useHighlightController } from '@features/Highlight/controller'
-import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
+import { useBook } from '@shared/hooks/contexts/useBook'
 import { TPatchActiveBookRequest, TUpdateBookRequest } from '@shared/types'
 import { TEditBookSchema, editBookSchema } from '../BookInformationUtils'
 import { deleteBook, patchActiveOrConcluedBook, updateBook } from '../services'
 
-export const useBookInformationController = (image?: string) => {
+export const useBookController = (image?: string) => {
   const { refetch } = useHighlightController()
-  const { choiseBookToSeeInfo, selectedBook } = useBookInformation()
+  const { choiseBookToSeeInfo, selectedBook } = useBook()
 
   const [isCharactersCardHovered, setIsCharactersCardHovered] = useState(false)
   const [action, setAction] = useState({

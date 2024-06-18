@@ -1,3 +1,4 @@
+import { BookMyOwnBooks } from './views/BookMyOwnBooks'
 import { BookNewBook } from './views/BookNewBook'
 import { BooksBookInformation } from './views/BooksBookInformation'
 import { BooksHighlight } from './views/BooksHighlight'
@@ -7,5 +8,6 @@ export const Books = {
   root: BooksRoot,
   highlight: BooksHighlight,
   info: BooksBookInformation,
-  newBook: BookNewBook
+  newBook: BookNewBook,
+  ownBooks: BookMyOwnBooks
 }

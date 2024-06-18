@@ -3,12 +3,12 @@
 import { Button } from '@nextui-org/react'
 
 import Link from 'next/link'
-
-import { Icon, Text, Title } from '@shared/components'
 import { usePathname, useParams } from 'next/navigation'
-import { getIsActivePath, items } from '../SidebarUtils'
+
 import { Feedback } from '@features/feedback'
+import { Icon, Text, Title } from '@shared/components'
 import { useSidebar } from '@shared/hooks/contexts/useSidebar'
+import { getIsActivePath, items } from '../SidebarUtils'
 import * as tv from '../SidebarTV'
 
 export function SidebarItems() {

@@ -9,23 +9,21 @@ import { useNewBookController } from '../controller'
 import { newBookWrapperFormVariants } from '../NewBookUtils'
 import { newBookFormWrapperRootTV, newBookFormWrapperTV } from '../NewBookTV'
 import { useEffect } from 'react'
+import { useBook } from '@shared/hooks/contexts/useBook'
 
 interface INewBookFormWrapperProps extends TRootComponent {
-  handleToggleCreateBook: () => void
   handleBackFormState: () => void
   handleNextFormState: () => void
-  showForm: boolean
   state: State
 }
 
 export function NewBookFormWrapper({
-  showForm,
   children,
   state,
   handleNextFormState,
-  handleBackFormState,
-  handleToggleCreateBook
+  handleBackFormState
 }: INewBookFormWrapperProps) {
+  const { showForm, handleToggleCreateBook } = useBook()
   const { bookSchema, isFirstAccess, isSubmitSuccessful, handleSubmit, onSubmit, clearDraft } =
     useNewBookController()
 
@@ -33,6 +31,10 @@ export function NewBookFormWrapper({
     if (isSubmitSuccessful) {
       handleToggleCreateBook()
       clearDraft()
+    }
+
+    return () => {
+      if (showForm) handleToggleCreateBook()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitSuccessful])

@@ -6,7 +6,7 @@ import { ReactNode } from 'react'
 import { QueryClientProvider } from 'react-query'
 import { NextUIProvider } from '@nextui-org/react'
 import { SidebarProvider } from '@shared/contexts/SidebarContext'
-import { BookInformationProvider } from '@shared/contexts/BookInformationContext'
+import { BookProvider } from '@shared/contexts/BookContext'
 
 type TProvidersProps = {
   children: ReactNode
@@ -25,7 +25,7 @@ export function Providers({ children }: TProvidersProps) {
         props.children
       )
 
-  const AllProviders = composeProviders(AppThemeProvider, SidebarProvider, BookInformationProvider)
+  const AllProviders = composeProviders(AppThemeProvider, SidebarProvider, BookProvider)
 
   return (
     <NextUIProvider>

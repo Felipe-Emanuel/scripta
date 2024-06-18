@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react'
 import { BookInformationHeader } from '../views/BookInformationHeader'
 import { BookResultMock } from '@shared/mocks/BookResult'
 
-jest.mock('@shared/hooks/contexts/useBookInformation', () => ({
-  useBookInformation: jest.fn(() => ({
+jest.mock('@shared/hooks/contexts/useBook', () => ({
+  useBook: jest.fn(() => ({
     selectedBook: BookResultMock
   }))
 }))

@@ -1,6 +1,5 @@
 'use client'
 
-import { ElementType } from 'react'
 import { Card, CardHeader, CardFooter, Button } from '@nextui-org/react'
 import NextImage from 'next/image'
 
@@ -9,30 +8,17 @@ import { BsEmojiHeartEyes } from 'react-icons/bs'
 import { HiTrophy } from 'react-icons/hi2'
 import { FaBook } from 'react-icons/fa'
 
-import { Icon, Text } from '@shared/components'
-import HighlightFallback from '@assets/images/highlight-fallback.png'
+import { Text } from '@shared/components'
 import { formatNumber } from '@shared/utils/validation'
-import { useBookInformation } from '@shared/hooks/contexts/useBookInformation'
+import { useBook } from '@shared/hooks/contexts/useBook'
 import { useHighlightController } from '../controller'
+import { RenderInfo } from './components/RenderInfo'
+import HighlightFallback from '@assets/images/highlight-fallback.png'
 import * as tv from '../HighlightTV'
 
-type TRenderInfo = {
-  label: string
-  icon: ElementType
-}
-
 export function HighlightCard() {
-  const { selectedBook, choiseBookToSeeInfo } = useBookInformation()
+  const { selectedBook, choiseBookToSeeInfo, handleToggleCreateBook } = useBook()
   const { highestHitsBook } = useHighlightController()
-
-  const RenderInfo = ({ icon, label }: TRenderInfo) => (
-    <div className="flex items-center gap-2">
-      <div className="rounded-lg bg-white p-2 flex items-center justify-center">
-        <Icon icon={icon} color="primary" />
-      </div>
-      <Text weight="bold" text={label} size="sm" />
-    </div>
-  )
 
   const cardContent = (
     <>
@@ -116,8 +102,7 @@ export function HighlightCard() {
       <NextImage
         alt="destaque fallback"
         src={HighlightFallback}
-        width={1000}
-        height={765}
+        fill
         className={tv.highlightFallbackImageTV()}
       />
       <CardHeader className={tv.cardHeaderWrapperTV()}>
@@ -133,7 +118,13 @@ export function HighlightCard() {
         <div>
           <Text as="b" weight="semi-bold" text="Adicione um livro para começar" />
         </div>
-        <Button className="text-tiny" color="primary" radius="full" size="sm">
+        <Button
+          onClick={handleToggleCreateBook}
+          className="text-tiny"
+          color="primary"
+          radius="full"
+          size="sm"
+        >
           Adicionar
         </Button>
       </CardFooter>

@@ -1,6 +1,5 @@
 'use client'
 
-import { motionProps } from '@features/feedback/FeedbackUtils'
 import {
   Modal,
   ModalContent,
@@ -10,9 +9,10 @@ import {
   Button,
   useDisclosure
 } from '@nextui-org/react'
+
+import { motionProps } from '@features/feedback/FeedbackUtils'
 import { Text, Title } from '@shared/components'
 import { TBookResponse } from '@shared/types'
-import { useEffect } from 'react'
 
 interface IDeleteModalProps {
   isDeleting: boolean
@@ -27,11 +27,7 @@ export function DeleteModal({
   toggleDeleting,
   handleDeleteBook
 }: IDeleteModalProps) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-
-  useEffect(() => {
-    isDeleting && onOpen()
-  }, [isDeleting, onOpen])
+  const { onOpenChange } = useDisclosure()
 
   return (
     <Modal
@@ -40,9 +36,10 @@ export function DeleteModal({
       shadow="md"
       size="md"
       backdrop="blur"
-      isOpen={isOpen}
+      isOpen={isDeleting}
       onOpenChange={onOpenChange}
       motionProps={motionProps}
+      onClose={toggleDeleting}
     >
       <ModalContent className="bg-[#121214]">
         {(onClose) => (
@@ -58,13 +55,7 @@ export function DeleteModal({
               <Text text="Você não poderá desfazer esta ação." weight="light" color="gray" />
             </ModalBody>
             <ModalFooter>
-              <Button
-                color="primary"
-                onPress={() => {
-                  onClose()
-                  toggleDeleting()
-                }}
-              >
+              <Button color="primary" onPress={onClose}>
                 Melhor não...
               </Button>
               <Button
@@ -73,7 +64,6 @@ export function DeleteModal({
                 onPress={() => {
                   onClose()
                   handleDeleteBook()
-                  toggleDeleting()
                 }}
               >
                 Acredito que sim...
