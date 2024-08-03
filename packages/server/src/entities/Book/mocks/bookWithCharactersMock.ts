@@ -2,10 +2,11 @@ import { TBookWithCharacters } from '@types'
 import { randomUUID } from 'crypto'
 import { bookEntitieMock } from './bookEntitieMock'
 import { fakeBase64 } from '@constants/fakeBase64'
+import { chapterMock } from '@entities/Chapter/mocks'
 
 export const bookWithCharactersMock: TBookWithCharacters = {
   book: {
-    ...bookEntitieMock,
+    ...bookEntitieMock
   },
   characters: [
     {
@@ -22,6 +23,7 @@ export const bookWithCharactersMock: TBookWithCharacters = {
       race: 'Human',
       sexuality: 'man',
       updatedAt: new Date(),
-    },
-  ],
+      chapterId: chapterMock?.id
+    }
+  ]
 }

@@ -8,7 +8,7 @@ const app = fastify()
 routes(app)
 
 app.register(cors, {
-  origin: true,
+  origin: true
 })
 
 dailySatisfactionRateJob.start()
@@ -16,5 +16,6 @@ dailySatisfactionRateJob.start()
 app
   .listen({
     port: 3333,
+    host: '0.0.0.0'
   })
   .then(() => console.log('✨Server is live✨'))

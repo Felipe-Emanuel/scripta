@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import { throwUserMessages } from 'src/entities/User/utils'
-import 'dotenv/config'
 
 const secretKey = process.env.SECRET_TOKEN_KEY
 
@@ -17,7 +16,7 @@ export const generateToken = (data: TGenerateToken): string => {
 export const verifyToken = async (token: string) => {
   try {
     const decoded = jwt.verify(token, secretKey, {
-      algorithms: ['HS384', 'HS256'],
+      algorithms: ['HS384', 'HS256']
     })
 
     return decoded

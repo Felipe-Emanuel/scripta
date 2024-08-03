@@ -15,7 +15,7 @@ type TGetFeedback = {
   adminEmail: string
 }
 
-export default async function feedbackController(app: FastifyInstance) {
+export async function feedbackController(app: FastifyInstance) {
   const { createFeedback, getFeedbacks } = databaseFeedbackRepository()
   const { getUserByEmail } = databaseUserRepository()
 

@@ -4,7 +4,7 @@ import { IBooksRepository } from '@repositories'
 import { TUpdateBookService } from '@types'
 
 export const databaseBookRepository = (): IBooksRepository => {
-  async function createBook(book: Book): Promise<Book[]> {
+  const createBook = async (book: Book): Promise<Book[]> => {
     const newBook = await prisma.book.create({
       data: book
     })

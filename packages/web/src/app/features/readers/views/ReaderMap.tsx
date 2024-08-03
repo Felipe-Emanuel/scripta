@@ -8,7 +8,7 @@ import Map, {
   NavigationControl,
   FullscreenControl,
   ScaleControl,
-  GeolocateControl,
+  GeolocateControl
 } from 'react-map-gl'
 import Pin from './components/Pin'
 import { useCoordinates } from '@shared/hooks/useCoordinates'
@@ -21,7 +21,7 @@ type TReaderMap = {
 }
 
 const proximityThresholdInMeters = 10000
-const accessToken = process.env.NEXT_PUBLIC_MAPBOXGL_ACCESSTOKEN ?? ''
+const accessToken = process.env.NEXT_PUBLIC_MAPBOXGL_ACCESSTOKEN
 const randomRotate = Math.random() * 45
 
 function ReaderMap({ coordinates, seeReader }: TReaderMap) {
@@ -34,7 +34,7 @@ function ReaderMap({ coordinates, seeReader }: TReaderMap) {
         const isClose = isCoordinateInProximity(
           { lat: user.lat, lng: user.lng },
           coordinates,
-          proximityThresholdInMeters,
+          proximityThresholdInMeters
         )
 
         return (
@@ -54,7 +54,7 @@ function ReaderMap({ coordinates, seeReader }: TReaderMap) {
           </Marker>
         )
       }),
-    [coordinates, seeReader],
+    [coordinates, seeReader]
   )
 
   return (
@@ -65,7 +65,7 @@ function ReaderMap({ coordinates, seeReader }: TReaderMap) {
           longitude,
           zoom: 4,
           bearing: 0,
-          pitch: 45,
+          pitch: 45
         }}
         mapStyle="mapbox://styles/mapbox/streets-v12"
         mapboxAccessToken={accessToken}

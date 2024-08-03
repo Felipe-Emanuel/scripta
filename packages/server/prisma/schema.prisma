@@ -58,14 +58,41 @@ model Book {
   readers      Reader[]
   User         User?       @relation(fields: [userEmail], references: [email])
   userEmail    String?
+  chapters     Chapter[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  type      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  comment   String
+  Chapter   Chapter? @relation(fields: [chapterId], references: [id])
+  chapterId String?
+}
+
+model Chapter {
+  id           String      @id @default(uuid())
+  chapterTitle String
+  chapterText  String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  Book         Book        @relation(fields: [bookId], references: [id])
+  bookId       String
+  characters   Character[]
+  wordsCounter Int
+  comments     Comment[]
+  reactions    Reaction[]
 }
 
 model Reaction {
-  id       String  @id @default(uuid())
-  name     String
-  iconName String
-  Book     Book?   @relation(fields: [bookId], references: [id])
-  bookId   String?
+  id        String   @id @default(uuid())
+  name      String
+  iconName  String
+  Book      Book?    @relation(fields: [bookId], references: [id])
+  bookId    String?
+  Chapter   Chapter? @relation(fields: [chapterId], references: [id])
+  chapterId String?
 }
 
 model Character {
@@ -84,6 +111,8 @@ model Character {
   bookId            String
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
+  Chapter           Chapter?       @relation(fields: [chapterId], references: [id])
+  chapterId         String?
 }
 
 model Relationship {

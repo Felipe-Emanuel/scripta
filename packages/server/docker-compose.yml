@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  postgress:
+    image: 'bitnami/postgresql:latest'
+    ports:
+      - '5432:5432'
+    env_file:
+     - .env
+    volumes:
+      - postgres_data:/bitnami/postgresql
+    networks:
+      - backend_network
+
+  server:
+    image: 'sullivanfelipe/memorize-server:latest'
+    depends_on:
+      - postgress
+    env_file:
+      - .env.postgress
+    ports:
+      - '3333:3333'
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

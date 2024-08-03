@@ -2,6 +2,7 @@ import { bookEntitieMock } from '@entities/Book/mocks'
 import { formateDate, getWeekNumber, isToday } from 'src/shared/utils/dates'
 import { isAllAttributeFilled, progressGoal } from 'src/shared/utils/objectValidations'
 import {
+  generateRandomString,
   generateStrongPass,
   isBase64,
   isLink,
@@ -113,5 +114,14 @@ describe('isBase64', () => {
     const isValidLink = isBase64(bookEntitieMock.heroPathUrl)
 
     expect(isValidLink).toBeTruthy()
+  })
+})
+
+describe('generateRandomString', () => {
+  it('should generate a string with a length of 25 caracteres', () => {
+    const length = 25
+    const randomString = generateRandomString(length)
+
+    expect(randomString.length).toBe(length)
   })
 })

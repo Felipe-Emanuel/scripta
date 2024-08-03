@@ -16,6 +16,7 @@
     ],
     "baseUrl": "./",
     "paths": {
+      "~/*": ["./*"],
       "@global/*": ["./src/global/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@features/*": ["./src/app/features/*"],

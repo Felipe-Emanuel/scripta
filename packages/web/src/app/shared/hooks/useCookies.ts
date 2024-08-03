@@ -19,16 +19,16 @@ export const useCookie = () => {
   const createSession = ({ cookieName, value }: CreateSession) =>
     setCookie(null, cookieName, value, {
       maxAge,
-      path: '/',
+      path: '/'
     })
 
   const deleteCookie = (cookieName: string) =>
     destroyCookie(null, cookieName, {
-      cookieName,
+      cookieName
     })
 
   return {
     createSession,
-    deleteCookie,
+    deleteCookie
   }
 }

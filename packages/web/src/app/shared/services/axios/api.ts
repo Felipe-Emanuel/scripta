@@ -8,7 +8,7 @@ import { TSessionCustomer } from '@shared/types'
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
 export const api = axios.create({
-  baseURL,
+  baseURL
 })
 
 api.interceptors.request.use(async (config) => {
@@ -46,7 +46,7 @@ api.interceptors.response.use(
 
       toast.info(error.response?.data.message)
     }
-  },
+  }
 )
 
 export const FAQApi: AxiosInstance = axios.create({})

@@ -3,10 +3,21 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.16.0"
+  },
+  "tsup": {
+    "entry": ["src/server.ts"],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true
+  },
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch --env-file .env src/server.ts",
+    "build": "tsup",
+    "start": "node dist/server.js",
     "lint": "eslint src --ext .ts --fix",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --setupFiles dotenv/config --watch",
     "studio": "prisma studio",
     "reset": "prisma migrate reset",
     "migrate": "prisma migrate dev"
@@ -28,6 +39,7 @@
     "@babel/preset-typescript": "^7.23.3",
     "@jest/globals": "^29.7.0",
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/uuid": "^9.0.8"
+    "@types/uuid": "^9.0.8",
+    "tsup": "^8.2.4"
   }
 }

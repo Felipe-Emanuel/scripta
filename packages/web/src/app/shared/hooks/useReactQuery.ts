@@ -9,26 +9,32 @@ import {
   useQueryClient
 } from 'react-query'
 
+type UseQueryMutationParams<TResponse, TRequest> = {
+  mutationFn: MutationFunction<TResponse | undefined, TRequest> | undefined
+  cacheName: TCacheName
+  variablePath?: keyof TRequest
+}
+
 /**
- * 
- * @alias TResponse should contains responses object type
- * @alias TRequest should contains requests object type
- * @param mutationFn function to be executed to update anything
- * @param cacheName cache name to be updated
- * @param variablePath a optional path to the variable should be updated
- * @returns mutateAsync to be executed to update as an asyncronus api request or anything like that
- * @returns ...rest contains everything that useMutation from react query returns
- * @example const { mutateAsync } = useQueryMutation<
-    TGoalResponse,
-    TUpdateCurrentGoalRequest
-  >(updateCurrentGoal, 'currentGoal', 'updatedGoal')
+ * Custom hook to handle mutations and update the cache using react-query.
+ *
+ * @template TResponse - The type of the response object.
+ * @template TRequest - The type of the request object.
+ * @param {MutationFunction<TResponse | undefined, TRequest>} mutationFn - Function to execute the mutation.
+ * @param {TCacheName} cacheName - The name of the cache to be updated.
+ * @param {keyof TRequest} [variablePath] - An optional path to the variable to be updated.
+ * @returns {Object} - Contains `mutateAsync` function to trigger the mutation and the rest of the useMutation return values.
+ * @example
+ * const { mutateAsync } = useQueryMutation<TGoalResponse, TUpdateCurrentGoalRequest>(
+ *   updateCurrentGoal, 'currentGoal', 'updatedGoal'
+ * );
  */
 
-export function useQueryMutation<TResponse, TRequest>(
-  mutationFn: MutationFunction<TResponse | undefined, TRequest> | undefined,
-  cacheName: TCacheName,
-  variablePath?: keyof TRequest
-) {
+export function useQueryMutation<TResponse, TRequest>({
+  mutationFn,
+  cacheName,
+  variablePath
+}: UseQueryMutationParams<TResponse, TRequest>): object {
   const queryClient = useQueryClient()
 
   const { mutateAsync, ...rest } = useMutation({
@@ -54,15 +60,18 @@ export function useQueryMutation<TResponse, TRequest>(
 }
 
 /**
- * @type T should contain the type of object to be returned and should be apllyied on the getDataFn as exemple
- * @param getDataFn async function to get data from database, local or anywhere. Should receive type of object returned and can receive a parameter
- * @param cacheName name of the cache to be created
- * @param cacheTime time of the cache
- * @param enabled optional param to define if this request should be enabled
- * @param initialData optional param to define a default value to this data
- * @returns data and all methods from useQuery
- * @example const getDataFn = (): TWordCount => ({}) as TWordCount
- * @example const { data } = useQueryData(getDataFn, 'wordCounters', '12-hours')
+ * Custom hook to fetch data and manage caching using react-query.
+ *
+ * @template T - The type of the returned data object.
+ * @param {QueryFunction<T | undefined>} getDataFn - Async function to get data. Should return a promise resolving to the data object.
+ * @param {TCacheName} cacheName - The name of the cache to be created.
+ * @param {TTimeToRefetchCache} cacheTime - The time duration to refetch the cache.
+ * @param {boolean} [enabled=true] - Optional parameter to enable or disable the query.
+ * @param {T | InitialDataFunction<T>} [initialData] - Optional initial data for the query.
+ * @returns {Object} - Contains `data` and all other methods returned by useQuery.
+ * @example
+ * const getDataFn = async (): Promise<TWordCount> => ({}) as TWordCount;
+ * const { data } = useQueryData(getDataFn, 'wordCounters', '12-hours');
  */
 
 export function useQueryData<T>(

@@ -3,10 +3,10 @@ import { createNewGoal } from '@features/wordGoals/services'
 import NextAhth, { User } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
-const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ''
-const googleClientSecret = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET ?? ''
+const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!
+const googleClientSecret = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!
 
-const secret = process.env.NEXT_PUBLIC_SECRET ?? ''
+const secret = process.env.NEXT_PUBLIC_SECRET
 
 type Profile = {
   user: Partial<User>
@@ -17,8 +17,8 @@ export const authOptions: never = {
   providers: [
     GoogleProvider({
       clientId: googleClientId,
-      clientSecret: googleClientSecret,
-    }),
+      clientSecret: googleClientSecret
+    })
   ],
   secret,
   callbacks: {
@@ -31,23 +31,23 @@ export const authOptions: never = {
           goals: {
             createdAt: new Date(),
             words: 0,
-            goal: 0,
-          },
+            goal: 0
+          }
         })
 
         await createUser({
           email,
           name,
           password: '', // as created by a provider, password will be created in the backend and be sent to the user email address
-          hasProvider: true,
+          hasProvider: true
         })
 
         return true
       } else {
         return false
       }
-    },
-  },
+    }
+  }
 }
 
 const handler = NextAhth(authOptions)
