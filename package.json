@@ -12,9 +12,7 @@
     "prepare": "husky",
     "eslint:server": "yarn workspace @memorize/server eslint src --ext .ts --fix",
     "eslint:web": "yarn workspace @memorize/web eslint src src/**/*.{ts,tsx} --fix",
-    "build:server": "yarn workspace @memorize/server tsup",
-    "start-dev:server": "yarn workspace @memorize/server tsx watch --env-file .env src/server.ts",
-    "docker-build:dev": "docker build -t memorize . && docker run -p 3333:3333 -d memorize"
+    "docker-build-dev:server": "docker build -t memorize -f packages/docker/development/server/Dockerfile . && docker run -p 3333:3333 -d memorize"
   },
   "workspaces": {
     "packages": [

@@ -1,6 +1,6 @@
 import fastify from 'fastify'
 import cors from '@fastify/cors'
-import { dailySatisfactionRateJob } from 'src/shared/jobs/dailySatisfactionRateJob'
+import { dailySatisfactionRateJob } from '../src/shared/jobs/dailySatisfactionRateJob'
 import { routes } from 'src/routes'
 
 const app = fastify()
@@ -14,7 +14,7 @@ app.register(cors, {
 dailySatisfactionRateJob.start()
 
 app.get('/', (req, apply) => {
-  apply.send('Whaaaaaa')
+  apply.send('!!sdsd')
 })
 
 app

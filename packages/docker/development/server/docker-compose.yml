@@ -1,0 +1,10 @@
+services:
+  server:
+    build: .
+    command: yarn dev
+    env_file:
+      - ../../../server/.env.development
+    ports:
+      - '3333:3333'
+    volumes:
+      - .:/packages/server
