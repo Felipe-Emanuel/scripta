@@ -13,6 +13,10 @@ app.register(cors, {
 
 dailySatisfactionRateJob.start()
 
+app.get('/', (req, apply) => {
+  apply.send('Whaaaaaa')
+})
+
 app
   .listen({
     port: 3333,

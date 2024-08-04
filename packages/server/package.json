@@ -7,7 +7,9 @@
     "node": ">=20.16.0"
   },
   "tsup": {
-    "entry": ["src/server.ts"],
+    "entry": [
+      "src/server.ts"
+    ],
     "splitting": false,
     "sourcemap": true,
     "clean": true

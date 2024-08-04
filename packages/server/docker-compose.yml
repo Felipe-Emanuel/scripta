@@ -13,6 +13,8 @@ services:
       - backend_network
 
   server:
+    build: ../../
+    command: yarn start
     image: 'sullivanfelipe/memorize-server:latest'
     depends_on:
       - postgress
@@ -22,6 +24,8 @@ services:
       - '3333:3333'
     networks:
       - backend_network
+    volumes:
+      - .:/usr/src/app
 
 networks:
   backend_network:
