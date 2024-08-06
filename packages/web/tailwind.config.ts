@@ -85,7 +85,8 @@ const config: Config = {
         }
       }
     }),
-    require('tailwind-scrollbar')
+    require('tailwind-scrollbar'),
+    require('@tailwindcss/typography')
   ]
 }
 export default config

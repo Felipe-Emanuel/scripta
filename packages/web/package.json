@@ -2,6 +2,9 @@
   "name": "@memorize/web",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,9 +18,16 @@
     "@headlessui/react": "^1.7.18",
     "@hookform/resolvers": "^3.3.4",
     "@nextui-org/react": "^2.3.0",
+    "@radix-ui/react-toolbar": "^1.1.0",
+    "@tailwindcss/typography": "^0.5.13",
     "@tanstack/react-query": "^5.22.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
+    "@tiptap/extension-highlight": "^2.5.8",
+    "@tiptap/extension-text-align": "^2.5.8",
+    "@tiptap/pm": "^2.5.8",
+    "@tiptap/react": "^2.5.8",
+    "@tiptap/starter-kit": "^2.5.8",
     "@types/mapbox-gl": "^3.1.0",
     "apexcharts": "^3.46.0",
     "axios": "^1.6.7",
