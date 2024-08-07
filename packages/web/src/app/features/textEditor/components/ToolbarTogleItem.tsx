@@ -1,7 +1,7 @@
 import { IconType } from 'react-icons/lib'
 import { Button, ButtonProps } from '@nextui-org/react'
 
-interface IToolbarTogleItem extends ButtonProps {
+export interface IToolbarTogleItem extends ButtonProps {
   icon: IconType
   value: string
   ariaLabel: string
