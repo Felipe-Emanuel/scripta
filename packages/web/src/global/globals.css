@@ -35,10 +35,19 @@ input[type=number] {
 
 }
 
+/* Editor */
 mark {
   background-color: #0075FF;
   border-radius: 0.4rem;
   box-decoration-break: clone;
   padding: 0.1rem 0.3rem;
   transition: all 300ms;
+}
+
+.tiptap p.is-empty::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }

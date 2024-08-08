@@ -10,22 +10,27 @@ import {
 import { GoChevronDown } from 'react-icons/go'
 import { Dispatch, SetStateAction } from 'react'
 import { BsTextParagraph } from 'react-icons/bs'
-import { MdFormatLineSpacing } from "react-icons/md"
+import { MdFormatLineSpacing } from 'react-icons/md'
 
 import { IToolbarEditor } from './ToolbarEditorHeader'
 import { TTEditorMenu } from '@shared/types'
 import { Icon } from '~/src/app/shared/components'
 
-interface ISpacings extends IToolbarEditor {
+export interface ISpacings extends IToolbarEditor {
   setMenuState: Dispatch<SetStateAction<TTEditorMenu>>
   menuState: TTEditorMenu
 }
 
 export function Spacings({ editor, menuState, setMenuState }: ISpacings) {
   return (
-    <ButtonGroup variant="flat" color='secondary'>
+    <ButtonGroup variant="flat" color="secondary">
       <Button>Espaçamentos</Button>
-      <Dropdown placement="bottom-end">
+      <Dropdown
+        placement="bottom-end"
+        classNames={{
+          content: 'w-10'
+        }}
+      >
         <DropdownTrigger>
           <Button isIconOnly>
             <GoChevronDown />
@@ -34,7 +39,6 @@ export function Spacings({ editor, menuState, setMenuState }: ISpacings) {
         <DropdownMenu
           aria-label="Opções de espaçamentos"
           selectionMode="none"
-          className="max-w-[300px]"
         >
           <DropdownItem isReadOnly key="espaços">
             <Input

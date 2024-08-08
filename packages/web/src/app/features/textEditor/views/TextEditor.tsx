@@ -1,6 +1,12 @@
 'use client'
 
+import { Color } from '@tiptap/extension-color'
+import { Document } from '@tiptap/extension-document'
 import { useEditor, EditorContent, BubbleMenu, FloatingMenu } from '@tiptap/react'
+import Placeholder from '@tiptap/extension-placeholder'
+import TextStyle from '@tiptap/extension-text-style'
+import FontFamily from '@tiptap/extension-font-family'
+
 import { AiOutlineFullscreen } from 'react-icons/ai'
 import { FaBook } from 'react-icons/fa'
 
@@ -20,42 +26,60 @@ import { FloatingMenuContent } from '../components/FloatingMenuContent'
 import { Icon, Text } from '@shared/components'
 
 function countWords(text: string): number {
-  // Remover espaços extras e dividir o texto por espaços em branco
   const words = text.trim().split(/\s+/)
-  // Filtrar palavras vazias que podem ocorrer se houver múltiplos espaços consecutivos
   const filteredWords = words.filter((word) => word.length > 0)
-  // Retornar a quantidade de palavras
   return filteredWords.length
 }
 
 export function TextEditor() {
   const [fullscreen, setFullscreen] = useState(false)
   const [chapterContent, setChapterContent] = useState({
-    content: '',
+    content: `
+        <p><span style="font-family: Inter">Did you know that Inter is a really nice font for interfaces?</span></p>
+        <p><span style="font-family: Comic Sans MS, Comic Sans">It doesn't look as professional as Comic Sans.</span></p>
+        <p><span style="font-family: serif">Serious people use serif fonts anyway.</span></p>
+        <p><span style="font-family: monospace">The cool kids can apply monospace fonts aswell.</span></p>
+        <p><span style="font-family: cursive">But hopefully we all can agree, that cursive fonts are the best.</span></p>
+        <p><span style="font-family: var(--title-font-family)">Then there are CSS variables, the new hotness.</span></p>
+      `,
     wordsCounter: 0
   })
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        history: false
-      }),
+      Document,
+      StarterKit,
+      Underline,
+      FirstLineIndent,
+      Color,
+      TextStyle,
+      FontFamily,
       TextAlign.configure({
-        types: ['heading', 'paragraph']
+        types: ['heading', 'paragraph'],
+        defaultAlignment: 'justify'
       }),
       Highlight.configure({
         multicolor: true
       }),
-      Underline,
-      FirstLineIndent
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          if (node.type.name === 'heading') {
+            return 'Qual o título?'
+          }
+
+          return "Comece com '/' para abrir o menu."
+        }
+      })
     ],
     onUpdate({ editor }) {
-      setChapterContent({
+      return setChapterContent({
         content: editor.getHTML(),
         wordsCounter: countWords(editor.getText())
       })
     },
-    content: chapterContent.content ? chapterContent.content : '<p>Inicie com / para abrir o menu.</p>',
+    immediatelyRender: false,
+    content: chapterContent.content,
+    autofocus: true,
     editorProps: {
       attributes: {
         class: 'outline-none leading-none text-gray-400'
@@ -71,7 +95,6 @@ export function TextEditor() {
 
   const toggleFullscreen = () => setFullscreen((prev) => !prev)
 
-
   const wordsCounterText = chapterContent.wordsCounter > 1 ? 'Palavras' : 'Palavra'
 
   return (
@@ -84,11 +107,13 @@ export function TextEditor() {
         <EditorContent className="prose prose-invert size-full" editor={editor} />
         {editor && (
           <FloatingMenu
-            className="bg-black/85 backdrop-blur-2xl border-1 border-white/72 p-2 shadow-[0_2px_10px] shadow-black"
+            className="bg-black/85 h-28 overflow-y-auto backdrop-blur-2xl border-1 border-white/72 p-2 shadow-[0_2px_10px] shadow-black"
             editor={editor}
             shouldShow={({ state }) => shouldShowFloatindMenu(state)}
           >
-            <FloatingMenuContent editor={editor} />
+            <div>
+              <FloatingMenuContent editor={editor} />
+            </div>
           </FloatingMenu>
         )}
         {editor && (
@@ -108,7 +133,12 @@ export function TextEditor() {
         </Button>
 
         <Chip startContent={<Icon icon={FaBook} size="md" />} variant="faded" color="secondary">
-          <Text size="sm" as="small" color="black" text={`${wordsCounterText} ${chapterContent.wordsCounter}`} />
+          <Text
+            size="sm"
+            as="small"
+            color="black"
+            text={`${wordsCounterText} ${chapterContent.wordsCounter}`}
+          />
         </Chip>
       </div>
     </div>

@@ -6,14 +6,15 @@ import {
   RxTextAlignRight,
   RxTextAlignJustify
 } from 'react-icons/rx'
-import { RiMenuFoldLine, RiMenuUnfoldLine, RiFontSize } from 'react-icons/ri'
+import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri'
 
 import { ToolbarTogleItem } from './ToolbarTogleItem'
-import { Button, Input } from '@nextui-org/react'
+import { Button } from '@nextui-org/react'
 import { Icon } from '@shared/components'
 import { BasicIdentations } from './BasicIdentations'
 import { useEditor } from '@shared/hooks/useEditor'
 import { Spacings } from './Spacings'
+import { FontStyles } from './FontStyles'
 
 export interface IToolbarEditor {
   editor: Editor
@@ -27,11 +28,11 @@ export function ToolbarEditorHeader({ editor }: IToolbarEditor) {
   return (
     <Toolbar.Root
       data-open={menuState.opened}
-      className="w-12 data-[open=false]:bg-transparent data-[open=true]:w-full h-12 overflow-hidden duration-500 absolute top-0 data-[open=true]:left-0 data-[open=false]:right-0 z-10 flex flex-shrink-0 items-center p-[10px] gap-2min-w-max bg-white/10 backdrop-blur-md data-[open=true]:border-b-1 border-white/50 shadow-[0_2px_10px] shadow-black"
+      className="w-12 data-[open=false]:bg-transparent data-[open=true]:w-full h-16 overflow-hidden duration-500 absolute top-0 data-[open=true]:left-0 data-[open=false]:right-0 z-10 flex flex-shrink-0 items-center p-[10px] gap-2min-w-max bg-white/10 backdrop-blur-md data-[open=true]:border-b-1 border-white/50 shadow-[0_2px_10px] shadow-black"
       aria-label="Formatting options"
     >
       {menuState.opened && (
-        <>
+        <div className='flex items-center overflow-scroll size-full'>
           <BasicIdentations editor={editor} />
 
           <Toolbar.Separator className="w-[1px] bg-primary mx-[10px] h-full" />
@@ -70,7 +71,9 @@ export function ToolbarEditorHeader({ editor }: IToolbarEditor) {
               value="justify"
             />
           </Toolbar.ToggleGroup>
-          <Toolbar.Separator className="w-[1px] bg-primary mx-[10px] h-full" />
+          
+          <Toolbar.Separator className="w-[1px] bg-primary mx-[10px] h-12" />
+          
           <Toolbar.ToggleGroup
             type="single"
             className="flex items-center"
@@ -84,40 +87,13 @@ export function ToolbarEditorHeader({ editor }: IToolbarEditor) {
 
           <Toolbar.ToggleGroup
             type="single"
-            className="flex flex-1 items-end justify-end"
+            className="flex items-center"
             defaultValue="center"
-            aria-label="Text alignment"
+            aria-label="font options"
           >
-            <Input
-              onChange={(e) => {
-                const value = e.target.value.replace(/[^0-9,.]/g, '')
-                setMenuState({
-                  ...menuState,
-                  fontSize: value
-                })
-                editor.commands.updateAttributes('paragraph', {
-                  fontSize: `${value ?? '0'}px`
-                })
-              }}
-              value={menuState.fontSize}
-              type="number"
-              label="Fonte"
-              placeholder="0"
-              labelPlacement="outside-left"
-              size="sm"
-              color="primary"
-              variant="underlined"
-              className="text-white"
-              endContent={
-                <div className="pointer-events-none flex items-center">
-                  <span className="text-default-400 text-small">
-                    <Icon size="md" icon={RiFontSize} />
-                  </span>
-                </div>
-              }
-            />
+            <FontStyles editor={editor} menuState={menuState} setMenuState={setMenuState} />
           </Toolbar.ToggleGroup>
-        </>
+        </div>
       )}
       <Toolbar.ToggleGroup
         type="single"
