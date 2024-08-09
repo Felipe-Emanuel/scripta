@@ -18,13 +18,22 @@ export const menuSearchDefaultItem: TMenuSearchDefaultItem[] = [
 
 export const defaultFonts = [
   {
+    key: 'Inter',
+    label: 'Inter',
+    weight: [
+      { value: 400, name: 'Regular' },
+      { value: 500, name: 'Semi-negrito' },
+      { value: 600, name: 'Negrito' }
+    ]
+  },
+  {
     key: 'Arial',
     label: 'Arial',
     weight: [
-      { value: 400, name: 'Regular' },
       { value: 300, name: 'Light' },
-      { value: 600, name: 'SemiBold' },
-      { value: 700, name: 'Bold' }
+      { value: 400, name: 'Regular' },
+      { value: 500, name: 'Semi-negrito' },
+      { value: 600, name: 'Negrito' }
     ]
   },
   {
@@ -32,7 +41,7 @@ export const defaultFonts = [
     label: 'Courier New',
     weight: [
       { value: 400, name: 'Regular' },
-      { value: 700, name: 'Bold' }
+      { value: 600, name: 'Negrito' }
     ]
   },
   {
@@ -40,7 +49,7 @@ export const defaultFonts = [
     label: 'Georgia',
     weight: [
       { value: 400, name: 'Regular' },
-      { value: 700, name: 'Bold' }
+      { value: 600, name: 'Negrito' }
     ]
   },
   {
@@ -48,7 +57,7 @@ export const defaultFonts = [
     label: 'Times New Roman',
     weight: [
       { value: 400, name: 'Regular' },
-      { value: 700, name: 'Bold' }
+      { value: 600, name: 'Negrito' }
     ]
   },
   {
@@ -56,7 +65,7 @@ export const defaultFonts = [
     label: 'Trebuchet MS',
     weight: [
       { value: 400, name: 'Regular' },
-      { value: 700, name: 'Bold' }
+      { value: 600, name: 'Negrito' }
     ]
   },
   {
@@ -64,7 +73,7 @@ export const defaultFonts = [
     label: 'Verdana',
     weight: [
       { value: 400, name: 'Regular' },
-      { value: 700, name: 'Bold' }
+      { value: 600, name: 'Negrito' }
     ]
   },
   {
@@ -77,7 +86,7 @@ export const defaultFonts = [
     label: 'Comic Sans MS',
     weight: [
       { value: 400, name: 'Regular' },
-      { value: 700, name: 'Bold' }
+      { value: 600, name: 'Negrito' }
     ]
   },
   {
@@ -90,7 +99,7 @@ export const defaultFonts = [
     label: 'Tahoma',
     weight: [
       { value: 400, name: 'Regular' },
-      { value: 700, name: 'Bold' }
+      { value: 600, name: 'Negrito' }
     ]
   },
   {
@@ -98,7 +107,7 @@ export const defaultFonts = [
     label: 'Palatino Linotype',
     weight: [
       { value: 400, name: 'Regular' },
-      { value: 700, name: 'Bold' }
+      { value: 600, name: 'Negrito' }
     ]
   }
 ]

@@ -6,7 +6,8 @@ export const useEditor = () => {
     firstLineIndent: '2',
     lineHeight: '1,5',
     opened: false,
-    fontSize: '16'
+    fontSize: '16',
+    fontWeight: '400'
   })
 
   const togleMenu = () =>

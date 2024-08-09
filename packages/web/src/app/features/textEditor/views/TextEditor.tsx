@@ -34,14 +34,7 @@ function countWords(text: string): number {
 export function TextEditor() {
   const [fullscreen, setFullscreen] = useState(false)
   const [chapterContent, setChapterContent] = useState({
-    content: `
-        <p><span style="font-family: Inter">Did you know that Inter is a really nice font for interfaces?</span></p>
-        <p><span style="font-family: Comic Sans MS, Comic Sans">It doesn't look as professional as Comic Sans.</span></p>
-        <p><span style="font-family: serif">Serious people use serif fonts anyway.</span></p>
-        <p><span style="font-family: monospace">The cool kids can apply monospace fonts aswell.</span></p>
-        <p><span style="font-family: cursive">But hopefully we all can agree, that cursive fonts are the best.</span></p>
-        <p><span style="font-family: var(--title-font-family)">Then there are CSS variables, the new hotness.</span></p>
-      `,
+    content: '',
     wordsCounter: 0
   })
 
@@ -107,6 +100,7 @@ export function TextEditor() {
         <EditorContent className="prose prose-invert size-full" editor={editor} />
         {editor && (
           <FloatingMenu
+            tippyOptions={{ duration: 1000 }}
             className="bg-black/85 h-28 overflow-y-auto backdrop-blur-2xl border-1 border-white/72 p-2 shadow-[0_2px_10px] shadow-black"
             editor={editor}
             shouldShow={({ state }) => shouldShowFloatindMenu(state)}

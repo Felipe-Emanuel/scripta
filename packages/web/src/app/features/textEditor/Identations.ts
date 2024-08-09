@@ -39,6 +39,17 @@ export const FirstLineIndent = Extension.create({
               fontSize: element.style.fontSize,
             }),
           },
+          fontWeight: {
+            default: '400',
+            renderHTML: attributes => {
+              return {
+                style: `font-weight: ${attributes.fontWeight}`,
+              }
+            },
+            parseHTML: element => ({
+              fontWeight: element.style.fontWeight,
+            }),
+          },
         }
       }
     ]

@@ -23,11 +23,37 @@ import { Icon } from '@shared/components'
 import { ISpacings } from './Spacings'
 import { defaultFonts } from '../TextEditorUtils'
 
+type TFontWeight = {
+  value: number
+  name: string
+}
+
+type TFont = {
+  key: string
+  label: string
+  weight: TFontWeight[]
+}
+
 export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
-  const INITIAL_FONT = editor.getAttributes('textStyle').fontFamily
+    const INITIAL_FONT = editor.getAttributes('textStyle').fontFamily ?? 'Inter'
   const [value, setValue] = useState<Selection>(new Set([INITIAL_FONT]))
 
-  console.log(value)
+  const textValue = Array.from(value)[0].toString()
+
+  const selectWeight = (font: TFont, fontWeight: TFontWeight) => {
+    setValue(new Set([font.key]))
+    const updatedFontWeight = String(fontWeight.value)
+
+    editor.commands.setFontFamily(font.key)
+    
+    setMenuState({
+      ...menuState,
+      fontWeight: updatedFontWeight
+    })
+    editor.commands.updateAttributes('paragraph', {
+      fontWeight: updatedFontWeight
+    })
+  }
 
   return (
     <ButtonGroup variant="flat" color="secondary">
@@ -85,6 +111,7 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
               defaultSelectedKeys={['cat']}
               variant="underlined"
               onClick={(e) => e.stopPropagation()}
+              items={defaultFonts}
               onSelectionChange={(key) => {
                 setValue(key)
                 const selectedFont = Array.from(key)[0]
@@ -102,18 +129,19 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
               }
             >
               {defaultFonts.map((font, index) => (
-                <SelectItem key={font.key}>
+                <SelectItem textValue={textValue} key={font.key}>
                   {font.weight.length > 1 ? (
                     <Tooltip
                       placement="right-end"
                       content={font.weight.map((fontWeight, i) => (
                         <button
-                          onClick={() => {
-                            setValue(new Set(font.key))
-                            editor.commands.setFontFamily(font.key)
-                          }}
+                          data-active={
+                            textValue === font.key &&
+                            menuState.fontWeight === String(fontWeight.value)
+                          }
+                          onMouseEnter={() => selectWeight(font, fontWeight)}
                           key={`${fontWeight.name}-${i}`}
-                          className="bg-transparent p-2 z-40 hover:bg-[#bbb] group rounded-md duration-300 w-full flex items-center justify-between"
+                          className="data-[active=true]:bg-[#ccc] bg-transparent p-2 z-40 hover:bg-[#bbb] group rounded-md duration-300 w-full flex items-center justify-between"
                         >
                           <small
                             className="text-black group-hover:text-black/75"

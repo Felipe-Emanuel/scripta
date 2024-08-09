@@ -32,7 +32,7 @@ export function ToolbarEditorHeader({ editor }: IToolbarEditor) {
       aria-label="Formatting options"
     >
       {menuState.opened && (
-        <div className='flex items-center overflow-scroll size-full'>
+        <div className='flex items-center overflow-x-scroll overflow-y-hidden size-full'>
           <BasicIdentations editor={editor} />
 
           <Toolbar.Separator className="w-[1px] bg-primary mx-[10px] h-full" />
