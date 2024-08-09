@@ -7,10 +7,11 @@ import {
   RxTextAlignJustify
 } from 'react-icons/rx'
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri'
+import { IoIosColorPalette } from 'react-icons/io'
 
 import { ToolbarTogleItem } from './ToolbarTogleItem'
 import { Button } from '@nextui-org/react'
-import { Icon } from '@shared/components'
+import { Icon, Text } from '@shared/components'
 import { BasicIdentations } from './BasicIdentations'
 import { useEditor } from '@shared/hooks/useEditor'
 import { Spacings } from './Spacings'
@@ -32,7 +33,7 @@ export function ToolbarEditorHeader({ editor }: IToolbarEditor) {
       aria-label="Formatting options"
     >
       {menuState.opened && (
-        <div className='flex items-center overflow-x-scroll overflow-y-hidden size-full'>
+        <div className="flex items-center overflow-x-scroll overflow-y-hidden size-full">
           <BasicIdentations editor={editor} />
 
           <Toolbar.Separator className="w-[1px] bg-primary mx-[10px] h-full" />
@@ -71,9 +72,9 @@ export function ToolbarEditorHeader({ editor }: IToolbarEditor) {
               value="justify"
             />
           </Toolbar.ToggleGroup>
-          
+
           <Toolbar.Separator className="w-[1px] bg-primary mx-[10px] h-12" />
-          
+
           <Toolbar.ToggleGroup
             type="single"
             className="flex items-center"
@@ -93,6 +94,23 @@ export function ToolbarEditorHeader({ editor }: IToolbarEditor) {
           >
             <FontStyles editor={editor} menuState={menuState} setMenuState={setMenuState} />
           </Toolbar.ToggleGroup>
+
+          <Toolbar.Separator className="w-[1px] bg-white mx-[10px] h-14" />
+
+          <form className="flex w-full items-center justify-start gap-2">
+            <input
+              type="color"
+              id="color"
+              className="rounded-full outline-none h-4 w-6 p-0"
+              onChange={(event) => editor.chain().focus().setColor(event.target.value).run()}
+              value={editor.getAttributes('textStyle').color ?? '#A0AEC0'}
+            />
+            <Text
+              as="label"
+              htmlFor="color"
+              text={<Icon size="lg" icon={IoIosColorPalette} className="hidden sm:flex" />}
+            />
+          </form>
         </div>
       )}
       <Toolbar.ToggleGroup

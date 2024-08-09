@@ -17,8 +17,10 @@ export function ToolbarEditor({ editor }: IToolbarEditor) {
       className="z-50 flex items-center p-[10px] gap-2 w-full min-w-max rounded-md bg-black/75 backdrop-blur-sm ring-1 ring-white/50 shadow-[0_2px_10px] shadow-black"
       aria-label="Formatting options"
     >
-      <BasicIdentations editor={editor} />
-      <Toolbar.Separator className="w-[1px] bg-primary mx-[10px] h-7" />
+      <span className="hidden sm:flex">
+        <BasicIdentations editor={editor} />
+        <Toolbar.Separator className="w-[1px] bg-primary mx-[10px] h-7" />
+      </span>
       <ToolbarTogleItem
         onClick={() => editor?.chain().focus().toggleHighlight({ color: '#0075FF' }).run()}
         data-active={editor.isActive('highlight', { color: '#0075FF' })}

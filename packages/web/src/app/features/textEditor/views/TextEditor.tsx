@@ -16,7 +16,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import Highlight from '@tiptap/extension-highlight'
 import { Button, Chip, ScrollShadow } from '@nextui-org/react'
 import { EditorState } from '@tiptap/pm/state'
-import { FirstLineIndent } from '../Identations'
+import { FirstLineIndent, TransformDashToDialog } from '../Identations'
 import { useState } from 'react'
 
 import { ToolbarEditor } from '../components/ToolbarEditor'
@@ -26,7 +26,9 @@ import { FloatingMenuContent } from '../components/FloatingMenuContent'
 import { Icon, Text } from '@shared/components'
 
 function countWords(text: string): number {
-  const words = text.trim().split(/\s+/)
+  const cleanedText = text.replace(/[^a-zA-Z0-9\s]/g, '')
+
+  const words = cleanedText.trim().split(/\s+/)
   const filteredWords = words.filter((word) => word.length > 0)
   return filteredWords.length
 }
@@ -40,8 +42,9 @@ export function TextEditor() {
 
   const editor = useEditor({
     extensions: [
-      Document,
       StarterKit,
+      TransformDashToDialog,
+      Document,
       Underline,
       FirstLineIndent,
       Color,
@@ -65,7 +68,7 @@ export function TextEditor() {
       })
     ],
     onUpdate({ editor }) {
-      return setChapterContent({
+       return setChapterContent({
         content: editor.getHTML(),
         wordsCounter: countWords(editor.getText())
       })
@@ -103,7 +106,7 @@ export function TextEditor() {
             tippyOptions={{ duration: 1000 }}
             className="bg-black/85 h-28 overflow-y-auto backdrop-blur-2xl border-1 border-white/72 p-2 shadow-[0_2px_10px] shadow-black"
             editor={editor}
-            shouldShow={({ state }) => shouldShowFloatindMenu(state)}
+            shouldShow={() => shouldShowFloatindMenu(editor?.state)}
           >
             <div>
               <FloatingMenuContent editor={editor} />

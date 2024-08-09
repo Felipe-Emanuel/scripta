@@ -16,7 +16,6 @@ import { useState } from 'react'
 import { GoChevronDown } from 'react-icons/go'
 import { FaFont } from 'react-icons/fa6'
 import { RiFontSize } from 'react-icons/ri'
-import { IoIosColorPalette } from 'react-icons/io'
 import { BiChevronRight } from 'react-icons/bi'
 
 import { Icon } from '@shared/components'
@@ -65,17 +64,6 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
           </Button>
         </PopoverTrigger>
         <PopoverContent>
-          <div className="flex w-full items-center justify-start gap-2">
-            <Icon size="lg" icon={IoIosColorPalette} className="hidden sm:flex" />
-            <input
-              type="color"
-              name="color"
-              className="rounded-full outline-none h-4 w-6 p-0"
-              onChange={(event) => editor.chain().focus().setColor(event.target.value).run()}
-              value={editor.getAttributes('textStyle').color}
-            />
-          </div>
-
           <div className="flex flex-1 items-center gap-2">
             <Input
               aria-label="Tamanho da fonte"
@@ -111,7 +99,6 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
               defaultSelectedKeys={['cat']}
               variant="underlined"
               onClick={(e) => e.stopPropagation()}
-              items={defaultFonts}
               onSelectionChange={(key) => {
                 setValue(key)
                 const selectedFont = Array.from(key)[0]
