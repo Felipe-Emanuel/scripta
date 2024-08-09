@@ -34,7 +34,7 @@ export function useQueryMutation<TResponse, TRequest>({
   mutationFn,
   cacheName,
   variablePath
-}: UseQueryMutationParams<TResponse, TRequest>): object {
+}: UseQueryMutationParams<TResponse, TRequest>) {
   const queryClient = useQueryClient()
 
   const { mutateAsync, ...rest } = useMutation({

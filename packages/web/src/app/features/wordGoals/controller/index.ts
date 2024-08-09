@@ -38,7 +38,11 @@ export const useWordGoalsController = () => {
   const { mutateAsync } = useQueryMutation<
     TGoalResponse,
     TUpdateCurrentGoalRequest
-  >(updateCurrentGoal, 'currentGoal', 'updatedGoal')
+  >({
+    mutationFn: updateCurrentGoal,
+    cacheName: 'currentGoal',
+    variablePath: 'updatedGoal'
+  })
 
   const visibleState: 'visible' | 'hidden' | undefined = isFormVisible
     ? 'visible'

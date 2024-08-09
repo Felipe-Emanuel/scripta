@@ -54,7 +54,11 @@ export const useProfileController = () => {
   const { mutateAsync } = useQueryMutation<
     TGoalResponse,
     TUpdateCurrentGoalRequest
-  >(updateCurrentGoal, 'currentGoal', 'updatedGoal')
+  >({
+    mutationFn: updateCurrentGoal,
+    cacheName: 'currentGoal',
+    variablePath: 'updatedGoal'
+  })
 
   const onSubmit = async (data: TUpdateWordCountSchema) => {
     if (currentGoal) {
