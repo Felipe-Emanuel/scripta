@@ -7,11 +7,9 @@ import {
   Input,
   Select,
   SelectItem,
-  Selection,
   Tooltip
 } from '@nextui-org/react'
 import { Separator } from '@radix-ui/react-toolbar'
-import { useState } from 'react'
 
 import { GoChevronDown } from 'react-icons/go'
 import { FaFont } from 'react-icons/fa6'
@@ -19,40 +17,13 @@ import { RiFontSize } from 'react-icons/ri'
 import { BiChevronRight } from 'react-icons/bi'
 
 import { Icon } from '@shared/components'
-import { ISpacings } from './Spacings'
 import { defaultFonts } from '../TextEditorUtils'
+import { useEditorController } from '../controller'
+import { IToolbarEditor } from './ToolbarEditorHeader'
+import * as tv from './TextEditorComponentsTV'
 
-type TFontWeight = {
-  value: number
-  name: string
-}
-
-type TFont = {
-  key: string
-  label: string
-  weight: TFontWeight[]
-}
-
-export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
-    const INITIAL_FONT = editor.getAttributes('textStyle').fontFamily ?? 'Inter'
-  const [value, setValue] = useState<Selection>(new Set([INITIAL_FONT]))
-
-  const textValue = Array.from(value)[0].toString()
-
-  const selectWeight = (font: TFont, fontWeight: TFontWeight) => {
-    setValue(new Set([font.key]))
-    const updatedFontWeight = String(fontWeight.value)
-
-    editor.commands.setFontFamily(font.key)
-    
-    setMenuState({
-      ...menuState,
-      fontWeight: updatedFontWeight
-    })
-    editor.commands.updateAttributes('paragraph', {
-      fontWeight: updatedFontWeight
-    })
-  }
+export function FontStyles({ editor, menuState }: IToolbarEditor) {
+  const { textValue, value, setMenuState, setValue, selectWeight } = useEditorController()
 
   return (
     <ButtonGroup variant="flat" color="secondary">
@@ -64,20 +35,20 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
           </Button>
         </PopoverTrigger>
         <PopoverContent>
-          <div className="flex flex-1 items-center gap-2">
+          <div className={tv.fontStylesWrapperTV()}>
             <Input
               aria-label="Tamanho da fonte"
               onChange={(e) => {
                 const value = e.target.value.replace(/[^0-9,.]/g, '')
-                setMenuState({
-                  ...menuState,
+                setMenuState?.({
+                  ...menuState!,
                   fontSize: value
                 })
                 editor.commands.updateAttributes('paragraph', {
                   fontSize: `${value ?? '0'}px`
                 })
               }}
-              value={menuState.fontSize}
+              value={menuState?.fontSize}
               type="number"
               placeholder="16"
               size="sm"
@@ -85,13 +56,13 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
               variant="underlined"
               className="text-black flex flex-1"
               endContent={
-                <div className="pointer-events-none items-center hidden sm:flex">
+                <div className={tv.fontStylesIconTV()}>
                   <Icon size="md" icon={RiFontSize} />
                 </div>
               }
             />
 
-            <Separator className="w-[1px] bg-primary mx-[10px] h-full" />
+            <Separator className={tv.fontStylesSeparatorTV()} />
 
             <Select
               aria-label="Escolha de fontes"
@@ -105,12 +76,12 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
                 editor.commands.setFontFamily(String(selectedFont))
               }}
               selectedKeys={value}
-              className="flex flex-[2]"
+              className={tv.fontStylesSelectTV()}
               scrollShadowProps={{
                 isEnabled: false
               }}
               endContent={
-                <div className="pointer-events-none items-center hidden sm:flex">
+                <div className={tv.fontStylesIconTV()}>
                   <Icon size="md" icon={FaFont} />
                 </div>
               }
@@ -124,14 +95,16 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
                         <button
                           data-active={
                             textValue === font.key &&
-                            menuState.fontWeight === String(fontWeight.value)
+                            menuState?.fontWeight === String(fontWeight.value)
                           }
-                          onMouseEnter={() => selectWeight(font, fontWeight)}
+                          onMouseEnter={() =>
+                            selectWeight(font, fontWeight, menuState!, setMenuState)
+                          }
                           key={`${fontWeight.name}-${i}`}
-                          className="data-[active=true]:bg-[#ccc] bg-transparent p-2 z-40 hover:bg-[#bbb] group rounded-md duration-300 w-full flex items-center justify-between"
+                          className={tv.fontStylesTooltipWeightButtonTV()}
                         >
                           <small
-                            className="text-black group-hover:text-black/75"
+                            className={tv.fontStylesTooltipWeightSmallTV()}
                             style={{
                               fontFamily: fontWeight.name,
                               fontWeight: fontWeight.value
@@ -143,9 +116,9 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
                       ))}
                       offset={20}
                     >
-                      <button className="bg-transparent w-full flex items-center justify-between">
+                      <button className={tv.fontStylesButtonTV()}>
                         <small
-                          className="text-black"
+                          className={tv.fontStylesButtonSmallTV()}
                           style={{
                             fontFamily: font.label,
                             fontWeight: font.weight[0].value
@@ -157,9 +130,9 @@ export function FontStyles({ editor, menuState, setMenuState }: ISpacings) {
                       </button>
                     </Tooltip>
                   ) : (
-                    <button className="bg-transparent w-full flex items-center justify-between">
+                    <button className={tv.fontStylesButtonTV()}>
                       <small
-                        className="text-black"
+                        className={tv.fontStylesButtonSmallTV()}
                         key={index}
                         style={{
                           fontFamily: font.label,

@@ -27,6 +27,8 @@ export * from './TArrayExemple'
 export * from './TNewBookFormState'
 export * from './TBookcContentSelector'
 export * from './TTEditorMenu'
+export * from './TFont'
+export * from './TChapterContent'
 
 export * from './requests/TAuthRequest'
 export * from './requests/TCreateUserRequest'

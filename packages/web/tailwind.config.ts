@@ -38,6 +38,8 @@ const config: Config = {
         500: '#01B574'
       },
       gray: {
+        50: '#BBB',
+        100: '#CCC',
         400: '#A0AEC0'
       }
     },

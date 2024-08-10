@@ -31,3 +31,10 @@ export const extractTypeFromBase64 = (imageString: string) => {
 
   return ''
 }
+
+export const countWords = (text: string) => {
+  const cleanedText = text.replace(/[^a-zA-Z0-9\s]/g, '')
+  const words = cleanedText.trim().split(/\s+/)
+  const filteredWords = words.filter((word) => word.length > 0)
+  return filteredWords.length
+}

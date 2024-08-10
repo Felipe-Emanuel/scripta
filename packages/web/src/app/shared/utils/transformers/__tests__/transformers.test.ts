@@ -37,3 +37,12 @@ describe('extractTypeFromBase64', () => {
     expect(sut).toBe(imageType)
   })
 })
+
+describe('countWords', () => {
+  it('should remove special caracter and return a total of words into the string', () => {
+    const text = '- should return four words'
+    const sut = T.countWords(text)
+
+    expect(sut).toBe(4)
+  })
+})

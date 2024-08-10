@@ -8,20 +8,23 @@ import {
   Input
 } from '@nextui-org/react'
 import { GoChevronDown } from 'react-icons/go'
-import { Dispatch, SetStateAction } from 'react'
 import { BsTextParagraph } from 'react-icons/bs'
 import { MdFormatLineSpacing } from 'react-icons/md'
 
 import { IToolbarEditor } from './ToolbarEditorHeader'
-import { TTEditorMenu } from '@shared/types'
-import { Icon } from '~/src/app/shared/components'
 
-export interface ISpacings extends IToolbarEditor {
-  setMenuState: Dispatch<SetStateAction<TTEditorMenu>>
-  menuState: TTEditorMenu
-}
+import { Icon } from '@shared/components'
+import * as tv from './TextEditorComponentsTV'
 
-export function Spacings({ editor, menuState, setMenuState }: ISpacings) {
+export function Spacings({ editor, menuState, setMenuState }: IToolbarEditor) {
+  const handleChange = (attribute: string, updateState: (value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9,.]/g, '')
+    updateState(value)
+    editor.commands.updateAttributes('paragraph', {
+      [attribute]: `${value ?? '0'}rem`
+    })
+  }
+
   return (
     <ButtonGroup variant="flat" color="secondary">
       <Button>Espaçamentos</Button>
@@ -36,51 +39,37 @@ export function Spacings({ editor, menuState, setMenuState }: ISpacings) {
             <GoChevronDown />
           </Button>
         </DropdownTrigger>
-        <DropdownMenu
-          aria-label="Opções de espaçamentos"
-          selectionMode="none"
-        >
-          <DropdownItem isReadOnly key="espaços">
+        <DropdownMenu aria-label="Opções de espaçamentos" selectionMode="none">
+          <DropdownItem textValue="espaços" isReadOnly key="espaços">
             <Input
-              onChange={(e) => {
-                const value = e.target.value.replace(/[^0-9,.]/g, '')
-                setMenuState({
-                  ...menuState,
-                  firstLineIndent: value
-                })
-                editor.commands.updateAttributes('paragraph', {
-                  firstLineIndent: `${value ?? '0'}rem`
-                })
-              }}
-              value={menuState.firstLineIndent}
+              onChange={handleChange('firstLineIndent', value => setMenuState?.({
+                ...menuState!,
+                firstLineIndent: value
+              }))}
+              value={menuState?.firstLineIndent}
               type="number"
               label="À esquerda"
-              placeholder="0"
+              placeholder="2"
               labelPlacement="outside-left"
               size="sm"
               color="primary"
               variant="underlined"
-              className="text-black"
               endContent={
-                <div className="pointer-events-none flex items-center">
-                  <span className="text-default-400 text-small">
+                <div className={tv.spacingsIconWrapperTV()}>
+                  <span className={tv.spacingsIconSpanTV()}>
                     <Icon size="md" icon={BsTextParagraph} />
                   </span>
                 </div>
               }
             />
+          </DropdownItem>
+          <DropdownItem textValue="largura" isReadOnly key="largura">
             <Input
-              onChange={(e) => {
-                const value = e.target.value.replace(/[^0-9,.]/g, '')
-                setMenuState({
-                  ...menuState,
-                  lineHeight: value
-                })
-                editor.commands.updateAttributes('paragraph', {
-                  lineHeight: `${value ?? '0'}rem`
-                })
-              }}
-              value={menuState.lineHeight}
+              onChange={handleChange('lineHeight', value => setMenuState?.({
+                ...menuState!,
+                lineHeight: value
+              }))}
+              value={menuState?.lineHeight}
               type="number"
               label="Entre linhas"
               placeholder="0"
@@ -88,10 +77,9 @@ export function Spacings({ editor, menuState, setMenuState }: ISpacings) {
               size="sm"
               color="primary"
               variant="underlined"
-              className="text-black"
               endContent={
-                <div className="pointer-events-none flex items-center">
-                  <span className="text-default-400 text-small">
+                <div className={tv.spacingsIconWrapperTV()}>
+                  <span className={tv.spacingsIconSpanTV()}>
                     <Icon size="md" icon={MdFormatLineSpacing} />
                   </span>
                 </div>

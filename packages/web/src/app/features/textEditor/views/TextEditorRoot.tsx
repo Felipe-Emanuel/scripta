@@ -3,10 +3,11 @@
 import { Menu } from '@features/menu'
 import { TRootComponent } from '@shared/types'
 import { menuSearchDefaultItem } from '../TextEditorUtils'
+import { textEditorRootTV } from '../TextEditorTV'
 
 export function TextEditorRoot({ children }: TRootComponent) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 max-w-[1500px] m-auto pl-20">
+    <div className={textEditorRootTV()}>
       <Menu.root>
         <Menu.pathname />
         <Menu.actions>
