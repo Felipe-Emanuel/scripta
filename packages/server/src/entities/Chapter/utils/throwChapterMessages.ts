@@ -12,5 +12,10 @@ export const throwChapterMessages = {
   minLength: `Quantidade mínima de caracteres por capítulo é de ${MIN_WORDS_BY_CHAPTER}`,
   maxLengthTitle: `Quantidade mínima para título é de ${MIN_CHAPTER_TITLE_CHARACTERS}`,
   minLengthTitle: `Quantidade máxima para título é de ${MIN_CHAPTER_TITLE_CHARACTERS}`,
-  somethingWrong: 'Alguma propriedade não está no formato válido!'
+  wrongId: 'O lívro indicado não existe ou não pertence à este capítulo.',
+  somethingWrong: 'Alguma propriedade não está no formato válido!',
+  requiredEmail: 'capítulo sem autor registrado!',
+  invalidEmail: 'e-mail inválido para atualziar o capítulo!',
+  idRequired: 'id do capítulo inexistente e necessário',
+  notFount: 'Capítulo não encontrado.'
 }

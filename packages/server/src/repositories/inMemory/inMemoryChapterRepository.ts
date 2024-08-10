@@ -9,7 +9,29 @@ export const inMemoryChapterRepository = (): IChapterRepository => {
     return updatedChapter.find((c) => c.bookId === chapter.bookId)
   }
 
+  const getChapterById = async (chapterId: string): Promise<Chapter> => {
+    const existentChapter = chapters.find((chapter) => chapter.id === chapterId)
+
+    return existentChapter || null
+  }
+
+  const updateChapter = async (chapter: Chapter): Promise<Chapter> => {
+    const existentChapter = chapters.find((oldChapter) => oldChapter.id === chapter.id)
+
+    const updatedChapter = {
+      id: existentChapter.id,
+      bookId: existentChapter.bookId,
+      createdAt: existentChapter.createdAt,
+      updatedAt: new Date(),
+      ...existentChapter
+    }
+
+    return updatedChapter
+  }
+
   return {
-    createChapter
+    createChapter,
+    getChapterById,
+    updateChapter
   }
 }

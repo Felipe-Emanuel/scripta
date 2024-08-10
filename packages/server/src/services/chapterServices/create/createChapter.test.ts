@@ -1,6 +1,6 @@
-import { inMemoryChapterRepository } from '~/src/repositories'
 import { CreateChapterService, TCreateChapterServiceRequest } from '.'
-import { chapterMock } from '~/src/entities/Chapter/mocks'
+import { inMemoryChapterRepository } from '@repositories'
+import { chapterMock } from '@entities/Chapter/mocks'
 import { Chapter } from '@prisma/client'
 
 describe('CreateChapterService', () => {

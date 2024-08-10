@@ -72,17 +72,21 @@ model Comment {
 }
 
 model Chapter {
-  id           String      @id @default(uuid())
-  chapterTitle String
-  chapterText  String
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  Book         Book        @relation(fields: [bookId], references: [id])
-  bookId       String
-  characters   Character[]
-  wordsCounter Int
-  comments     Comment[]
-  reactions    Reaction[]
+  id              String      @id @default(uuid())
+  chapterTitle    String
+  chapterText     String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  Book            Book        @relation(fields: [bookId], references: [id])
+  bookId          String
+  characters      Character[]
+  wordsCounter    Int
+  comments        Comment[]
+  reactions       Reaction[]
+  firstLineIndent String
+  lineHeight      String
+  fontSize        String
+  fontWeight      String
 }
 
 model Reaction {

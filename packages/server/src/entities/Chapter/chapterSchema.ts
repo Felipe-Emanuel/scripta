@@ -9,6 +9,11 @@ const {
 } = constants
 
 export const chapterSchema = z.object({
+  id: z
+    .string({
+      invalid_type_error: throwChapterMessages.idRequired
+    })
+    .uuid(),
   bookId: z.string().uuid(),
   chapterText: z.string({
     required_error: throwChapterMessages.minLength
@@ -26,9 +31,20 @@ export const chapterSchema = z.object({
     })
     .min(MIN_CHAPTER_TITLE_CHARACTERS, throwChapterMessages.minLengthTitle)
     .max(MAX_CHAPTER_TITLE_CHARACTERS, throwChapterMessages.maxLengthTitle),
+  firstLineIndent: z.string({
+    required_error: throwChapterMessages.somethingWrong
+  }),
+  fontSize: z.string({
+    required_error: throwChapterMessages.somethingWrong
+  }),
+  fontWeight: z.string({
+    required_error: throwChapterMessages.somethingWrong
+  }),
+  lineHeight: z.string({
+    required_error: throwChapterMessages.somethingWrong
+  }),
   createdAt: z.date().default(() => new Date()),
-  updatedAt: z.date().default(() => new Date()),
-  id: z.string().uuid()
+  updatedAt: z.date().default(() => new Date())
 })
 
 export type TChapterSchema = z.infer<typeof chapterSchema>

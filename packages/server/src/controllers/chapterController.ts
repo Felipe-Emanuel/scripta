@@ -1,23 +1,64 @@
+import { z } from 'zod'
 import { FastifyInstance } from 'fastify'
-import { CreateChapterService, TCreateChapterServiceRequest } from '@services'
-import { databaseChapterRepository } from '@repositories'
-import { authorization } from 'src/middlewares'
+import {
+  CreateChapterService,
+  GetAllBooksService,
+  TCreateChapterServiceRequest,
+  TGetAllBooksServiceRequest
+} from '@services'
+import { databaseBookRepository, databaseChapterRepository } from '@repositories'
+import { throwChapterMessages } from '@entities/Chapter/utils'
 import { globalErrorMessage } from '@utils'
+import { authorization } from 'src/middlewares'
+import {
+  TUpdateChapterServiceRequest,
+  UpdateChapterService
+} from '../services/chapterServices/updateChapter'
 
 export async function chapterController(app: FastifyInstance): Promise<void> {
-  const { createChapter } = databaseChapterRepository()
+  const { createChapter, getChapterById, updateChapter } = databaseChapterRepository()
+  const { getAllBooks } = databaseBookRepository()
 
   const actionCreateChapter: TCreateChapterServiceRequest['action'] = {
     createChapter
   }
+  const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = {
+    getAllBooks
+  }
 
-  app.post('/chapter', async (req, apply) => {
+  const actionsUpdateChapter: TUpdateChapterServiceRequest['actions'] = {
+    getAllBooks,
+    updateChapter,
+    getChapterById
+  }
+
+  app.post('/chapter/:userEmail', async (req, apply) => {
+    const { userEmail } = req.params as Partial<TGetAllBooksServiceRequest>
     const { chapter } = req.body as Partial<TCreateChapterServiceRequest>
 
     const provider = req.headers.provider
     const accessToken = req.headers.authorization
 
     await authorization(provider, accessToken, apply)
+
+    const paramSchema = z.object({
+      userEmail: z
+        .string({
+          required_error: throwChapterMessages.requiredEmail
+        })
+        .email('e-mail inválido!')
+    })
+
+    const email = paramSchema.parse({ userEmail })
+
+    const booksByEmail = await GetAllBooksService({
+      action: actionGetAllBooks,
+      userEmail: email.userEmail
+    })
+
+    const existentBook = booksByEmail.find((book) => book.id === chapter.bookId)
+
+    if (!existentBook.id) throw new Error(throwChapterMessages.wrongId)
 
     const newChapter = await CreateChapterService({
       action: actionCreateChapter,
@@ -26,6 +67,28 @@ export async function chapterController(app: FastifyInstance): Promise<void> {
 
     try {
       apply.send(newChapter)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  app.put('/chapter/:userEmail', async (req, apply) => {
+    const { userEmail } = req.params as Partial<TGetAllBooksServiceRequest>
+    const { chapter } = req.body as Partial<TCreateChapterServiceRequest>
+
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    const updatedBook = await UpdateChapterService({
+      actions: actionsUpdateChapter,
+      updatedChapter: chapter,
+      userEmail
+    })
+
+    try {
+      apply.send(updatedBook)
     } catch {
       apply.status(500).send({ message: globalErrorMessage.unexpected })
     }

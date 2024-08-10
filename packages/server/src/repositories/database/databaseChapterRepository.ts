@@ -11,7 +11,30 @@ export const databaseChapterRepository = (): IChapterRepository => {
     return newChapter
   }
 
+  const getChapterById = async (chapterId: string): Promise<Chapter> => {
+    const existentChapter = await prisma.chapter.findFirst({
+      where: {
+        id: chapterId
+      }
+    })
+
+    return existentChapter || null
+  }
+
+  const updateChapter = async (chapter: Chapter): Promise<Chapter> => {
+    const updatedChapter = await prisma.chapter.update({
+      where: {
+        id: chapter.id
+      },
+      data: chapter
+    })
+
+    return updatedChapter || null
+  }
+
   return {
-    createChapter
+    createChapter,
+    getChapterById,
+    updateChapter
   }
 }

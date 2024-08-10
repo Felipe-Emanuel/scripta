@@ -14,8 +14,6 @@ export const ChapterEntitie = (chapter: Chapter) => {
     return parsedChapter as Chapter
   }
 
-  // const updateChapter = async () => {}
-
   return {
     createChapter
   }

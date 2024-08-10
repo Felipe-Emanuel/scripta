@@ -1,7 +1,7 @@
-import { Chapter } from '@prisma/client'
-import { ChapterEntitie } from '~/src/entities/Chapter'
-import { IChapterRepository } from '~/src/repositories/ChapterRepository'
 import { v4 as uuiv4 } from 'uuid'
+import { Chapter } from '@prisma/client'
+import { ChapterEntitie } from '@entities/Chapter'
+import { IChapterRepository } from '@repositories'
 
 export type TCreateChapterServiceRequest = {
   action: Pick<IChapterRepository, 'createChapter'>

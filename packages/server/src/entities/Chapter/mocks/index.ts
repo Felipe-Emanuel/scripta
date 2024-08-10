@@ -9,5 +9,9 @@ export const chapterMock: Chapter = {
   bookId: bookEntitieMock.id,
   chapterText: 'this is a mocked book chapter with a minimum of character',
   chapterTitle: 'book chapter title',
-  wordsCounter: 150
+  wordsCounter: 150,
+  firstLineIndent: '2',
+  fontSize: '16',
+  fontWeight: '400',
+  lineHeight: '1.5'
 }
