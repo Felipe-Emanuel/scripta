@@ -73,7 +73,7 @@ export const toolbarEditorHeaderTV = tv({
 })
 
 export const toolbarEditorHeaderContentTV = tv({
-  base: 'flex items-center scrollbar-thin overflow-x-scroll overflow-y-hidden size-full'
+  base: 'flex items-center scrollbar-thin overflow-x-auto overflow-y-hidden size-full'
 })
 
 export const toolbarEditorHeaderSeparatorTV = tv({
