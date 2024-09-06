@@ -1,11 +1,13 @@
 import { useLocalStorage } from '@shared/hooks/useLocalStorage'
+import { renderHook } from '@testing-library/react'
 
 describe('useLocalStorage', () => {
   beforeEach(() => {
     window.localStorage.clear()
   })
 
-  const { getLocalStorage, setLocalStorage, STORAGE_KEY } = useLocalStorage()
+  const { result: localStorageResult } = renderHook(() => useLocalStorage())
+  const { getLocalStorage, setLocalStorage, STORAGE_KEY } = localStorageResult.current
 
   it('should return item from localStorage', () => {
     window.localStorage.setItem(`${STORAGE_KEY}key`, JSON.stringify('John'))

@@ -53,7 +53,7 @@ const Reader = ({ reader, isShowing }: IReaderProps) => {
                   text="Portfólio"
                   className={tv.readerCardFooterLabelTV()}
                 />
-                <a target="_blank" href={reader.portfolioUrl}>
+                <a target="_blank" href={reader.portfolioUrl} rel="noreferrer">
                   <Button
                     className={tv.cardAccessButtonTV()}
                     variant="flat"

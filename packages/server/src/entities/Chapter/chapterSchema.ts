@@ -30,7 +30,8 @@ export const chapterSchema = z.object({
       required_error: throwChapterMessages.minLengthTitle
     })
     .min(MIN_CHAPTER_TITLE_CHARACTERS, throwChapterMessages.minLengthTitle)
-    .max(MAX_CHAPTER_TITLE_CHARACTERS, throwChapterMessages.maxLengthTitle),
+    .max(MAX_CHAPTER_TITLE_CHARACTERS, throwChapterMessages.maxLengthTitle)
+    .nullable(),
   firstLineIndent: z.string({
     required_error: throwChapterMessages.somethingWrong
   }),

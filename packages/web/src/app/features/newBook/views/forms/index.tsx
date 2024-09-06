@@ -4,8 +4,8 @@ import { NewBookOverviewForm } from './NewBookOverviewForm'
 import { NewBookSocialForm } from './NewBookSocialForm'
 
 export const forms = [
-  <NewBookAboutBookForm />,
-  <NewBookMediaForm />,
-  <NewBookSocialForm />,
-  <NewBookOverviewForm />
+  <NewBookAboutBookForm key="NewBookAboutBookForm" />,
+  <NewBookMediaForm key="NewBookMediaForm" />,
+  <NewBookSocialForm key="NewBookSocialForm" />,
+  <NewBookOverviewForm key="NewBookOverviewForm" />
 ]

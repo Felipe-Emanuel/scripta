@@ -33,8 +33,8 @@ export function NewBookAboutBookForm() {
             variant="bordered"
             maxLength={1000}
             max={1000}
-            maxRows={6}
-            minRows={6}
+            maxRows={5}
+            minRows={5}
             placeholder="Descreva sua obra..."
             className="text-white"
             defaultValue={draft?.description}

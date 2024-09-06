@@ -30,7 +30,7 @@ export const floatingMenuContentButtons = [
     level: 6,
     icon: MdSubtitles,
     label: 'Subtítulo',
-    description: 'Aplicar seção de subtítulo',
+    description: 'Aplicar subtítulo',
     action: (editor: Editor) => {
       editor.chain().focus().toggleHeading({ level: 6 }).toggleBold().toggleItalic().run()
       removeLeadingSlash(editor)

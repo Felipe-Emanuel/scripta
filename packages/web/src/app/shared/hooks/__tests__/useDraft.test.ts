@@ -9,7 +9,8 @@ type TDraftToTest = {
 }
 
 describe('useDraft', () => {
-  const { getLocalStorage } = useLocalStorage()
+  const { result: localStorageResult } = renderHook(() => useLocalStorage())
+  const { getLocalStorage } = localStorageResult.current
   const { result } = renderHook(() => useDraft<TDraftToTest>('newBook'))
   const { updateDraft, clearDraft } = result.current
 

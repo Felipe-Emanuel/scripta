@@ -15,7 +15,7 @@ export function MenuActions({ children }: TRootComponent) {
       {children}
       {actions.map((action, i) => {
         const content = (
-          <div className={tv.menuActionContentTV()}>
+          <div key={i} className={tv.menuActionContentTV()}>
             <Icon icon={action.icon} size="md" color="gray" />
             {action.label && <Text text={action.label} size="sm" color="gray" />}
           </div>

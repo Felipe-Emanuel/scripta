@@ -37,7 +37,7 @@ export function MenuSearch({ defaultItems }: IMenuSearchProps) {
         variant="underlined"
         defaultItems={defaultItems}
         selectedKey={currentHelper?.ref}
-        onSelectionChange={(key) => updateRef(key?.toString())}
+        onSelectionChange={(key) => updateRef(key?.toString() ?? '')}
         onClear={clearing}
       >
         {(item) => (

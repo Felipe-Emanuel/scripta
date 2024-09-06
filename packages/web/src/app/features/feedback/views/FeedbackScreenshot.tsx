@@ -38,6 +38,7 @@ export function FeedbackScreenshot() {
           src={String(image)}
           fill
           className={tv.feedbackScreenshotThumbTV()}
+          fetchPriority="low"
         />
       </div>
       <Modal
@@ -63,6 +64,7 @@ export function FeedbackScreenshot() {
                   width={500}
                   height={500}
                   className={tv.feedbackScreenshotModalThumbTV()}
+                  fetchPriority="high"
                 />
               </ModalBody>
               <ModalFooter>

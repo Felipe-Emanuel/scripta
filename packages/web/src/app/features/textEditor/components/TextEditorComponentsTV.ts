@@ -69,7 +69,7 @@ export const toolbarTogleItemTV = tv({
 })
 
 export const toolbarEditorHeaderTV = tv({
-  base: 'w-12 data-[open=false]:bg-transparent data-[open=true]:w-full h-16 overflow-hidden duration-500 absolute top-0 data-[open=true]:left-0 data-[open=false]:right-0 z-10 flex flex-shrink-0 items-center p-[10px] bg-white/10 backdrop-blur-md data-[open=true]:border-b-1 border-white/50 shadow-[0_2px_10px] shadow-black'
+  base: 'w-12 data-[open=false]:bg-transparent data-[open=true]:w-full h-16 overflow-hidden duration-500 absolute top-0 data-[open=true]:left-0 data-[open=false]:right-0 z-10 flex flex-shrink-0 items-center p-[10px] bg-white/10 backdrop-blur-md data-[open=true]:border-b-1 border-white/50 shadow-[0_2px_10px] shadow-black data-[open=false]:shadow-transparent'
 })
 
 export const toolbarEditorHeaderContentTV = tv({

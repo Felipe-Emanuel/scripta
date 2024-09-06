@@ -1,16 +1,14 @@
 import { Selection } from '@nextui-org/react'
-import { Dispatch, SetStateAction, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri'
 
 import { FirstLineIndent, TransformDashToDialog } from '../Identations'
-import { countWords } from '@shared/utils/transformers'
-import { useEditor as useEditorMenu } from '@shared/hooks/useEditor'
-import { TChapterContent, TFont, TFontWeight, TTEditorMenu } from '@shared/types'
+import { useChapterConfig } from '@shared/hooks/contexts/useChapterConfig'
+import { TFont, TFontWeight } from '@shared/types'
 
 import { useEditor } from '@tiptap/react'
 import { EditorState } from '@tiptap/pm/state'
 import { Color } from '@tiptap/extension-color'
-import { Document } from '@tiptap/extension-document'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
@@ -18,13 +16,11 @@ import Highlight from '@tiptap/extension-highlight'
 import Placeholder from '@tiptap/extension-placeholder'
 import TextStyle from '@tiptap/extension-text-style'
 import FontFamily from '@tiptap/extension-font-family'
+import { useNewChapterController } from '../../newChapter/controller'
 
-export const useEditorController = () => {
-  const { menuState, togleMenu, setMenuState } = useEditorMenu()
-  const [chapterContent, setChapterContent] = useState<TChapterContent>({
-    content: '',
-    wordsCounter: 0
-  })
+export const useEditorController = (bookId: string) => {
+  const { menuState, togleMenu, updateMenuState, updateChapterContent } = useChapterConfig()
+  const { write } = useNewChapterController(bookId)
 
   const menuIcon = useMemo(
     () => (menuState.opened ? RiMenuUnfoldLine : RiMenuFoldLine),
@@ -35,7 +31,6 @@ export const useEditorController = () => {
     extensions: [
       StarterKit,
       TransformDashToDialog,
-      Document,
       Underline,
       FirstLineIndent,
       Color,
@@ -58,14 +53,15 @@ export const useEditorController = () => {
         }
       })
     ],
-    onUpdate({ editor }) {
-      return setChapterContent({
-        content: editor.getHTML(),
-        wordsCounter: countWords(editor.getText())
-      })
+    onUpdate() {
+      if (editor) {
+        updateChapterContent(editor, menuState)
+        write()
+      }
     },
+    shouldRerenderOnTransaction: false,
     immediatelyRender: false,
-    content: chapterContent.content,
+    content: menuState.content,
     autofocus: true,
     editorProps: {
       attributes: {
@@ -87,41 +83,38 @@ export const useEditorController = () => {
 
   const toggleFullscreen = () => setFullscreen((prev) => !prev)
 
-  const wordsCounterText = chapterContent.wordsCounter > 1 ? 'Palavras' : 'Palavra'
+  const wordsCounterText = menuState.wordsCounter > 1 ? 'Palavras' : 'Palavra'
 
   const textValue = Array.from(value)[0].toString()
 
-  const selectWeight = (
-    font: TFont,
-    fontWeight: TFontWeight,
-    menuState: TTEditorMenu,
-    setMenuState: Dispatch<SetStateAction<TTEditorMenu>>
-  ) => {
-    setValue(new Set([font.key]))
-    const updatedFontWeight = String(fontWeight.value)
+  const selectWeight = useCallback(
+    (font: TFont, fontWeight: TFontWeight) => {
+      setValue(new Set([font.key]))
+      const updatedFontWeight = String(fontWeight.value)
 
-    editor?.commands.setFontFamily(font.key)
+      editor?.commands.setFontFamily(font.key)
 
-    setMenuState({
-      ...menuState,
-      fontWeight: updatedFontWeight
-    })
-    editor?.commands.updateAttributes('paragraph', {
-      fontWeight: updatedFontWeight
-    })
-  }
+      updateMenuState({
+        ...menuState,
+        fontWeight: updatedFontWeight
+      })
+      editor?.commands.updateAttributes('paragraph', {
+        fontWeight: updatedFontWeight
+      })
+    },
+    [editor?.commands, menuState, updateMenuState]
+  )
 
   return {
     textValue,
     editor,
     fullscreen,
     wordsCounterText,
-    chapterContent,
     value,
     menuState,
     togleMenu,
     menuIcon,
-    setMenuState,
+    updateMenuState,
     setValue,
     selectWeight,
     shouldShowFloatindMenu,

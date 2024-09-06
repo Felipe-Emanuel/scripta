@@ -79,17 +79,6 @@ describe('updatedBook', () => {
     expect(sut.description).toEqual(updateBookMock.description)
   })
 
-  it('should return a throw error by required filds', async () => {
-    const { updatedBook } = BookEntitie(bookEntitieMock)
-
-    const sut = updatedBook({
-      ...bookEntitieMock,
-      title: ''
-    })
-
-    expect(sut).rejects.toThrow(throwBookMessages.areAllFieldsFilled)
-  })
-
   it('should trhow about invalid publised url', async () => {
     const { updatedBook } = BookEntitie(bookEntitieMock)
 

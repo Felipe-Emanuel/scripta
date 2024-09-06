@@ -1,7 +1,8 @@
 import {
   MAX_WORDS_BY_CHAPTER,
   MIN_WORDS_BY_CHAPTER,
-  MIN_CHAPTER_TITLE_CHARACTERS
+  MIN_CHAPTER_TITLE_CHARACTERS,
+  MAX_CHAPTER_TITLE_CHARACTERS
 } from './contants'
 
 export const throwChapterMessages = {
@@ -11,7 +12,7 @@ export const throwChapterMessages = {
   maxLength: `Quantidade máxima de caracteres por capítulo é de ${MAX_WORDS_BY_CHAPTER}`,
   minLength: `Quantidade mínima de caracteres por capítulo é de ${MIN_WORDS_BY_CHAPTER}`,
   maxLengthTitle: `Quantidade mínima para título é de ${MIN_CHAPTER_TITLE_CHARACTERS}`,
-  minLengthTitle: `Quantidade máxima para título é de ${MIN_CHAPTER_TITLE_CHARACTERS}`,
+  minLengthTitle: `Quantidade máxima para título é de ${MAX_CHAPTER_TITLE_CHARACTERS}`,
   wrongId: 'O lívro indicado não existe ou não pertence à este capítulo.',
   somethingWrong: 'Alguma propriedade não está no formato válido!',
   requiredEmail: 'capítulo sem autor registrado!',

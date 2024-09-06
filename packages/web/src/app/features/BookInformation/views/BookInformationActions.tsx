@@ -15,6 +15,8 @@ import { MdEditSquare } from 'react-icons/md'
 import { FaTrashCan } from 'react-icons/fa6'
 import { CiMenuKebab } from 'react-icons/ci'
 import { BiPowerOff } from 'react-icons/bi'
+import { TfiWrite } from 'react-icons/tfi'
+import { IoBookSharp } from 'react-icons/io5'
 
 import { Icon, Text } from '@shared/components'
 import { useBook } from '@shared/hooks/contexts/useBook'
@@ -33,7 +35,9 @@ export function BookInformationActions() {
     toggleDesactiving,
     toggleEditing,
     handlePatchActiveOrConcluedBook,
-    handleDeleteBook
+    handleDeleteBook,
+    goToNewChapter,
+    goToChapters
   } = useBookController()
   const { selectedBook } = useBook()
 
@@ -83,7 +87,25 @@ export function BookInformationActions() {
               key="edit"
               startContent={<IconContent icon={MdEditSquare} />}
             >
-              <Text weight="semi-bold" text="Editar" />
+              <Text weight="semi-bold" text="Editar Informações" />
+            </DropdownItem>
+            <DropdownItem
+              data-testid="dorpdown-item-book-information-action-new-chapter"
+              onClick={goToNewChapter}
+              textValue="Novo Capítulo"
+              key="new-chapter"
+              startContent={<IconContent icon={TfiWrite} />}
+            >
+              <Text weight="semi-bold" text="Novo Capítulo" />
+            </DropdownItem>
+            <DropdownItem
+              data-testid="dorpdown-item-book-information-action-view-chapters"
+              onClick={goToChapters}
+              textValue="Ver Capítulo"
+              key="view-chapters"
+              startContent={<IconContent icon={IoBookSharp} />}
+            >
+              <Text weight="semi-bold" text="Ver capítulos" />
             </DropdownItem>
           </DropdownSection>
 

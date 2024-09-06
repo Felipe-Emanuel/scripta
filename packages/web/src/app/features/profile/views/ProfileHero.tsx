@@ -13,6 +13,7 @@ export function ProfileHero() {
         priority
         alt="Água viva no mar profundo"
         className={profileHeroTV({ local: 'image' })}
+        fetchPriority="high"
       />
     </Parallax>
   )

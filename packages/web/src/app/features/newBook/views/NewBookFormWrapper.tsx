@@ -24,8 +24,15 @@ export function NewBookFormWrapper({
   handleBackFormState
 }: INewBookFormWrapperProps) {
   const { showForm, handleToggleCreateBook } = useBook()
-  const { bookSchema, isFirstAccess, isSubmitSuccessful, handleSubmit, onSubmit, clearDraft } =
-    useNewBookController()
+  const {
+    bookSchema,
+    isFirstAccess,
+    isValid,
+    isSubmitSuccessful,
+    handleSubmit,
+    onSubmit,
+    clearDraft
+  } = useNewBookController()
 
   useEffect(() => {
     if (isSubmitSuccessful) {
@@ -52,6 +59,7 @@ export function NewBookFormWrapper({
           <Form onSubmit={handleSubmit(onSubmit)} className={newBookFormWrapperTV()}>
             {children}
             <NewBookFormActions
+              isValid={isValid}
               handleNewBookSubmit={handleSubmit(onSubmit)}
               handleBackFormState={handleBackFormState}
               handleNextFormState={handleNextFormState}

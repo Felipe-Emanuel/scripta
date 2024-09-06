@@ -3,11 +3,13 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:react/recommended'
   ],
   plugins: ['react', '@typescript-eslint', 'react-hooks', 'import'],
   rules: {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-    semi: ["error", "never"],
+    'react/react-in-jsx-scope': 'off',
+    semi: ['error', 'never']
   }
 }

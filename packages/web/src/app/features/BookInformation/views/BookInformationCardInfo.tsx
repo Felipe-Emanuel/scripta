@@ -14,6 +14,7 @@ import { useMenuController } from '@features/menu/controller'
 import { useBookController } from '../controller'
 import RenderInfo from './components/RenderInfo'
 import * as tv from '../BookInformationTV'
+import { Text } from '@shared/components'
 
 export function BookInformationCardInfo() {
   const { clearing } = useMenuController()
@@ -22,13 +23,13 @@ export function BookInformationCardInfo() {
 
   const characterIcon = isCharactersCardHovered ? FaExternalLinkSquareAlt : FaUserSecret
 
-  if (!selectedBook) return null
+  if (!selectedBook)
+    return <Text text="Selecione algum livro para visualizar" align="center" className="w-full" />
 
   const hero = (
     <Image
       alt="imagem do livro"
       className={tv.heroTV()}
-      height={200}
       shadow="md"
       src={selectedBook?.heroPathUrl}
       width={130}
@@ -42,7 +43,7 @@ export function BookInformationCardInfo() {
           <a
             data-testid="book-information-card-info-published-link"
             target="_blank"
-            href={selectedBook?.publishedUrl}
+            href={selectedBook?.publishedUrl} rel="noreferrer"
           >
             {hero}
           </a>

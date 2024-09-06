@@ -9,8 +9,6 @@ const renderComponent = () => render(<NewBookMediaForm />)
 describe('NewBookMediaForm', () => {
   it('Should render correctly', () => {
     renderComponent()
-
-    screen.logTestingPlaygroundURL()
   })
 
   it('Should render paste and drop image input', () => {

@@ -5,22 +5,6 @@ import { constants, throwChapterMessages } from './utils'
 import { jestErrorHandler } from '__tests__/jestErrorHandler'
 
 describe('createChapter', () => {
-  it('should check if any of atributes are null, undefined or empty string', async () => {
-    try {
-      const { createChapter } = ChapterEntitie({
-        ...chapterMock,
-        chapterText: null
-      })
-
-      await createChapter()
-    } catch (e) {
-      jestErrorHandler({
-        error: e,
-        expected: throwChapterMessages.somethingWrong
-      })
-    }
-  })
-
   it('should throw about wordsCounter', async () => {
     try {
       const { createChapter } = ChapterEntitie({

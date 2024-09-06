@@ -1,11 +1,11 @@
 import { tv } from 'tailwind-variants'
 
 export const textEditorRootTV = tv({
-  base: 'flex flex-col items-center justify-center gap-4 max-w-[1500px] m-auto pl-20'
+  base: 'w-full flex justify-center'
 })
 
 export const textEditorTV = tv({
-  base: 'flex flex-col py-2 pt-12 w-[80%] h-[75vh] duration-300 data-[fullscreen=true]:z-50 data-[fullscreen=true]:inset-0 data-[fullscreen=true]:fixed data-[fullscreen=true]:w-screen data-[fullscreen=true]:h-screen bg-black/75 data-[fullscreen=true]:backdrop-blur-3xl relative rounded-lg overflow-x-hidden'
+  base: 'flex flex-col py-2 pt-4 w-[80%] h-[75vh] duration-300 data-[fullscreen=true]:z-50 data-[fullscreen=true]:inset-0 data-[fullscreen=true]:fixed data-[fullscreen=true]:w-screen data-[fullscreen=true]:h-screen bg-black/75 data-[fullscreen=true]:backdrop-blur-3xl relative rounded-lg overflow-x-hidden'
 })
 
 export const textEditorScrollShadowTV = tv({

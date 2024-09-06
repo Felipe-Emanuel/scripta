@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react'
-
 import { Editor } from '@tiptap/react'
 
 import { Button } from '@nextui-org/react'
@@ -16,19 +14,20 @@ import { Spacings } from './Spacings'
 import { FontStyles } from './FontStyles'
 import { toolbarEditorHeaderData } from './componentUtils'
 import * as tv from './TextEditorComponentsTV'
+import { memo } from 'react'
 
 export interface IToolbarEditor {
   editor: Editor
   menuState?: TTEditorMenu
   menuIcon?: IconType
-  setMenuState?: Dispatch<SetStateAction<TTEditorMenu>>
+  updateMenuState?: (newConfig: TTEditorMenu) => void
   togleMenu?: () => void
 }
 
-export function ToolbarEditorHeader({
+function ToolbarEditorHeader({
   editor,
   menuState,
-  setMenuState,
+  updateMenuState,
   togleMenu,
   menuIcon
 }: IToolbarEditor) {
@@ -67,13 +66,13 @@ export function ToolbarEditorHeader({
             className={tv.toolbarEditorHeaderSpacingsTV()}
             aria-label="Text spacings"
           >
-            <Spacings editor={editor} menuState={menuState} setMenuState={setMenuState} />
+            <Spacings editor={editor} menuState={menuState} updateMenuState={updateMenuState} />
           </Toolbar.ToggleGroup>
 
           <Toolbar.Separator className={tv.toolbarEditorHeaderSeparatorTV()} />
 
           <Toolbar.ToggleGroup type="single" aria-label="Font styles">
-            <FontStyles editor={editor} menuState={menuState} setMenuState={setMenuState} />
+            <FontStyles editor={editor} menuState={menuState} updateMenuState={updateMenuState} />
           </Toolbar.ToggleGroup>
 
           <Toolbar.Separator className={tv.toolbarEditorHeaderSeparatorTV()} />
@@ -102,3 +101,8 @@ export function ToolbarEditorHeader({
     </Toolbar.Root>
   )
 }
+
+const areEqual = (prevProps: Readonly<IToolbarEditor>, nextProps: Readonly<IToolbarEditor>) =>
+  prevProps.menuState === nextProps.menuState
+
+export default memo(ToolbarEditorHeader, areEqual)

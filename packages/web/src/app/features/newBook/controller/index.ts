@@ -74,7 +74,8 @@ export const useNewBookController = () => {
   const bookSchema = useForm<TCreateBookSchema>({
     resolver: zodResolver(createBookSchema),
     defaultValues: {
-      description: draft?.description
+      description: draft?.description,
+      publishedUrl: draft?.publishedUrl ?? ''
     }
   })
 
@@ -82,7 +83,7 @@ export const useNewBookController = () => {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitSuccessful }
+    formState: { errors, isSubmitSuccessful, isValid }
   } = bookSchema
 
   const onSubmit = async (data: TCreateBookSchema) => {
@@ -135,6 +136,7 @@ export const useNewBookController = () => {
     conclued,
     isActive,
     isSubmitSuccessful,
+    isValid,
     handleSubmit,
     onSubmit,
     setValue,

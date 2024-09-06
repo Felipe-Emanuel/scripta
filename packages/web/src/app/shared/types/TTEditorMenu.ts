@@ -4,4 +4,6 @@ export type TTEditorMenu = {
   fontSize: string
   fontWeight: string
   opened: boolean
+  content: string
+  wordsCounter: number
 }

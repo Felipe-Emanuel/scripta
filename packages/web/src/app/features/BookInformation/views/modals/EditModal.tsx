@@ -82,6 +82,7 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
                         alt="Imagem de capa do livro"
                         src={String(image) || book.heroPathUrl}
                         className={tv.copyAndPasteHeroTV()}
+                        fetchPriority="low"
                       />
                     )}
                   </div>

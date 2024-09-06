@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { act } from 'react-dom/test-utils'
+import { act } from 'react'
 import { TTab } from '@shared/types'
 import { IoIosCloudDone } from 'react-icons/io'
 import BooksPerformanceTabs from '../views/BooksPerformanceTabs'
@@ -13,12 +13,10 @@ describe('BooksPerformanceTabs', () => {
       icon: IoIosCloudDone,
       id: 0,
       label: 'FakeLabel',
-      value: 'hits',
-    },
+      value: 'hits'
+    }
   ]
-  const sut = (
-    <BooksPerformanceTabs handleTabFilter={handleFilter} tabs={tabs} />
-  )
+  const sut = <BooksPerformanceTabs handleTabFilter={handleFilter} tabs={tabs} />
   const { findByTestId } = render(sut)
 
   it('should render correctly', async () => {
@@ -31,7 +29,7 @@ describe('BooksPerformanceTabs', () => {
     render(sut)
 
     const tab = screen.getByRole('tab', {
-      name: /fakelabel 1/i,
+      name: /fakelabel 1/i
     })
 
     act(() => {

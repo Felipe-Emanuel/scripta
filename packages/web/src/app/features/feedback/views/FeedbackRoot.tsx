@@ -51,6 +51,7 @@ export function FeedbackRoot({ children }: TRootComponent) {
         alt="imagem de fundo do feedback"
         src={feedback}
         className={tv.feedbackBackgroundTV()}
+        fetchPriority="low"
       />
 
       <Modal

@@ -1,7 +1,7 @@
 import { Book } from '@prisma/client'
 import { TBookWithCharacters } from '@types'
 import { throwBookMessages } from './utils'
-import { isAllAttributeFilled, isLink } from '@utils'
+import { isLink } from '@utils'
 
 export const BookEntitie = (book: Book) => {
   const setBook = async () => {
@@ -21,9 +21,8 @@ export const BookEntitie = (book: Book) => {
   }
 
   const updatedBook = async (updatedBook: Book) => {
-    if (!isAllAttributeFilled(updatedBook)) throw new Error(throwBookMessages.areAllFieldsFilled)
-
-    if (!isLink(updatedBook.publishedUrl)) throw new Error(throwBookMessages.invalidPublishedUrl)
+    if (updatedBook.publishedUrl && !isLink(updatedBook.publishedUrl))
+      throw new Error(throwBookMessages.invalidPublishedUrl)
 
     return updatedBook
   }

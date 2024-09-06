@@ -14,16 +14,32 @@ import { MdFormatLineSpacing } from 'react-icons/md'
 import { IToolbarEditor } from './ToolbarEditorHeader'
 
 import { Icon } from '@shared/components'
+import { TTEditorMenu } from '@shared/types'
 import * as tv from './TextEditorComponentsTV'
+import { useCallback } from 'react'
 
-export function Spacings({ editor, menuState, setMenuState }: IToolbarEditor) {
-  const handleChange = (attribute: string, updateState: (value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9,.]/g, '')
-    updateState(value)
-    editor.commands.updateAttributes('paragraph', {
-      [attribute]: `${value ?? '0'}rem`
-    })
-  }
+type TSpacingsAttributes = 'firstLineIndent' | 'lineHeight'
+
+export function Spacings({ editor, menuState, updateMenuState }: IToolbarEditor) {
+  const handleChange = useCallback(
+    (attribute: TSpacingsAttributes, value: string) => {
+      const newConfig: TTEditorMenu = {
+        ...menuState!,
+        [attribute]: value
+      }
+
+      updateMenuState?.(newConfig)
+
+      console.log('newConfig ENVIADA: ', newConfig)
+
+      return editor.commands.updateAttributes('paragraph', {
+        [attribute]: `${value}rem`
+      })
+    },
+    [editor.commands, menuState, updateMenuState]
+  )
+
+  if (!menuState) return null
 
   return (
     <ButtonGroup variant="flat" color="secondary">
@@ -42,11 +58,7 @@ export function Spacings({ editor, menuState, setMenuState }: IToolbarEditor) {
         <DropdownMenu aria-label="Opções de espaçamentos" selectionMode="none">
           <DropdownItem textValue="espaços" isReadOnly key="espaços">
             <Input
-              onChange={handleChange('firstLineIndent', value => setMenuState?.({
-                ...menuState!,
-                firstLineIndent: value
-              }))}
-              value={menuState?.firstLineIndent}
+              onValueChange={(e) => handleChange('firstLineIndent', e)}
               type="number"
               label="À esquerda"
               placeholder="2"
@@ -65,11 +77,7 @@ export function Spacings({ editor, menuState, setMenuState }: IToolbarEditor) {
           </DropdownItem>
           <DropdownItem textValue="largura" isReadOnly key="largura">
             <Input
-              onChange={handleChange('lineHeight', value => setMenuState?.({
-                ...menuState!,
-                lineHeight: value
-              }))}
-              value={menuState?.lineHeight}
+              onValueChange={(e) => handleChange('lineHeight', e)}
               type="number"
               label="Entre linhas"
               placeholder="0"

@@ -35,8 +35,6 @@ describe('RenderInfo', () => {
 
     const { findByTestId } = sut
 
-    screen.logTestingPlaygroundURL()
-
     const link = await findByTestId('render-info-link')
 
     await userEvent.click(link)

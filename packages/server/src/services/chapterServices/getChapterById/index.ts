@@ -19,7 +19,5 @@ export const GetChapterByIdService = async ({
 
   const chapterById = await getChapterById(chapterId)
 
-  if (!chapterById) throw new Error(throwChapterMessages.notFount)
-
-  return chapterById
+  return chapterById || null
 }

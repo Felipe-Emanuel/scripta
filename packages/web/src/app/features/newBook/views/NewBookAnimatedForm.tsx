@@ -35,12 +35,13 @@ export function NewBookAnimatedForm({
             initial="enter"
             animate="center"
             className={tv.newBookAnimatedFormContentWrapperTV()}
-            children={content}
             exit="exit"
             transition={{
               x: { ease: direction > 0 ? 'circIn' : 'circInOut', stiffness: 3000, damping: 30 }
             }}
-          />
+          >
+            {content}
+          </motion.div>
         </AnimatePresence>
       </div>
     </ScrollShadow>

@@ -85,7 +85,7 @@ export function NewBookOverviewForm() {
             <Text text={`${formatNumber(draft?.totalWords) ?? 0} Palavras`} />
           </div>
           {draft?.publishedUrl && isUrl ? (
-            <a href={draft?.publishedUrl} target="_blank">
+            <a href={draft?.publishedUrl} target="_blank" rel="noreferrer">
               <Button color="primary" variant="solid" size="sm" fullWidth>
                 Acessar
               </Button>

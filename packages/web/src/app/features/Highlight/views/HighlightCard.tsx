@@ -55,6 +55,7 @@ export function HighlightCard() {
         alt="image do livro de destaque"
         className={tv.nextImageTV()}
         src={highestHitsBook.heroPathUrl}
+        fetchPriority="high"
       />
       <CardFooter className={tv.cardFooterTV()}>
         <div className={tv.cardFooterContentWrapperTV()}>

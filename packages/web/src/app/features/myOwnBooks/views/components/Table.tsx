@@ -17,7 +17,6 @@ import {
   Pagination,
   Selection,
   SortDescriptor,
-  DropdownSection,
   SlotsToClasses,
   TableSlots
 } from '@nextui-org/react'
@@ -28,14 +27,10 @@ import { formatNumber } from '@shared/utils/validation'
 import { capitalizeName } from '@shared/utils/transformers'
 import { Icon, Text } from '@shared/components'
 
-import { FaTrashCan } from 'react-icons/fa6'
-import { BsThreeDotsVertical, BsEyeFill } from 'react-icons/bs'
-// import { MdEditSquare } from 'react-icons/md'
+import { BsEyeFill } from 'react-icons/bs'
 import { FaSearch, FaChevronDown, FaPlus } from 'react-icons/fa'
 
 import { useBook } from '@shared/hooks/contexts/useBook'
-import { EditModal } from '@features/BookInformation/views/modals/EditModal'
-import { IconContent } from '@features/BookInformation/views/components/IconContent'
 import { useMyOwnBooks } from '@features/myOwnBooks/controller'
 
 const INITIAL_VISIBLE_COLUMNS = ['hits', 'book', 'gender', 'theme', 'isActive', 'actions']
@@ -75,7 +70,7 @@ const renderBasicContent = (content: React.ReactNode) => (
 )
 
 export default function BooksTable() {
-  const { action, books, choisedBook, toggleEditing, setChoisedBook } = useMyOwnBooks()
+  const { books } = useMyOwnBooks()
   const { handleToggleCreateBook, choiseBookToSeeInfo } = useBook()
 
   const [filterValue, setFilterValue] = React.useState('')
@@ -176,51 +171,16 @@ export default function BooksTable() {
         case 'actions':
           return (
             <div className="relative flex justify-end items-center gap-2 ">
-              <Dropdown
-                aria-label="Menu de ações do livro selecionado"
-                showArrow
-                className="bg-white/10 backdrop-blur-md ring-1 ring-white/50"
+              <Button
+                onClick={() => choiseBookToSeeInfo(book)}
+                color="secondary"
+                isIconOnly
+                radius="full"
+                size="sm"
+                variant="light"
               >
-                <DropdownTrigger aria-label="Ativação do menu de ação do livro selecionado">
-                  <Button color="secondary" isIconOnly radius="full" size="sm" variant="light">
-                    <Icon icon={BsThreeDotsVertical} color="gray" />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Menu de seleção de ações do livro selecionado">
-                  <DropdownItem
-                    data-testid="dorpdown-item-book-information-action-edit"
-                    onClick={() => choiseBookToSeeInfo(book)}
-                    textValue="Visualizar"
-                    key="view"
-                    startContent={<IconContent icon={BsEyeFill} />}
-                  >
-                    <Text weight="semi-bold" text="Visualizar" />
-                  </DropdownItem>
-                  {/* <DropdownItem
-                    data-testid="dorpdown-item-book-information-action-edit"
-                    onClick={() => {
-                      toggleEditing()
-                      console.log(book)
-                      setChoisedBook(book)
-                    }}
-                    textValue="Editar"
-                    key="edit"
-                    startContent={<IconContent icon={MdEditSquare} />}
-                  >
-                    <Text weight="semi-bold" text="Editar" />
-                  </DropdownItem> */}
-                  <DropdownSection title="Zona de perigo">
-                    <DropdownItem
-                      data-testid="dorpdown-item-book-information-action-delete"
-                      textValue="Excluir"
-                      key="trash"
-                      startContent={<IconContent icon={FaTrashCan} color="danger" />}
-                    >
-                      <Text weight="semi-bold" text="Excluir" color="error" />
-                    </DropdownItem>
-                  </DropdownSection>
-                </DropdownMenu>
-              </Dropdown>
+                <Icon icon={BsEyeFill} color="gray" />
+              </Button>
             </div>
           )
         default:
@@ -402,17 +362,6 @@ export default function BooksTable() {
 
   return (
     <>
-      {choisedBook && (
-        <EditModal
-          book={choisedBook}
-          isEditing={action.isEditing}
-          toggleEditing={() => {
-            toggleEditing()
-            setChoisedBook(null)
-          }}
-        />
-      )}
-
       <Table
         isCompact
         removeWrapper

@@ -3,17 +3,17 @@ import { FastifyInstance } from 'fastify'
 import {
   CreateChapterService,
   GetAllBooksService,
+  GetChapterByIdService,
   TCreateChapterServiceRequest,
-  TGetAllBooksServiceRequest
+  TGetAllBooksServiceRequest,
+  TGetChapterByIdServiceRequest,
+  TUpdateChapterServiceRequest,
+  UpdateChapterService
 } from '@services'
 import { databaseBookRepository, databaseChapterRepository } from '@repositories'
 import { throwChapterMessages } from '@entities/Chapter/utils'
 import { globalErrorMessage } from '@utils'
 import { authorization } from 'src/middlewares'
-import {
-  TUpdateChapterServiceRequest,
-  UpdateChapterService
-} from '../services/chapterServices/updateChapter'
 
 export async function chapterController(app: FastifyInstance): Promise<void> {
   const { createChapter, getChapterById, updateChapter } = databaseChapterRepository()
@@ -29,6 +29,10 @@ export async function chapterController(app: FastifyInstance): Promise<void> {
   const actionsUpdateChapter: TUpdateChapterServiceRequest['actions'] = {
     getAllBooks,
     updateChapter,
+    getChapterById
+  }
+
+  const getChapterAction: TGetChapterByIdServiceRequest['action'] = {
     getChapterById
   }
 
@@ -50,6 +54,21 @@ export async function chapterController(app: FastifyInstance): Promise<void> {
     })
 
     const email = paramSchema.parse({ userEmail })
+
+    const existentChapter = await GetChapterByIdService({
+      action: getChapterAction,
+      chapterId: chapter.id
+    })
+
+    if (existentChapter) {
+      const updatedBook = await UpdateChapterService({
+        actions: actionsUpdateChapter,
+        updatedChapter: chapter,
+        userEmail
+      })
+
+      apply.send(updatedBook)
+    }
 
     const booksByEmail = await GetAllBooksService({
       action: actionGetAllBooks,

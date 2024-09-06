@@ -1,4 +1,3 @@
-import { v4 as uuiv4 } from 'uuid'
 import { Chapter } from '@prisma/client'
 import { ChapterEntitie } from '@entities/Chapter'
 import { IChapterRepository } from '@repositories'
@@ -17,9 +16,9 @@ export const CreateChapterService = async ({
   const { createChapter } = action
 
   const { createChapter: create } = ChapterEntitie({
-    id: uuiv4(),
     createdAt: new Date(),
     updatedAt: new Date(),
+    chapterTitle: 'Novo capítulo',
     ...chapter
   })
 

@@ -22,8 +22,9 @@ import { useEditorController } from '../controller'
 import { IToolbarEditor } from './ToolbarEditorHeader'
 import * as tv from './TextEditorComponentsTV'
 
-export function FontStyles({ editor, menuState }: IToolbarEditor) {
-  const { textValue, value, setMenuState, setValue, selectWeight } = useEditorController()
+export function FontStyles({ editor }: IToolbarEditor) {
+  const { textValue, value, menuState, updateMenuState, setValue, selectWeight } =
+    useEditorController()
 
   return (
     <ButtonGroup variant="flat" color="secondary">
@@ -40,15 +41,14 @@ export function FontStyles({ editor, menuState }: IToolbarEditor) {
               aria-label="Tamanho da fonte"
               onChange={(e) => {
                 const value = e.target.value.replace(/[^0-9,.]/g, '')
-                setMenuState?.({
-                  ...menuState!,
+                updateMenuState({
+                  ...menuState,
                   fontSize: value
                 })
                 editor.commands.updateAttributes('paragraph', {
                   fontSize: `${value ?? '0'}px`
                 })
               }}
-              value={menuState?.fontSize}
               type="number"
               placeholder="16"
               size="sm"
@@ -97,9 +97,7 @@ export function FontStyles({ editor, menuState }: IToolbarEditor) {
                             textValue === font.key &&
                             menuState?.fontWeight === String(fontWeight.value)
                           }
-                          onMouseEnter={() =>
-                            selectWeight(font, fontWeight, menuState!, setMenuState)
-                          }
+                          onMouseEnter={() => selectWeight(font, fontWeight)}
                           key={`${fontWeight.name}-${i}`}
                           className={tv.fontStylesTooltipWeightButtonTV()}
                         >

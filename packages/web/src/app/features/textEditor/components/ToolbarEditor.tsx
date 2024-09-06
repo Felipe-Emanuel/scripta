@@ -13,17 +13,14 @@ import * as tv from './TextEditorComponentsTV'
 
 export function ToolbarEditor({ editor }: IToolbarEditor) {
   return (
-    <Toolbar.Root
-      className={tv.toolbarEditorTV()}
-      aria-label="Formatting options"
-    >
+    <Toolbar.Root className={tv.toolbarEditorTV()} aria-label="Formatting options">
       <span className={tv.toolbarEditorBasicsTV()}>
         <BasicIdentations editor={editor} />
         <Toolbar.Separator className={tv.toolbarEditorSeparatorTV()} />
       </span>
       <ToolbarTogleItem
-        onClick={() => editor?.chain().focus().toggleHighlight({ color: '#0075FF' }).run()}
-        data-active={editor.isActive('highlight', { color: '#0075FF' })}
+        onClick={() => editor?.chain()?.focus()?.toggleHighlight()?.run()}
+        data-active={editor.isActive('highlight')}
         icon={FaHighlighter}
         ariaLabel="Highlight"
         value="highlight"
@@ -38,23 +35,26 @@ export function ToolbarEditor({ editor }: IToolbarEditor) {
           </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Opções de títulos" selectionMode="none">
-          {toolbarEditorData(editor).map(({ key, ariaLabel, value, icon, text, action, isActive }) => (
-            <DropdownItem
-              key={key}
-              variant="solid"
-              color={isActive ? 'primary' : 'default'}
-              onClick={() => action(editor)}
-            >
-              <ToolbarDropdownItemContent
-                ariaLabel={ariaLabel}
-                value={value}
-                editor={editor}
-                icon={icon}
-                isActive={isActive}
-                text={text}
-              />
-            </DropdownItem>
-          ))}
+          {toolbarEditorData(editor).map(
+            ({ key, ariaLabel, value, icon, text, action, isActive }) => (
+              <DropdownItem
+                key={key}
+                textValue={key}
+                variant="solid"
+                color={isActive ? 'primary' : 'default'}
+                onClick={() => action(editor)}
+              >
+                <ToolbarDropdownItemContent
+                  ariaLabel={ariaLabel}
+                  value={value}
+                  editor={editor}
+                  icon={icon}
+                  isActive={isActive}
+                  text={text}
+                />
+              </DropdownItem>
+            )
+          )}
         </DropdownMenu>
       </Dropdown>
     </Toolbar.Root>

@@ -3,12 +3,12 @@ import { Button, Chip } from '@nextui-org/react'
 import { AiOutlineFullscreen } from 'react-icons/ai'
 import { FaBook } from 'react-icons/fa'
 
-import { TChapterContent } from '@shared/types'
 import { Icon, Text } from '@shared/components'
+import { TTEditorMenu } from '@shared/types'
 import * as tv from './TextEditorComponentsTV'
 
 export interface ITextEditorFooter {
-  chapterContent: TChapterContent
+  chapterContent: TTEditorMenu
   wordsCounterText: string
   toggleFullscreen: () => void
 }
