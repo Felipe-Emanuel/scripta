@@ -11,7 +11,8 @@
     "test:web": "yarn workspace @scripta/web jest",
     "prepare": "husky",
     "eslint:server": "yarn workspace @scripta/server eslint src --ext .ts --fix",
-    "eslint:web": "yarn workspace @scripta/web eslint src src/**/*.{ts,tsx} --fix"
+    "eslint:web": "yarn workspace @scripta/web eslint src src/**/*.{ts,tsx} --fix",
+    "buld:web": "yarn workspace @scripta/web next build"
   },
   "workspaces": {
     "packages": [
