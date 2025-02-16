@@ -73,6 +73,7 @@ model Comment {
 
 model Chapter {
   id              String      @id @default(uuid())
+  isConclued      Boolean     @default(false)
   chapterTitle    String
   chapterText     String
   createdAt       DateTime    @default(now())

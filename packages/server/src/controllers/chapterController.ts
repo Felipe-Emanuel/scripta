@@ -1,29 +1,39 @@
-import { z } from 'zod'
 import { FastifyInstance } from 'fastify'
+import { databaseBookRepository, databaseChapterRepository } from '@repositories'
+import { globalErrorMessage } from '@utils'
+import { authorization } from 'src/middlewares'
+import {
+  chapterByIdSchema,
+  chaptersSchema,
+  chapterTitleSchema
+} from '../entities/Chapter/chaptersSchema'
+
 import {
   CreateChapterService,
-  GetAllBooksService,
+  GetAllChaptersByBookIdService,
   GetChapterByIdService,
   TCreateChapterServiceRequest,
   TGetAllBooksServiceRequest,
+  TGetAllChaptersByBookIdServiceRequest,
   TGetChapterByIdServiceRequest,
   TUpdateChapterServiceRequest,
-  UpdateChapterService
+  UpdateChapterService,
+  PatchChapterTitleService,
+  TPatchChapterTitleServiceRequest,
+  PatchConcluedChapterService,
+  TPatchConcluedChapterServiceRequest,
+  TDeleteChapterServiceRequest,
+  DeleteChapterService
 } from '@services'
-import { databaseBookRepository, databaseChapterRepository } from '@repositories'
-import { throwChapterMessages } from '@entities/Chapter/utils'
-import { globalErrorMessage } from '@utils'
-import { authorization } from 'src/middlewares'
+import { deleteChapterSchema } from '../entities/Chapter/chapterSchema'
 
 export async function chapterController(app: FastifyInstance): Promise<void> {
-  const { createChapter, getChapterById, updateChapter } = databaseChapterRepository()
+  const { createChapter, getChapterById, updateChapter, getAllChapters, deleteChapter } =
+    databaseChapterRepository()
   const { getAllBooks } = databaseBookRepository()
 
   const actionCreateChapter: TCreateChapterServiceRequest['action'] = {
     createChapter
-  }
-  const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = {
-    getAllBooks
   }
 
   const actionsUpdateChapter: TUpdateChapterServiceRequest['actions'] = {
@@ -36,6 +46,25 @@ export async function chapterController(app: FastifyInstance): Promise<void> {
     getChapterById
   }
 
+  const getAllChaptersAction: TGetAllChaptersByBookIdServiceRequest['action'] = {
+    getAllChapters
+  }
+
+  const patchConcluedChapterAction: TPatchConcluedChapterServiceRequest['actions'] = {
+    getChapterById,
+    updateChapter
+  }
+
+  const patchTitleAction: TPatchChapterTitleServiceRequest['actions'] = {
+    getChapterById,
+    updateChapter
+  }
+
+  const deleteActions: TDeleteChapterServiceRequest['actions'] = {
+    deleteChapter,
+    getChapterById
+  }
+
   app.post('/chapter/:userEmail', async (req, apply) => {
     const { userEmail } = req.params as Partial<TGetAllBooksServiceRequest>
     const { chapter } = req.body as Partial<TCreateChapterServiceRequest>
@@ -44,16 +73,6 @@ export async function chapterController(app: FastifyInstance): Promise<void> {
     const accessToken = req.headers.authorization
 
     await authorization(provider, accessToken, apply)
-
-    const paramSchema = z.object({
-      userEmail: z
-        .string({
-          required_error: throwChapterMessages.requiredEmail
-        })
-        .email('e-mail inválido!')
-    })
-
-    const email = paramSchema.parse({ userEmail })
 
     const existentChapter = await GetChapterByIdService({
       action: getChapterAction,
@@ -70,14 +89,11 @@ export async function chapterController(app: FastifyInstance): Promise<void> {
       apply.send(updatedBook)
     }
 
-    const booksByEmail = await GetAllBooksService({
-      action: actionGetAllBooks,
-      userEmail: email.userEmail
-    })
+    const lastChapters = await getAllChapters(chapter.bookId)
+    const lastChapter = lastChapters?.[0]
 
-    const existentBook = booksByEmail.find((book) => book.id === chapter.bookId)
-
-    if (!existentBook.id) throw new Error(throwChapterMessages.wrongId)
+    if (lastChapters?.length > 0 && !lastChapter?.isConclued)
+      return apply.status(200).send({ message: 'O ultimo capítulo não está concluído' })
 
     const newChapter = await CreateChapterService({
       action: actionCreateChapter,
@@ -108,6 +124,98 @@ export async function chapterController(app: FastifyInstance): Promise<void> {
 
     try {
       apply.send(updatedBook)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  app.get('/chapters/:bookId', async (req, apply) => {
+    const { bookId } = chaptersSchema.parse(req.params)
+
+    const allChapters = await GetAllChaptersByBookIdService({
+      action: getAllChaptersAction,
+      bookId
+    })
+
+    try {
+      apply.send(allChapters)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  app.get('/chapter/:chapterId', async (req, apply) => {
+    const { chapterId } = chapterByIdSchema.parse(req.params)
+
+    const chapter = await GetChapterByIdService({
+      action: getChapterAction,
+      chapterId
+    })
+
+    try {
+      apply.send(chapter)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  app.patch('/chapterConlued/:chapterId', async (req, apply) => {
+    const { chapterId } = chapterByIdSchema.parse(req.params)
+
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    const patchedChapter = await PatchConcluedChapterService({
+      actions: patchConcluedChapterAction,
+      chapterIdToBeEdited: chapterId
+    })
+
+    try {
+      apply.send(patchedChapter)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  app.patch('/chapter/:chapterId', async (req, apply) => {
+    const { chapterId } = chapterByIdSchema.parse(req.params)
+    const { title } = chapterTitleSchema.parse(req.body)
+
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    const patchedChapter = await PatchChapterTitleService({
+      actions: patchTitleAction,
+      chapterId,
+      newTitle: title
+    })
+
+    try {
+      apply.send(patchedChapter)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  app.delete('/deleteChapter/:chapterId', async (req, apply) => {
+    const { chapterId } = deleteChapterSchema.parse(req.params)
+
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    const response = await DeleteChapterService({
+      actions: deleteActions,
+      paramChapterId: chapterId
+    })
+
+    try {
+      apply.send(response)
     } catch {
       apply.status(500).send({ message: globalErrorMessage.unexpected })
     }

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 export const useGraphicsController = (
-  getMonthExpenses: () => void,
-  getYearExpenses: () => void,
+  getMonthExpenses: VoidFunction,
+  getYearExpenses: VoidFunction
 ) => {
   const [activeId, setActiveId] = useState(0)
 
@@ -13,7 +13,7 @@ export const useGraphicsController = (
       action: (id: number) => {
         getMonthExpenses()
         setActiveId(id)
-      },
+      }
     },
     {
       id: 1,
@@ -21,21 +21,17 @@ export const useGraphicsController = (
       action: (id: number) => {
         getYearExpenses()
         setActiveId(id)
-      },
-    },
+      }
+    }
   ]
 
   const sortedActions =
     activeId !== null
-      ? [
-          actions[activeId],
-          ...actions.slice(0, activeId),
-          ...actions.slice(activeId + 1),
-        ]
+      ? [actions[activeId], ...actions.slice(0, activeId), ...actions.slice(activeId + 1)]
       : actions
 
   return {
     sortedActions,
-    activeId,
+    activeId
   }
 }

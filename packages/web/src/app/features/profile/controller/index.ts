@@ -1,7 +1,4 @@
-import {
-  TUpdateWordCountSchema,
-  updateWordCountSchema,
-} from '@features/profile/ProfileUtils'
+import { TUpdateWordCountSchema, updateWordCountSchema } from '@features/profile/ProfileUtils'
 import { updateCurrentGoal, getCurrentGoal } from '@features/profile/services'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryData, useQueryMutation } from '@shared/hooks/useReactQuery'
@@ -11,6 +8,8 @@ import { capitalizeName } from '@shared/utils/transformers'
 import { progressGoal } from '@shared/utils/validation'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { queryClient } from '~/src/app/shared/services/reactQuery'
+import { cacheName } from '~/src/app/shared/utils/constants/cacheName'
 
 export const useProfileController = () => {
   const { sessionCustomer } = useUser()
@@ -18,16 +17,23 @@ export const useProfileController = () => {
 
   const toggleFormVisible = () => setIsFormVisible((prev) => !prev)
 
-  const getGoal = useCallback(
-    async () => await getCurrentGoal(sessionCustomer?.email),
-    [sessionCustomer],
-  )
+  const getGoal = useCallback(async () => {
+    if (sessionCustomer) {
+      const current = await getCurrentGoal(sessionCustomer.email)
+
+      return current
+    }
+  }, [sessionCustomer])
 
   const {
     data: currentGoal,
     isLoading: currentGoalLoading,
-    refetch,
-  } = useQueryData(getGoal, 'currentGoal', '12-hours')
+    refetch
+  } = useQueryData({
+    getDataFn: getGoal,
+    cacheName: 'currentGoal',
+    cacheTime: '12-hours'
+  })
 
   useEffect(() => {
     if (sessionCustomer?.email && !currentGoal?.words) refetch()
@@ -45,16 +51,13 @@ export const useProfileController = () => {
   const wordCountSchema = useForm<TUpdateWordCountSchema>({
     resolver: zodResolver(updateWordCountSchema),
     defaultValues: {
-      wordCount: currentGoal?.words || 100,
-    },
+      wordCount: currentGoal?.words || 100
+    }
   })
 
-  const { handleSubmit, reset } = wordCountSchema
+  const { handleSubmit, setValue } = wordCountSchema
 
-  const { mutateAsync } = useQueryMutation<
-    TGoalResponse,
-    TUpdateCurrentGoalRequest
-  >({
+  const { mutateAsync } = useQueryMutation<TGoalResponse, TUpdateCurrentGoalRequest>({
     mutationFn: updateCurrentGoal,
     cacheName: 'currentGoal',
     variablePath: 'updatedGoal'
@@ -69,20 +72,21 @@ export const useProfileController = () => {
         updatedGoal: {
           ...currentGoal,
           words: data.wordCount,
-          goalComplete: goalComplete >= 100,
-        },
+          goalComplete: goalComplete >= 100
+        }
       }
 
       await mutateAsync(createWordCountRequest)
+      queryClient.invalidateQueries({
+        queryKey: [cacheName.goalsByFilter]
+      })
     }
 
-    reset()
+    setValue('wordCount', data?.wordCount)
     toggleFormVisible()
   }
 
-  const visibleState: 'visible' | 'hidden' | undefined = isFormVisible
-    ? 'visible'
-    : 'hidden'
+  const visibleState: 'visible' | 'hidden' | undefined = isFormVisible ? 'visible' : 'hidden'
 
   return {
     userName,
@@ -94,6 +98,6 @@ export const useProfileController = () => {
     visibleState,
     toggleFormVisible,
     handleSubmit,
-    onSubmit,
+    onSubmit
   }
 }

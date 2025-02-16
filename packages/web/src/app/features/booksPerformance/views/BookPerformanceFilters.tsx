@@ -1,9 +1,9 @@
 import { Text, Title } from '@shared/components'
-import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
+import { Autocomplete, AutocompleteItem } from "@heroui/react"
 import { TReaction, TCharacterResponse } from '@shared/types'
 import * as tv from '../BookPerformanceTV'
 
-type TUniquePerformance = {
+export type TUniquePerformance = {
   label: string | number | boolean | Date | TCharacterResponse[] | TReaction[]
   value: string
 }

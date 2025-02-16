@@ -1,5 +1,5 @@
 {
-  "name": "@memorize/eslint-config",
+  "name": "@scripta/eslint-config",
   "version": "1.0.0",
   "main": ".eslintrc.js",
   "license": "MIT",

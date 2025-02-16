@@ -1,4 +1,4 @@
-import { Button, Chip } from '@nextui-org/react'
+import { Button, Chip } from "@heroui/react"
 
 import { AiOutlineFullscreen } from 'react-icons/ai'
 import { FaBook } from 'react-icons/fa'
@@ -10,7 +10,7 @@ import * as tv from './TextEditorComponentsTV'
 export interface ITextEditorFooter {
   chapterContent: TTEditorMenu
   wordsCounterText: string
-  toggleFullscreen: () => void
+  toggleFullscreen: VoidFunction
 }
 
 export function TextEditorFooter({

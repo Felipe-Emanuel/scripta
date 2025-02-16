@@ -6,27 +6,18 @@ import { Template, Text } from '@shared/components'
 import { VariantProps } from 'tailwind-variants'
 
 type TGraphicsActions = {
-  getMonthExpenses: () => void
-  getYearExpenses: () => void
+  getMonthExpenses: VoidFunction
+  getYearExpenses: VoidFunction
 } & VariantProps<typeof actionWrapperTV>
 
-export function GraphicsActions({
-  state,
-  getMonthExpenses,
-  getYearExpenses,
-}: TGraphicsActions) {
-  const { sortedActions, activeId } = useGraphicsController(
-    getMonthExpenses,
-    getYearExpenses,
-  )
+export function GraphicsActions({ state, getMonthExpenses, getYearExpenses }: TGraphicsActions) {
+  const { sortedActions, activeId } = useGraphicsController(getMonthExpenses, getYearExpenses)
 
   return (
     <Template flex-wrap="no-wrap" className="gap-5">
       {sortedActions.map((action) => {
         const currentAction = activeId === action.id
-        const activeState: typeof state = currentAction
-          ? 'isActive'
-          : 'notActive'
+        const activeState: typeof state = currentAction ? 'isActive' : 'notActive'
 
         return (
           <button

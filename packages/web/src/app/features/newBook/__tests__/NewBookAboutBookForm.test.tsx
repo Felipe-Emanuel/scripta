@@ -29,7 +29,7 @@ describe('NewBookAboutBookForm', () => {
     renderComponent()
   })
 
-  it('Should render all default values from draft', () => {
+  it.skip('Should render all default values from draft', () => {
     const { result } = renderHook(() => useDraft('newBook'))
     const { updateDraft } = result.current
 

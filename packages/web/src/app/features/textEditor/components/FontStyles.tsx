@@ -8,7 +8,7 @@ import {
   Select,
   SelectItem,
   Tooltip
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { Separator } from '@radix-ui/react-toolbar'
 
 import { GoChevronDown } from 'react-icons/go'
@@ -18,16 +18,16 @@ import { BiChevronRight } from 'react-icons/bi'
 
 import { Icon } from '@shared/components'
 import { defaultFonts } from '../TextEditorUtils'
-import { useEditorController } from '../controller'
 import { IToolbarEditor } from './ToolbarEditorHeader'
 import * as tv from './TextEditorComponentsTV'
+import { useEditorController } from '../controller'
 
 export function FontStyles({ editor }: IToolbarEditor) {
   const { textValue, value, menuState, updateMenuState, setValue, selectWeight } =
-    useEditorController()
+    useEditorController({})
 
   return (
-    <ButtonGroup variant="flat" color="secondary">
+    (<ButtonGroup variant="flat" color="primary">
       <Button>Fonte</Button>
       <Popover placement="bottom-end" offset={20}>
         <PopoverTrigger>
@@ -147,6 +147,6 @@ export function FontStyles({ editor }: IToolbarEditor) {
           </div>
         </PopoverContent>
       </Popover>
-    </ButtonGroup>
+    </ButtonGroup>)
   )
 }

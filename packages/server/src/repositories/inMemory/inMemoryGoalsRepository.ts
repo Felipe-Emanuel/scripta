@@ -13,25 +13,26 @@ export const inMemoryGoalsRepository = (): IGoalRepository => {
   const getGoalsByFilter = async (
     email: string,
     startGoalFilter: Date,
-    endGoalFilter: Date,
+    endGoalFilter: Date
   ): Promise<Goal[]> => {
     const existentGoals = userGoals.filter(
       (goal) =>
         goal.email === email &&
         goal.createdAt === startGoalFilter &&
-        goal.createdAt === endGoalFilter,
+        goal.createdAt === endGoalFilter
     )
 
     return existentGoals || []
   }
 
-  const updateGoal = async (
-    goalId: string,
-    updatedGoal: Goal,
-  ): Promise<Goal> => {
-    const existingGoals = userGoals.find((goals) => goals.id === goalId)
+  const updateGoal = async (goalId: string, updatedGoal: Goal): Promise<Goal> => {
+    const existingGoal = userGoals.find((goal) => goal.id === goalId)
 
-    return { ...existingGoals, ...updatedGoal } || existingGoals
+    if (!existingGoal) {
+      throw new Error('Goal not found')
+    }
+
+    return { ...existingGoal, ...updatedGoal }
   }
 
   const getLastGoal = async (email: string): Promise<Goal | null> =>
@@ -41,6 +42,6 @@ export const inMemoryGoalsRepository = (): IGoalRepository => {
     createGoals,
     getGoalsByFilter,
     updateGoal,
-    getLastGoal,
+    getLastGoal
   }
 }

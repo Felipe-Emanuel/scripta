@@ -8,7 +8,7 @@ import { TCreateBookSchema, createBookSchema } from '../NewBookUtils'
 import { createBook } from '../services'
 import { useDebounce } from '@shared/hooks/useDebounce'
 import { useDraft } from '@shared/hooks/useDraft'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { cacheName } from '@shared/utils/constants/cacheName'
 import { getAllBooks } from '@features/Highlight/services'
 
@@ -59,7 +59,7 @@ export const useNewBookController = () => {
   const queryClient = useQueryClient()
 
   const { mutateAsync } = useMutation({
-    mutationKey: cacheName.allBooks,
+    mutationKey: [cacheName.allBooks],
     mutationFn: createNewBook,
     async onSuccess() {
       if (sessionCustomer) {

@@ -42,6 +42,8 @@ export * from './requests/TUpdateBookRequest'
 export * from './requests/TCreateBookRequest'
 export * from './requests/TCreateChapterRequest'
 export * from './requests/TUpdateChapterRequest'
+export * from './requests/TPatchChapterHTMLRequest'
+export * from './requests/TPatchChapterTitleRequest'
 
 export * from './responses/TUser'
 export * from './responses/TGoalResponse'

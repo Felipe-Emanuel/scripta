@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react'
 import { TCurrentTab } from '@shared/types'
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 import { FaChevronRight } from 'react-icons/fa'
 import { Icon, Input } from '@shared/components'
 import { ImBooks } from 'react-icons/im'
@@ -15,7 +15,7 @@ export interface IReaderBookDetailsProps extends IFilterTabsProps, IBooksProps {
   isShowingBookDetails: boolean
   currentTab: TCurrentTab
   searchBook: UseFormReturn<TSearchBookSchema>
-  toggleBookDetails: () => void
+  toggleBookDetails: VoidFunction
 }
 
 export function ReaderBookDetails({

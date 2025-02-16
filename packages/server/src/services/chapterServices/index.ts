@@ -1,3 +1,7 @@
 export * from './create'
 export * from './getChapterById'
 export * from './updateChapter'
+export * from './getAllChaptersByBookId'
+export * from './patchConcluedChapter'
+export * from './patchChapterTitle'
+export * from './delete'

@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react'
 import { TReader } from '@shared/types'
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 import { FaChevronLeft } from 'react-icons/fa'
 import { Icon } from '@shared/components'
 import Reader from './components/Reader'
@@ -9,7 +9,7 @@ import { readerDetailsButtonTV, readerDetailsTV } from '../ReaderTV'
 export interface IReaderDetailsProps {
   reader: TReader | undefined
   isShowingDetails: boolean
-  toggleDetails: () => void
+  toggleDetails: VoidFunction
 }
 
 export function ReaderDetails({ isShowingDetails, reader, toggleDetails }: IReaderDetailsProps) {

@@ -9,7 +9,7 @@ import { useCallback, useRef } from 'react'
 export const useDebounce = () => {
   const timeOutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const debounced = useCallback((fn: () => void, delay: number) => {
+  const debounced = useCallback((fn: VoidFunction, delay: number) => {
     if (timeOutRef.current) clearTimeout(timeOutRef.current)
 
     timeOutRef.current = setTimeout(() => {

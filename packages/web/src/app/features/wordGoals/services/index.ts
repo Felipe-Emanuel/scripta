@@ -7,7 +7,7 @@ export const createNewGoal = async ({ email, goals }: TCreateGoalRequest) => {
 
     const body: TCreateGoalRequest = {
       email,
-      goals,
+      goals
     }
 
     const { data } = await api.post<TGoalResponse[]>(endpoint, body)
@@ -16,7 +16,6 @@ export const createNewGoal = async ({ email, goals }: TCreateGoalRequest) => {
       return data[0]
     }
   } catch (err) {
-    if (err instanceof Error)
-      throw new Error('Falha ao registrar uma nova meta do dia', err)
+    if (err instanceof Error) throw new Error('Falha ao registrar uma nova meta do dia', err)
   }
 }

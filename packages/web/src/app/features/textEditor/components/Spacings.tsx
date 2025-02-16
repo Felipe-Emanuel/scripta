@@ -6,7 +6,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Input
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { GoChevronDown } from 'react-icons/go'
 import { BsTextParagraph } from 'react-icons/bs'
 import { MdFormatLineSpacing } from 'react-icons/md'
@@ -30,8 +30,6 @@ export function Spacings({ editor, menuState, updateMenuState }: IToolbarEditor)
 
       updateMenuState?.(newConfig)
 
-      console.log('newConfig ENVIADA: ', newConfig)
-
       return editor.commands.updateAttributes('paragraph', {
         [attribute]: `${value}rem`
       })
@@ -42,7 +40,7 @@ export function Spacings({ editor, menuState, updateMenuState }: IToolbarEditor)
   if (!menuState) return null
 
   return (
-    <ButtonGroup variant="flat" color="secondary">
+    <ButtonGroup variant="flat" color="primary">
       <Button>Espaçamentos</Button>
       <Dropdown
         placement="bottom-end"

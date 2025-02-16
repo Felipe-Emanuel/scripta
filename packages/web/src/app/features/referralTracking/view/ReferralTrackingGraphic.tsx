@@ -24,16 +24,16 @@ export function ReferralTrackingGraphic() {
               shade: 'dark',
               type: 'vertical',
               gradientToColors: ['#0075FF', '#7551FF'],
-              stops: [0, 100],
-            },
+              stops: [0, 100]
+            }
           }}
           RadialBarOptions={{
             dataLabels: {
               total: {
                 label: 'TOTAL',
-                show: true,
-              },
-            },
+                show: true
+              }
+            }
           }}
         />
       </Graphics.root>

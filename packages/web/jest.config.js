@@ -1,10 +1,10 @@
 const { name } = require('./package.json')
-const { pathsToModuleNameMapper } = require('ts-jest');
-const { compilerOptions } = require('./tsconfig.json');
+const { pathsToModuleNameMapper } = require('ts-jest')
+const { compilerOptions } = require('./tsconfig.json')
 const nextJest = require('next/jest')
 
 const createJestConfig = nextJest({
-  dir: './',
+  dir: './'
 })
 
 /** @type {import('jest').Config}*/
@@ -16,9 +16,13 @@ const config = {
   setupFilesAfterEnv: ['<rootDir>/.jest/setup.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/.next/'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: '<rootDir>/',
+    prefix: '<rootDir>/'
   }),
+  globals: {
+    'ts-jest': {
+      useESM: true
+    }
+  }
 }
-
 
 module.exports = createJestConfig(config)

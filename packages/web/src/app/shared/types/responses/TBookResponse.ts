@@ -1,4 +1,4 @@
-import { TReaction, TCharacterResponse } from '@shared/types'
+import { TReaction, TCharacterResponse, TChapterResponse } from '@shared/types'
 
 export type TBookResponse = {
   id: string
@@ -17,4 +17,5 @@ export type TBookResponse = {
   reaction: TReaction[]
   totalWords: number
   isActive: boolean
+  chapters?: TChapterResponse[]
 }

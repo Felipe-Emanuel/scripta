@@ -3,6 +3,7 @@ import { ChapterEntitie } from '.'
 import { chapterMock } from './mocks'
 import { constants, throwChapterMessages } from './utils'
 import { jestErrorHandler } from '__tests__/jestErrorHandler'
+import { bookEntitieMock } from '../Book/mocks'
 
 describe('createChapter', () => {
   it('should throw about wordsCounter', async () => {
@@ -103,5 +104,59 @@ describe('createChapter', () => {
     const sut = await createChapter()
 
     expect(sut).toStrictEqual(chapterMock)
+  })
+})
+
+describe('validBookdId', () => {
+  it('should throw about invalid bookId', async () => {
+    try {
+      const { validBookdId } = ChapterEntitie()
+
+      await validBookdId({
+        bookId: ''
+      })
+    } catch (e) {
+      jestErrorHandler({
+        error: e,
+        expected: throwChapterMessages.notFound
+      })
+    }
+  })
+
+  it('return a valid bookId', async () => {
+    const bookId = bookEntitieMock.id
+
+    const { validBookdId } = ChapterEntitie()
+
+    const sut = await validBookdId({
+      bookId
+    })
+
+    expect(sut.bookId).toBe(bookId)
+  })
+})
+
+describe('patchChapterTitle', () => {
+  it('should throw about invalid new title required', async () => {
+    try {
+      const { patchChapterTitle } = ChapterEntitie()
+
+      await patchChapterTitle('')
+    } catch (e) {
+      jestErrorHandler({
+        error: e,
+        expected: throwChapterMessages.titleRequired
+      })
+    }
+  })
+
+  it('return a valid book with new title', async () => {
+    const newTitle = 'new title'
+
+    const { patchChapterTitle } = ChapterEntitie()
+
+    const sut = await patchChapterTitle(newTitle)
+
+    expect(sut.chapterTitle).toBe(newTitle)
   })
 })

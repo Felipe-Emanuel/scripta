@@ -3,7 +3,7 @@
 import { useCallback } from 'react'
 
 export const useLocalStorage = () => {
-  const STORAGE_KEY = 'Memorize:'
+  const STORAGE_KEY = 'Scripta:'
 
   const getLocalStorage = useCallback((key: string) => {
     const data = window.localStorage.getItem(`${STORAGE_KEY}${key}`)

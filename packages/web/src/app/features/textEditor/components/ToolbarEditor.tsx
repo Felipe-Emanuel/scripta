@@ -1,4 +1,4 @@
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react"
 import * as Toolbar from '@radix-ui/react-toolbar'
 
 import { FaHighlighter } from 'react-icons/fa6'

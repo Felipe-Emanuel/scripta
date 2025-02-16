@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ElementType, SetStateAction, memo } from 'react'
 
-import { Tooltip } from '@nextui-org/react'
+import { Tooltip } from "@heroui/react"
 
 import { Icon, Template, Text } from '@shared/components'
 import { capitalizeName } from '@shared/utils/transformers'
@@ -15,7 +15,7 @@ type TRenderInfo = {
   path?: string
   animation?: string
   setIsCharactersCardHovered?: (value: SetStateAction<boolean>) => void
-  clearing?: () => void
+  clearing?: VoidFunction
 }
 
 const RenderInfo = ({

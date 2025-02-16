@@ -4,7 +4,7 @@ import { TCreateFeedbackRequest } from '@shared/types'
 export const useFeedbackController = () => {
   const sendFeedback = async (
     feedback: TCreateFeedbackRequest,
-    closeFeedbackFocused: () => void
+    closeFeedbackFocused: VoidFunction
   ) => {
     const newFeedback = await createFeedback(feedback)
 

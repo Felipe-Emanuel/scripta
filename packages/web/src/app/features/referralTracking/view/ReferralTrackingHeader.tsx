@@ -9,31 +9,6 @@ import * as tv from '@features/referralTracking/ReferralTrackingTV'
 export function ReferralTrackingHeader() {
   const { handleChangeGoalFilter, options, currentFilterMethod } = useReferralTrackingController()
 
-  const renderoptions = options.map((option) => {
-    const { id, slug, label, options, icon } = option
-
-    const disabled = currentFilterMethod === label
-
-    return (
-      <Button.root
-        className={tv.renderOptionsRootTV({ disabled })}
-        disabled={currentFilterMethod === label}
-        key={id}
-        as="div"
-        onClick={() => handleChangeGoalFilter(options)}
-      >
-        <div className={tv.renderOptionsContentTV()}>
-          <Text text={capitalizeName(label)} color="white" weight="bold" />
-          <Text text={slug} color="gray" weight="light" size="xs" className="w-36" />
-        </div>
-
-        <div className={tv.renderOptionsIconTV()}>
-          <Icon icon={icon} color="primary" size="lg" />
-        </div>
-      </Button.root>
-    )
-  })
-
   return (
     <div className={tv.referralTrackingHeaderRootTV()}>
       <div>
@@ -43,7 +18,30 @@ export function ReferralTrackingHeader() {
 
       <Popover>
         <Text text="Busque por..." color="white" weight="bold" />
-        {renderoptions}
+        {options.map((option) => {
+          const { id, slug, label, options, icon } = option
+
+          const disabled = currentFilterMethod === label
+
+          return (
+            <Button.root
+              className={tv.renderOptionsRootTV({ disabled })}
+              disabled={currentFilterMethod === label}
+              key={id}
+              as="div"
+              onPress={() => handleChangeGoalFilter(options)}
+            >
+              <div className={tv.renderOptionsContentTV()}>
+                <Text text={capitalizeName(label)} color="white" weight="bold" />
+                <Text text={slug} color="gray" weight="light" size="xs" className="w-36" />
+              </div>
+
+              <div className={tv.renderOptionsIconTV()}>
+                <Icon icon={icon} color="primary" size="lg" />
+              </div>
+            </Button.root>
+          )
+        })}
       </Popover>
     </div>
   )

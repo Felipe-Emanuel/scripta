@@ -1,3 +1,3 @@
-const config = require('@memorize/eslint-config')
+const config = require('@scripta/eslint-config')
 
 module.exports = config

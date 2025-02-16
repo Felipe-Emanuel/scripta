@@ -1,11 +1,10 @@
 import { getGoalByFilter } from '@features/referralTracking/services'
-import { useQueryData } from '@shared/hooks/useReactQuery'
 import { useUser } from '@shared/hooks/useUser'
 import {
   TGetGoalRequest,
   TGoalFiltersOptions,
   TGoalResponse,
-  TReferralTrackingHeaderOptions,
+  TReferralTrackingHeaderOptions
 } from '@shared/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { MdCalendarMonth } from 'react-icons/md'
@@ -16,35 +15,34 @@ import {
   getMonthDayRange,
   getSaturdayDate,
   getSundayDate,
-  getWeekNumber,
+  getWeekNumber
 } from '@shared/utils/dates'
 import { progressGoal } from '@shared/utils/validation'
-import { months } from '@shared/utils/constants/months'
-import { useQuery } from 'react-query'
 import { cacheName } from '@shared/utils/constants/cacheName'
+import { queryClient } from '~/src/app/shared/services/reactQuery'
+import { useMutation } from '@tanstack/react-query'
+import {
+  date,
+  DAY_IN_MILLIS,
+  defaultFilterOption,
+  INVALID_GOAL,
+  month,
+  monthIndex,
+  year
+} from '../referralTrackingUtils'
 
 let id = 0
-
-const DAY_IN_MILLIS = 24 * 60 * 60 * 1000
-const INVALID_GOAL = 0
-const date = new Date()
-const year = date.getFullYear()
-const monthIndex = date.getMonth() + 1
-const month = months[monthIndex]
 
 export const useReferralTrackingController = () => {
   const { sessionCustomer } = useUser()
 
-  const [filterOption, setFilterOption] = useState<TGoalFiltersOptions>({
-    filterMethod: 'semana',
-    startGoalFilter: getSundayDate(),
-    endGoalFilter: getSaturdayDate(),
-  })
+  const [formattedGoals, setFormattedGoals] = useState<TGoalResponse[]>([])
+  const [filterOption, setFilterOption] = useState<TGoalFiltersOptions>(defaultFilterOption)
 
   const weekSlug = () => {
     const lastDateOfMonth = getLastDayOfMonth(date)
     const differenceInDays = Math.floor(
-      (lastDateOfMonth.getTime() - date.getTime()) / DAY_IN_MILLIS,
+      (lastDateOfMonth.getTime() - date.getTime()) / DAY_IN_MILLIS
     )
 
     if (differenceInDays < 7) {
@@ -71,8 +69,8 @@ export const useReferralTrackingController = () => {
         options: {
           filterMethod: 'semana',
           startGoalFilter: getSundayDate(),
-          endGoalFilter: getSaturdayDate(),
-        },
+          endGoalFilter: getSaturdayDate()
+        }
       },
       {
         id: id++,
@@ -82,17 +80,15 @@ export const useReferralTrackingController = () => {
         options: {
           filterMethod: 'mês',
           startGoalFilter: getFirstDayOfMonth(new Date()).toISOString(),
-          endGoalFilter: getLastDayOfMonth(new Date()).toISOString(),
-        },
-      },
+          endGoalFilter: getLastDayOfMonth(new Date()).toISOString()
+        }
+      }
     ],
-    [],
+    []
   )
 
   const getGoals = useCallback(
-    async (
-      options: TGoalFiltersOptions,
-    ): Promise<TGoalResponse[] | undefined> => {
+    async (options: TGoalFiltersOptions): Promise<TGoalResponse[] | undefined> => {
       if (sessionCustomer) {
         const param = options.startGoalFilter ? options : filterOption
         const { endGoalFilter, startGoalFilter } = param
@@ -100,53 +96,48 @@ export const useReferralTrackingController = () => {
         const body: TGetGoalRequest = {
           email: sessionCustomer?.email,
           endGoalFilter,
-          startGoalFilter,
+          startGoalFilter
         }
 
         const goals = await getGoalByFilter(body)
 
+        if (goals) setFormattedGoals(goals)
+
         return goals
       }
     },
-    [sessionCustomer, filterOption],
+    [sessionCustomer, filterOption]
   )
 
-  const { data: goals } = useQueryData(
-    getGoals,
-    'goalsByFilter',
-    '12-hours',
-    !!sessionCustomer && !!filterOption.startGoalFilter,
-  )
+  const { mutate, data: goals } = useMutation({
+    mutationKey: [cacheName.goalsByFilter],
+    mutationFn: getGoals
+  })
+
+  useEffect(() => {
+    mutate(defaultFilterOption)
+  }, [mutate])
 
   const handleChangeGoalFilter = async (options: TGoalFiltersOptions) => {
     setFilterOption(options)
-    await getGoals(options)
+    mutate(options)
   }
 
-  const { data: currentGoal } = useQuery<TGoalResponse>(cacheName.currentGoal)
-
-  const [formattedGoals, setFormattedGoals] = useState<TGoalResponse[]>(
-    goals || [],
-  )
+  const currentGoal: TGoalResponse | undefined = queryClient.getQueryData([cacheName.currentGoal])
 
   useEffect(() => {
     if (currentGoal && goals?.[0]) {
-      const goalCompletePercent = progressGoal(
-        currentGoal?.words,
-        currentGoal?.goal,
-      )
+      const goalCompletePercent = progressGoal(currentGoal?.words, currentGoal?.goal)
 
       const updatedCurrentGoal: TGoalResponse = {
         ...goals[0],
         words: currentGoal.words,
         goal: currentGoal.goal,
         goalComplete: goalCompletePercent >= 100,
-        goalCompletePercent,
+        goalCompletePercent
       }
 
-      const newGoalsArray = goals.map((goal, i) =>
-        i === 0 ? updatedCurrentGoal : goal,
-      )
+      const newGoalsArray = goals?.map((goal, i) => (i === 0 ? updatedCurrentGoal : goal))
 
       setFormattedGoals(newGoalsArray)
     }
@@ -154,29 +145,25 @@ export const useReferralTrackingController = () => {
 
   const reducedGoalsComplete =
     (formattedGoals &&
-      formattedGoals?.filter(
-        (goal) => goal.goal !== INVALID_GOAL && goal.goalComplete === true,
-      )) ??
+      formattedGoals?.filter((goal) => goal.goal !== INVALID_GOAL && goal.goalComplete === true)) ??
     []
 
   const goalsComplete = reducedGoalsComplete.length
 
-  const reducedWordsWritten =
-    formattedGoals?.reduce((acc, goal) => acc + goal.words, 0) ?? 0
+  const reducedWordsWritten = formattedGoals?.reduce((acc, goal) => acc + goal.words, 0) ?? 0
 
   const wordsWritten = reducedWordsWritten
 
-  const goalsDeclared =
-    formattedGoals?.reduce((acc, goal) => acc + goal.goal, 0) ?? 0
+  const goalsDeclared = formattedGoals?.reduce((acc, goal) => acc + goal.goal, 0) ?? 0
 
-  const formattedWords =
-    progressGoal(wordsWritten, goalsDeclared).toFixed(1) || 0
+  const formattedWords = progressGoal(wordsWritten, goalsDeclared).toFixed(1) || 0
   const formattedGoalsComplete =
-    (formattedGoals &&
-      progressGoal(goalsComplete, formattedGoals?.length).toFixed(1)) ||
-    0
+    (formattedGoals && progressGoal(goalsComplete, formattedGoals?.length).toFixed(1)) || 0
 
-  const series = [+formattedGoalsComplete, +formattedWords]
+  const series = useMemo(
+    () => [+formattedGoalsComplete, +formattedWords],
+    [formattedGoalsComplete, formattedWords]
+  )
 
   const currentFilterMethod = filterOption.filterMethod
 
@@ -187,6 +174,6 @@ export const useReferralTrackingController = () => {
     goalsComplete,
     series,
     currentFilterMethod,
-    filterOption,
+    filterOption
   }
 }

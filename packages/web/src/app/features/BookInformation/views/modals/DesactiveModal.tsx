@@ -9,14 +9,14 @@ import {
   ModalFooter,
   Button,
   useDisclosure
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { Text, Title } from '@shared/components'
 import { TBookResponse, TPatchActiveBookRequest } from '@shared/types'
 
 interface IDesactiveModalProps {
   isDesactiving: boolean
   book: TBookResponse
-  toggleDesactiving: () => void
+  toggleDesactiving: VoidFunction
   handleDesactiveBook: (
     where: TPatchActiveBookRequest['where']
   ) => Promise<TBookResponse | undefined>

@@ -2,9 +2,9 @@ import { api } from '@shared/services/axios/api'
 import { TBookResponse } from '@shared/types'
 import { AxiosError } from 'axios'
 
-export const getAllBooks = async (userEmail: string) => {
+export const getAllBooks = async (userEmail: string, onlyFirstChapter = false) => {
   try {
-    const endpoint = `/books/${userEmail}`
+    const endpoint = `/allBooks/${userEmail}/${onlyFirstChapter}`
 
     const { data } = await api.get<TBookResponse[]>(endpoint)
 

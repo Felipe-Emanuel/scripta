@@ -19,19 +19,33 @@ export const inMemoryChapterRepository = (): IChapterRepository => {
     const existentChapter = chapters.find((oldChapter) => oldChapter.id === chapter.id)
 
     const updatedChapter = {
-      id: existentChapter.id,
-      bookId: existentChapter.bookId,
-      createdAt: existentChapter.createdAt,
-      updatedAt: new Date(),
-      ...existentChapter
+      ...existentChapter,
+      id: existentChapter?.id,
+      bookId: existentChapter?.bookId,
+      createdAt: existentChapter?.createdAt,
+      updatedAt: new Date()
     }
 
     return updatedChapter
   }
 
+  const getAllChapters = async (bookId: string): Promise<Chapter[]> => {
+    const allChapters = chapters.filter((chapter) => chapter.bookId === bookId)
+
+    return allChapters || []
+  }
+
+  const deleteChapter = async (chapterId: string): Promise<string> => {
+    chapters.filter((chapter) => chapter.bookId !== chapterId)
+
+    return 'Capítulo deletado com sucesso!'
+  }
+
   return {
     createChapter,
     getChapterById,
-    updateChapter
+    updateChapter,
+    getAllChapters,
+    deleteChapter
   }
 }

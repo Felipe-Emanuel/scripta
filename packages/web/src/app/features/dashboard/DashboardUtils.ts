@@ -22,7 +22,7 @@ export const menuSearchDefaultItem: TMenuSearchDefaultItem[] = [
   },
   {
     id: id++,
-    label: 'Taxa de Satisfação',
+    label: 'Taxa de satisfação diária',
     value: 'WordGoals',
     tip: 'Aqui você tem uma visão do seu progresso de escrita, onde pode definir uma meta que deseja alcançar diariamente.',
     ref: 'word-goals-root',

@@ -25,7 +25,7 @@ export const cardBodyTV = tv({
 })
 
 export const cardBodyImageTV = tv({
-  base: 'object-cover rounded-xl h-full max-h-44'
+  base: 'object-cover rounded-xl h-44 w-32'
 })
 
 export const cardFooterTV = tv({

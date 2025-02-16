@@ -1,6 +1,7 @@
 import { Book } from '@prisma/client'
 import { IBooksRepository } from '../BooksRepository'
 import { TUpdateBookService } from '@types'
+import { TGetAllBooksServiceResponse, BookWithChapters } from '~/src/services'
 
 let books: Book[] = []
 
@@ -10,8 +11,20 @@ export const inMemoryBooksRepository = (): IBooksRepository => {
     return updatedBooks
   }
 
-  const getAllBooks = async (userEmail: string): Promise<Book[]> => {
-    const allBooks = books.filter((book) => book.userEmail === userEmail)
+  const getAllBooks = async (
+    userEmail: string,
+    onlyFirstChapter = false
+  ): Promise<TGetAllBooksServiceResponse> => {
+    const allBooks = books.filter(
+      (book) => book.userEmail === userEmail
+    ) as unknown as BookWithChapters[]
+
+    if (onlyFirstChapter) {
+      return allBooks.map((book) => ({
+        ...book,
+        chapters: book.chapters ? [book.chapters[0]] : []
+      }))
+    }
 
     return allBooks
   }

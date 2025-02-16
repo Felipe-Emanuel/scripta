@@ -7,7 +7,7 @@ import {
   DropdownItem,
   Button,
   DropdownSection
-} from '@nextui-org/react'
+} from "@heroui/react"
 
 import { IoMdDoneAll } from 'react-icons/io'
 import { IoIosRemoveCircle } from 'react-icons/io'
@@ -27,6 +27,7 @@ import { IconContent } from './components/IconContent'
 import { useBookController } from '../controller'
 
 import * as tv from '../BookInformationTV'
+import { ConfirmModal } from './modals/ConfirmModal'
 
 export function BookInformationActions() {
   const {
@@ -34,6 +35,8 @@ export function BookInformationActions() {
     toggleDeleting,
     toggleDesactiving,
     toggleEditing,
+    ToggleConfirm,
+    markAsConclued,
     handlePatchActiveOrConcluedBook,
     handleDeleteBook,
     goToNewChapter,
@@ -51,6 +54,11 @@ export function BookInformationActions() {
   return (
     <div className={tv.infoActionsWrapperTV()}>
       <EditModal toggleEditing={toggleEditing} book={selectedBook} isEditing={action.isEditing} />
+      <ConfirmModal
+        markAsConclued={markAsConclued}
+        ToggleConfirm={ToggleConfirm}
+        isConfirm={action.isConfirm}
+      />
       <DeleteModal
         handleDeleteBook={handleDeleteBook}
         isDeleting={action.isDeleting}
@@ -73,7 +81,7 @@ export function BookInformationActions() {
           <DropdownSection title="Ações">
             <DropdownItem
               data-testid="dorpdown-item-book-information-action-conclud"
-              onClick={() => handlePatchActiveOrConcluedBook('conclued')}
+              onPress={() => handlePatchActiveOrConcluedBook('conclued')}
               textValue="Concluído"
               key="conclued"
               startContent={<IconContent icon={markAsConcluedIcon} />}
@@ -82,7 +90,7 @@ export function BookInformationActions() {
             </DropdownItem>
             <DropdownItem
               data-testid="dorpdown-item-book-information-action-edit"
-              onClick={toggleEditing}
+              onPress={toggleEditing}
               textValue="Editar"
               key="edit"
               startContent={<IconContent icon={MdEditSquare} />}
@@ -91,7 +99,7 @@ export function BookInformationActions() {
             </DropdownItem>
             <DropdownItem
               data-testid="dorpdown-item-book-information-action-new-chapter"
-              onClick={goToNewChapter}
+              onPress={goToNewChapter}
               textValue="Novo Capítulo"
               key="new-chapter"
               startContent={<IconContent icon={TfiWrite} />}
@@ -100,7 +108,7 @@ export function BookInformationActions() {
             </DropdownItem>
             <DropdownItem
               data-testid="dorpdown-item-book-information-action-view-chapters"
-              onClick={goToChapters}
+              onPress={goToChapters}
               textValue="Ver Capítulo"
               key="view-chapters"
               startContent={<IconContent icon={IoBookSharp} />}
@@ -113,7 +121,7 @@ export function BookInformationActions() {
             <DropdownItem
               data-testid="dorpdown-item-book-information-action-desactive"
               textValue="Desativar"
-              onClick={toggleDesactiving}
+              onPress={toggleDesactiving}
               key="desactiving"
               startContent={
                 <IconContent
@@ -132,7 +140,7 @@ export function BookInformationActions() {
             <DropdownItem
               data-testid="dorpdown-item-book-information-action-delete"
               textValue="Excluir"
-              onClick={toggleDeleting}
+              onPress={toggleDeleting}
               key="trash"
               startContent={<IconContent icon={FaTrashCan} color="danger" />}
             >

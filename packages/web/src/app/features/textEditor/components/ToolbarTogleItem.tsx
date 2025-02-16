@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons/lib'
-import { Button, ButtonProps } from '@nextui-org/react'
+import { Button, ButtonProps } from "@heroui/react"
 import { toolbarTogleItemTV } from './TextEditorComponentsTV'
 
 export interface IToolbarTogleItem extends ButtonProps {

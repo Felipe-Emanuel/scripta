@@ -8,20 +8,17 @@ import { IoMdNotifications } from 'react-icons/io'
 
 type TmenuActionsCreate = {
   isAuthenticated: boolean
-  handleUserClick: () => void
-  handleNotificationClick: () => void
-  handleSettingsClick: () => void
+  handleUserClick: VoidFunction
+  handleNotificationClick: VoidFunction
+  handleSettingsClick: VoidFunction
 }
 
 export const getCurrentRoute = (pathname: string): TCurrentLabel => {
   if (pathname === '/') {
-    return {
-      ...APP_ROUTES.public.news
-    }
+    return { ...APP_ROUTES.public.news }
   }
 
   const combinedArray = []
-
   for (const key in APP_ROUTES) {
     const routeValue = APP_ROUTES[key as 'private' | 'public']
     combinedArray.push(routeValue)
@@ -32,11 +29,17 @@ export const getCurrentRoute = (pathname: string): TCurrentLabel => {
     ...combinedArray[1]
   }
 
-  const index = pathname?.replace('/', '')
+  const pathSegments = pathname.split('/').filter(Boolean)
 
-  const currentRoute: TCurrentLabel = combinedObject[index as keyof typeof combinedObject]
+  let lastKnownRoute: TCurrentLabel | null = null
 
-  return currentRoute
+  for (const segment of pathSegments) {
+    if (combinedObject[segment as keyof typeof combinedObject]) {
+      lastKnownRoute = combinedObject[segment as keyof typeof combinedObject]
+    }
+  }
+
+  return lastKnownRoute || { name: pathname, label: 'Desconhecido', base: 'Navegador' }
 }
 
 let id = 0

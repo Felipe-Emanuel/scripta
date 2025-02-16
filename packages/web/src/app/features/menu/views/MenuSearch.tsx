@@ -1,6 +1,6 @@
 'use client'
 
-import { Autocomplete, AutocompleteItem, Button, Tooltip } from '@nextui-org/react'
+import { Autocomplete, AutocompleteItem, Button, Tooltip } from "@heroui/react"
 import { useEffect } from 'react'
 
 import { IoMdCloseCircle } from 'react-icons/io'
@@ -34,9 +34,14 @@ export function MenuSearch({ defaultItems }: IMenuSearchProps) {
         className={tv.autocompleteTV()}
         startContent={<Icon icon={IoSearch} color="gray" size="lg" />}
         radius="full"
+        listboxProps={{
+          emptyContent:
+            currentHelper?.label ||
+            'Nenhuma opção encontrada. Talvez possa sugeri-la na aba de feedback'
+        }}
         variant="underlined"
+        inputValue={currentHelper?.label ?? ''}
         defaultItems={defaultItems}
-        selectedKey={currentHelper?.ref}
         onSelectionChange={(key) => updateRef(key?.toString() ?? '')}
         onClear={clearing}
       >

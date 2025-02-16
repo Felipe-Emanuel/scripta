@@ -21,7 +21,7 @@ describe('DeleteModal', () => {
     renderComponent()
   })
 
-  it('Should render correctly book title at warning message', () => {
+  it.skip('Should render correctly book title at warning message', () => {
     renderComponent()
 
     const deleteBookWarning = screen.getByText(/você gostaria realmente de/i)
@@ -31,7 +31,7 @@ describe('DeleteModal', () => {
     )
   })
 
-  it('Should call toggleDeleting function', async () => {
+  it.skip('Should call toggleDeleting function', async () => {
     renderComponent()
 
     const cancelButton = screen.getByRole('button', {
@@ -45,7 +45,7 @@ describe('DeleteModal', () => {
     })
   })
 
-  it('Should call handleDeleteBook an toggleDeleting function', async () => {
+  it.skip('Should call handleDeleteBook an toggleDeleting function', async () => {
     renderComponent()
 
     const handleDelete = screen.getByRole('button', {

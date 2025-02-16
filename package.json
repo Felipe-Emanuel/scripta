@@ -1,5 +1,5 @@
 {
-  "name": "memorize",
+  "name": "scripta",
   "version": "1.0.0",
   "description": "a full stack project with monorepo",
   "main": "index.js",
@@ -7,11 +7,11 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:server": "yarn workspace @memorize/server jest",
-    "test:web": "yarn workspace @memorize/web jest",
+    "test:server": "yarn workspace @scripta/server jest",
+    "test:web": "yarn workspace @scripta/web jest",
     "prepare": "husky",
-    "eslint:server": "yarn workspace @memorize/server eslint src --ext .ts --fix",
-    "eslint:web": "yarn workspace @memorize/web eslint src src/**/*.{ts,tsx} --fix"
+    "eslint:server": "yarn workspace @scripta/server eslint src --ext .ts --fix",
+    "eslint:web": "yarn workspace @scripta/web eslint src src/**/*.{ts,tsx} --fix"
   },
   "workspaces": {
     "packages": [
@@ -21,7 +21,7 @@
   "author": "Felipe Emanuel",
   "license": "MIT",
   "devDependencies": {
-    "@memorize/eslint-config": "*",
+    "@scripta/eslint-config": "*",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",

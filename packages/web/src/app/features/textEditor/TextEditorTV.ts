@@ -9,7 +9,7 @@ export const textEditorTV = tv({
 })
 
 export const textEditorScrollShadowTV = tv({
-  base: 'flex flex-col items-center justify-center size-full p-4 pt-10 rounded-sm'
+  base: 'flex flex-col items-center justify-center size-full p-4 pt-10 rounded-sm scrollbar-thin'
 })
 
 export const textEditorEditorContentV = tv({

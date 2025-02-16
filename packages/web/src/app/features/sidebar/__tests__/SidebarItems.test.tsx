@@ -36,7 +36,7 @@ describe('SidebarItems', () => {
   it('Should pass correctly href param', async () => {
     renderComponent()
 
-    const dashboardLink = document.querySelector('div > section:nth-child(1) > a:nth-child(2)')
+    const dashboardLink = document.querySelector('div > section:nth-child(1) > button:nth-child(2)')
 
     const href = dashboardLink?.getAttribute('href')
     expect(href).toBe('/dashboard')

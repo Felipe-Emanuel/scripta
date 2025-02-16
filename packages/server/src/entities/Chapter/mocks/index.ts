@@ -4,6 +4,7 @@ import { randomUUID } from 'crypto'
 
 export const chapterMock: Chapter = {
   id: randomUUID(),
+  isConclued: false,
   createdAt: new Date(),
   updatedAt: new Date(),
   bookId: bookEntitieMock.id,

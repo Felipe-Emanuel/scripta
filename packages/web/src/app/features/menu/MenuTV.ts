@@ -13,7 +13,7 @@ export const menuActionContentTV = tv({
 })
 
 export const autocompleteTV = tv({
-  base: 'text-gray-400'
+  base: 'text-gray-400 w-[20rem]'
 })
 
 export const autocompleteItemWrapperTV = tv({
@@ -21,7 +21,7 @@ export const autocompleteItemWrapperTV = tv({
 })
 
 export const autocompleteItemIconTV = tv({
-  base: 'cursor-pointer border-0 rounded-lg size-6 flex items-center justify-center duration-500 bg-primary'
+  base: 'cursor-pointer border-0 rounded-lg size-6 p-1 flex items-center justify-center duration-500 bg-primary'
 })
 
 export const helperWrapperTV = tv({

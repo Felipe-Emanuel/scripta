@@ -5,7 +5,7 @@ export const feedbackAboutTV = tv({
 })
 
 export const feedbackAboutIconContentTV = tv({
-  base: 'z-10 bg-white p-2 rounded-xl'
+  base: 'z-10 bg-white p-2 rounded-xl w-fit'
 })
 
 export const feedbackActionTV = tv({

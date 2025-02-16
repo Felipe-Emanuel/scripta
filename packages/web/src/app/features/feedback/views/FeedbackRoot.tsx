@@ -12,7 +12,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { motionProps } from '../FeedbackUtils'
 import { Text, Title } from '@shared/components'
 import { useEffect } from 'react'

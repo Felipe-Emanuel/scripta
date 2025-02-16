@@ -7,7 +7,7 @@ import {
   Image,
   CardFooter,
   Button,
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { Text, Title } from '@shared/components'
 import { memo } from 'react'
 import * as tv from './ReaderComponentsTV'

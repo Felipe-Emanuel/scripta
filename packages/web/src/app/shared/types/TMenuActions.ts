@@ -3,7 +3,7 @@ import { ElementType } from 'react'
 export type TMenuActions = {
   id: number
   icon: ElementType
-  handleClick: () => void
+  handleClick: VoidFunction
   isIconOnly: boolean
   label?: string
   tooltipLabel?: string

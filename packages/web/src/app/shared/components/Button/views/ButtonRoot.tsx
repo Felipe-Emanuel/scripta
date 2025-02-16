@@ -1,4 +1,4 @@
-import { Button, ButtonProps, VariantProps } from '@nextui-org/react'
+import { Button, ButtonProps, VariantProps } from "@heroui/react"
 import { buttonRootTv } from '@shared/components/Button/ButtonTV'
 import { TRootComponent } from '@shared/types'
 

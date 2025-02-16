@@ -4,7 +4,6 @@ export type TUpdateChapterRequest = {
     id: string
     chapterText: string
     wordsCounter: number
-    chapterTitle: string
     firstLineIndent: string
     fontSize: string
     fontWeight: string

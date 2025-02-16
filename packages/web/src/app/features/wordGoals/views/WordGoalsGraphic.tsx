@@ -6,17 +6,15 @@ import { useWordGoalsController } from '@features/wordGoals/controller'
 export function WordGoalsGraphic() {
   const { series, isLoading } = useWordGoalsController()
 
-  if (isLoading) return null
-
   return (
     <Graphics.root>
-      <Graphics.header text="Taxa de satisfação" />
+      <Graphics.header text="Taxa de satisfação diária" />
       <Graphics.content
         type="radialBar"
-        series={[+series]}
+        series={[+series || 0]}
         categories={['Meta']}
         theme="dark"
-        labels={['Progresso']}
+        labels={isLoading ? ['Buscando...'] : ['Progresso']}
         fill={{
           opacity: 1,
           type: 'gradient',

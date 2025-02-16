@@ -14,7 +14,7 @@ export function DashboardBooksPerformance() {
     tabs,
     handleTabFilter,
     handleGenre,
-    handleTheme,
+    handleTheme
   } = useBooksPerformanceController()
 
   return (
@@ -27,7 +27,7 @@ export function DashboardBooksPerformance() {
         uniqueGenres={uniqueGenres}
         uniqueThemes={uniqueThemes}
       />
-      <BooksPerformance.graphic catgories={catgories} series={series} />
+      <BooksPerformance.graphic catgories={catgories} series={series || []} />
       <BooksPerformance.tabs handleTabFilter={handleTabFilter} tabs={tabs} />
     </BooksPerformance.root>
   )

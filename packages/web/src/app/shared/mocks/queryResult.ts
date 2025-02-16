@@ -1,30 +1,31 @@
-import { UseQueryResult } from 'react-query'
+import { QueryObserverResult, UseQueryResult } from '@tanstack/react-query'
 
 export function queryResult<T>(data: T): UseQueryResult<T> {
   return {
     data,
     error: null,
     isError: false,
-    isIdle: false,
     isLoading: false,
     isLoadingError: false,
     isRefetchError: false,
     isSuccess: true,
     status: 'success',
-    dataUpdatedAt: new Date().getTime(),
-    errorUpdateCount: new Date().getTime(),
-    errorUpdatedAt: new Date().getTime(),
-    failureCount: 10,
-    isFetched: false,
+    dataUpdatedAt: Date.now(),
+    errorUpdateCount: 0,
+    errorUpdatedAt: 0,
+    failureCount: 0,
+    isFetched: true,
     isFetching: false,
     isStale: true,
-    isFetchedAfterMount: false,
+    isFetchedAfterMount: true,
     isPlaceholderData: false,
-    isPreviousData: false,
     isRefetching: false,
-    refetch: jest.fn(),
-    remove() {
-      jest.fn()
-    },
+    isPending: false,
+    failureReason: null,
+    isInitialLoading: false,
+    isPaused: false,
+    fetchStatus: 'idle',
+    refetch: async () => ({}) as Promise<QueryObserverResult<T, Error>>,
+    promise: Promise.resolve(data)
   }
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Tooltip } from '@nextui-org/react'
+import { Button, Tooltip } from "@heroui/react"
 
 import { Icon, Text } from '@shared/components'
 import { TRootComponent } from '@shared/types'

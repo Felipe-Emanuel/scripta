@@ -5,4 +5,7 @@ export const cacheName = {
   allBooks: 'allBooks',
   allReaders: 'allReaders',
   reader: 'reader',
+  chapters: 'chapters',
+  bookById: 'bookById',
+  currentBook: 'currentBook'
 }

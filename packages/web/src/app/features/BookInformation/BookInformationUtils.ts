@@ -1,4 +1,4 @@
-import { isBase64 } from '@memorize/server/src/shared/utils/stringValidations'
+import { isBase64 } from '@scripta/server/src/shared/utils/stringValidations'
 import { z } from 'zod'
 
 export const editBookSchema = z.object({
@@ -17,3 +17,18 @@ export const editBookSchema = z.object({
 })
 
 export type TEditBookSchema = z.infer<typeof editBookSchema>
+
+export const animationVariants = {
+  initial: (isRight: boolean) => ({
+    opacity: 0,
+    x: isRight ? '50vw' : '-50vw'
+  }),
+  animate: {
+    opacity: 1,
+    x: 0
+  },
+  exit: (isRight: boolean) => ({
+    opacity: 0,
+    x: isRight ? '-50vw' : '50vw'
+  })
+}

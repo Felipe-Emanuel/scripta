@@ -12,7 +12,7 @@ export const databaseChapterRepository = (): IChapterRepository => {
   }
 
   const getChapterById = async (chapterId: string): Promise<Chapter> => {
-    const existentChapter = await prisma.chapter.findFirst({
+    const existentChapter = await prisma.chapter.findUnique({
       where: {
         id: chapterId
       }
@@ -32,9 +32,34 @@ export const databaseChapterRepository = (): IChapterRepository => {
     return updatedChapter || null
   }
 
+  const getAllChapters = async (bookId: string): Promise<Chapter[]> => {
+    const allChapters = await prisma.chapter.findMany({
+      where: {
+        bookId
+      },
+      orderBy: {
+        createdAt: 'asc'
+      }
+    })
+
+    return allChapters || []
+  }
+
+  const deleteChapter = async (chapterId: string): Promise<string> => {
+    await prisma.chapter.delete({
+      where: {
+        id: chapterId
+      }
+    })
+
+    return 'Capítulo deletado com sucesso!'
+  }
+
   return {
     createChapter,
     getChapterById,
-    updateChapter
+    updateChapter,
+    getAllChapters,
+    deleteChapter
   }
 }

@@ -12,8 +12,8 @@ import { useEffect } from 'react'
 import { useBook } from '@shared/hooks/contexts/useBook'
 
 interface INewBookFormWrapperProps extends TRootComponent {
-  handleBackFormState: () => void
-  handleNextFormState: () => void
+  handleBackFormState: VoidFunction
+  handleNextFormState: VoidFunction
   state: State
 }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardHeader, CardFooter, Button } from '@nextui-org/react'
+import { Card, CardHeader, CardFooter, Button } from "@heroui/react"
 import NextImage from 'next/image'
 
 import { FaUserSecret } from 'react-icons/fa'

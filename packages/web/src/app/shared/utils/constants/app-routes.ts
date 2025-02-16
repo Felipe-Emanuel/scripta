@@ -19,6 +19,11 @@ export const APP_ROUTES = {
       name: '/profile',
       label: 'Seu Perfil',
       base: 'Você'
+    },
+    chapters: {
+      name: '/chapters',
+      label: 'Capítulos',
+      base: 'Você'
     }
   },
   public: {

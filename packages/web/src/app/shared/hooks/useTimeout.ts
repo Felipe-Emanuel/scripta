@@ -8,11 +8,7 @@ import { useCallback, useEffect } from 'react'
  * @param time number
  */
 
-export const useTimeout = (
-  situation: boolean,
-  updateSituation: () => void,
-  time: number,
-) => {
+export const useTimeout = (situation: boolean, updateSituation: VoidFunction, time: number) => {
   const resetSituation = useCallback(() => {
     if (situation) {
       const timeRef = () =>

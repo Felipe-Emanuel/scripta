@@ -15,11 +15,11 @@ export const useProvidersSession = () => {
     return session
   }, [])
 
-  const { data: session, isLoading: sessionLoading } = useQueryData(
-    getNextAuthSession,
-    'session',
-    '12-hours'
-  )
+  const { data: session, isLoading: sessionLoading } = useQueryData({
+    getDataFn: getNextAuthSession,
+    cacheName: 'session',
+    cacheTime: '12-hours'
+  })
 
   const cookieValue = {
     email: session?.user?.email,

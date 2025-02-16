@@ -1,83 +1,72 @@
 'use client'
 
-import { Image } from '@nextui-org/react'
-
 import { FaUserSecret } from 'react-icons/fa'
-import { BsEmojiHeartEyes } from 'react-icons/bs'
-import { HiTrophy } from 'react-icons/hi2'
-import { FaBook } from 'react-icons/fa'
 import { FaExternalLinkSquareAlt } from 'react-icons/fa'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import { useBook } from '@shared/hooks/contexts/useBook'
-import { APP_ROUTES } from '@shared/utils/constants/app-routes'
-import { useMenuController } from '@features/menu/controller'
-import { useBookController } from '../controller'
-import RenderInfo from './components/RenderInfo'
-import * as tv from '../BookInformationTV'
 import { Text } from '@shared/components'
+import { useBookController } from '../controller'
+import { CurrentChapter } from './components/CurrentChapter'
+import { animationVariants } from '../BookInformationUtils'
+import { Details } from './components/Details'
+import { Tab, Tabs } from "@heroui/react"
 
 export function BookInformationCardInfo() {
-  const { clearing } = useMenuController()
   const { selectedBook } = useBook()
-  const { isCharactersCardHovered, setIsCharactersCardHovered } = useBookController()
+  const {
+    isCharactersCardHovered,
+    activeTab,
+    isMovingRight,
+    setIsCharactersCardHovered,
+    changeTab
+  } = useBookController()
 
   const characterIcon = isCharactersCardHovered ? FaExternalLinkSquareAlt : FaUserSecret
 
   if (!selectedBook)
     return <Text text="Selecione algum livro para visualizar" align="center" className="w-full" />
 
-  const hero = (
-    <Image
-      alt="imagem do livro"
-      className={tv.heroTV()}
-      shadow="md"
-      src={selectedBook?.heroPathUrl}
-      width={130}
-    />
-  )
+  const tableToBeRendered = {
+    0: (
+      <Details
+        characterIcon={characterIcon}
+        isCharactersCardHovered={isCharactersCardHovered}
+        selectedBook={selectedBook}
+        setIsCharactersCardHovered={setIsCharactersCardHovered}
+      />
+    ),
+    1: <CurrentChapter minuature selectedBook={selectedBook} />
+  }
+
+  const tableIndex = activeTab as keyof typeof tableToBeRendered
 
   return (
-    <div className={tv.cardInfoWrapperTV()}>
-      <div className={tv.publishedHeroWrapperTV()}>
-        {selectedBook?.publishedUrl ? (
-          <a
-            data-testid="book-information-card-info-published-link"
-            target="_blank"
-            href={selectedBook?.publishedUrl} rel="noreferrer"
-          >
-            {hero}
-          </a>
-        ) : (
-          hero
-        )}
-      </div>
-
-      <div className={tv.renderInfoWrapperTV()}>
-        <div className={tv.characterSideWrapperTV()}>
-          <div className={tv.characterSideContentTV()}>
-            <RenderInfo
-              clearing={clearing}
-              setIsCharactersCardHovered={setIsCharactersCardHovered}
-              path={`${APP_ROUTES.private.characters.name}/${selectedBook?.id}`}
-              animation={
-                isCharactersCardHovered ? 'animate-appearance-in' : 'animate-appearance-in'
-              }
-              icon={characterIcon}
-              label="Personagens"
-              qtd={selectedBook?.characters?.length}
-            />
-          </div>
-          <RenderInfo
-            icon={BsEmojiHeartEyes}
-            label="Reações"
-            qtd={selectedBook?.reaction?.length}
-          />
-        </div>
-        <div className={tv.hitsSideWrapperTV()}>
-          <RenderInfo icon={HiTrophy} label="Acessos" qtd={selectedBook?.hits} />
-          <RenderInfo icon={FaBook} label="Palavras" qtd={selectedBook?.totalWords} />
-        </div>
-      </div>
+    <div className="flex flex-col gap-2">
+      <Tabs
+        data-testid="book-information-tablist"
+        variant="light"
+        color="primary"
+        aria-label="book-information-filters-tabs"
+        className="scrollbar-thin"
+        onSelectionChange={(key) => changeTab(+key)}
+      >
+        <Tab key="0" title={<Text text="Detalhes" color="white" weight="light" size="md" />} />
+        <Tab key="1" title={<Text text="Capítulo" color="white" weight="light" size="md" />} />
+      </Tabs>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={tableIndex}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          custom={isMovingRight}
+          variants={animationVariants}
+          transition={{ duration: 0.3, ease: 'anticipate' }}
+        >
+          {tableToBeRendered[tableIndex]}
+        </motion.div>
+      </AnimatePresence>
     </div>
   )
 }

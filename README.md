@@ -1,25 +1,25 @@
 ## Roadmap
 - [Roadmap](roadmap.md)
 
-## Memorize: Desbloqueie seu potencial criativo
+## Scripta: Desbloqueie seu potencial criativo
 
-**Memorize** é um projeto que oferece aos escritores um conjunto de ferramentas visuais e informações valiosas para otimizar sua produtividade e aprimorar suas histórias.
+**Scripta** é um projeto que oferece aos escritores um conjunto de ferramentas visuais e informações valiosas para otimizar sua produtividade e aprimorar suas histórias.
 
 **Funcionalidades:**
 
 * **Dashboard intuitivo:** Visualize seus projetos de escrita em um só lugar, acompanhe o progresso e explore estatísticas para tomar decisões mais inteligentes.
 * **Análise gráfica de produtividade:** Descubra seus padrões de escrita, identifique gargalos e maximize seu tempo criativo, desconbrindo seu melhor horário.
-* **Memorize personagens:** Crie perfis completos para seus livros e personagens, incluindo descrições, relacionamentos, arcos de história e muito mais.
+* **Scripta personagens:** Crie perfis completos para seus livros e personagens, incluindo descrições, relacionamentos, arcos de história e muito mais.
 * **Compartilhamento e colaboração:** Conecte-se com outros autores, compartilhe seus projetos e receba feedback valioso.
 
 **MVP:**
 
-A versão mínima viável (MVP) do Memorize se concentrará em funcionalidades básicas para garantir uma experiência de usuário sólida e iniciar a coleta de feedback crucial.
+A versão mínima viável (MVP) do Scripta se concentrará em funcionalidades básicas para garantir uma experiência de usuário sólida e iniciar a coleta de feedback crucial.
 
 * **Autenticação segura:** Proteja seus dados com autenticação via JWT ou Google.
-* **Feed de atividades:** Mantenha-se atualizado sobre os novos livros e personagens da comunidade Memorize.
+* **Feed de atividades:** Mantenha-se atualizado sobre os novos livros e personagens da comunidade Scripta.
 * **Dashboard pessoal:** Acesse seu painel individual para visualizar seus projetos, estatísticas e ferramentas.
-* **Envio de feedback:** Ajude a moldar o futuro do Memorize, compartilhando suas ideias e sugestões.
+* **Envio de feedback:** Ajude a moldar o futuro do Scripta, compartilhando suas ideias e sugestões.
 
 **Benefícios:**
 
@@ -27,7 +27,7 @@ A versão mínima viável (MVP) do Memorize se concentrará em funcionalidades b
 * **Aprimore suas histórias:** Explore insights valiosos sobre seus personagens e enredos para criar narrativas mais envolventes.
 * **Conecte-se com a comunidade:** Encontre inspiração, colabore com outros autores e aprenda com experiências compartilhadas.
 
-**Memorize** é a ferramenta ideal para escritores que buscam elevar seu nível de criatividade e alcançar seus objetivos literários.
+**Scripta** é a ferramenta ideal para escritores que buscam elevar seu nível de criatividade e alcançar seus objetivos literários.
 
 **Próximos passos:**
 

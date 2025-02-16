@@ -19,7 +19,7 @@ import {
   SortDescriptor,
   SlotsToClasses,
   TableSlots
-} from '@nextui-org/react'
+} from "@heroui/react"
 
 import { columns, statusOptions } from '@features/myOwnBooks/MyOwnBooksUtils'
 import { TBookResponse } from '@shared/types'

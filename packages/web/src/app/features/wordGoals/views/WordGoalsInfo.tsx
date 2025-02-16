@@ -7,15 +7,8 @@ import { FormProvider } from 'react-hook-form'
 import * as tv from '@features/wordGoals/WordGoalsTV'
 
 export function WordGoalsInfo() {
-  const {
-    goal,
-    words,
-    wordGoalsSchema,
-    visibleState,
-    toggleFormVisible,
-    handleSubmit,
-    onSubmit,
-  } = useWordGoalsController()
+  const { goal, words, wordGoalsSchema, visibleState, toggleFormVisible, handleSubmit, onSubmit } =
+    useWordGoalsController()
 
   return (
     <div className={tv.wordGoalsInfoWrapperTV()}>
@@ -42,9 +35,7 @@ export function WordGoalsInfo() {
         )}
         <FormProvider {...wordGoalsSchema}>
           <Form onSubmit={handleSubmit(onSubmit)} data-testid="form-meta">
-            <Input.root
-              className={tv.wordGoalsInputRootTV({ visible: visibleState })}
-            >
+            <Input.root className={tv.wordGoalsInputRootTV({ visible: visibleState })}>
               <Input.field
                 className={tv.wordGoalsInputFieldTV({ visible: visibleState })}
                 min={100}

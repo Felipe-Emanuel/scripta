@@ -2,7 +2,7 @@
 
 import { useErrorBoundary } from 'react-error-boundary'
 import { Text } from '..'
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 import { errorTV } from './ErrorTV'
 
 export function ErrorFallback() {

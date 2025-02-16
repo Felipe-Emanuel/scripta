@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, wrap } from 'framer-motion'
-import { ScrollShadow } from '@nextui-org/react'
+import { ScrollShadow } from "@heroui/react"
 
 import { Text } from '@shared/components'
 import { variants } from '../NewBookUtils'

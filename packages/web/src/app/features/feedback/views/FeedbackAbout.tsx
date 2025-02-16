@@ -1,7 +1,7 @@
 import { MdFeedback } from 'react-icons/md'
 import { Icon, Text } from '@shared/components'
 import { useSidebar } from '@shared/hooks/contexts/useSidebar'
-import { Tooltip } from '@nextui-org/react'
+import { Tooltip } from "@heroui/react"
 import { feedbackAboutIconContentTV, feedbackAboutTV } from '../FeedbackTV'
 
 export function FeedbackAbout() {

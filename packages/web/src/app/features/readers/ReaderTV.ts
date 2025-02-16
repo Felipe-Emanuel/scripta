@@ -25,7 +25,7 @@ export const readerBookDetailsULTV = tv({
 })
 
 export const readerBookInputTV = tv({
-  base: 'w-full max-w-64 m-auto'
+  base: 'w-full max-w-64 m-auto py-2'
 })
 
 export const readerBookButtonTV = tv({

@@ -17,7 +17,7 @@ export function ProfileInfo() {
     visibleState,
     toggleFormVisible,
     handleSubmit,
-    onSubmit,
+    onSubmit
   } = useProfileController()
 
   if (currentGoalLoading || !sessionCustomer) return null
@@ -27,13 +27,7 @@ export function ProfileInfo() {
       <div className={tv.profileInfoHeaderTV()}>
         <div>
           <Text text="Bem vindo," size="sm" color="gray" weight="normal" />
-          <Text
-            data-testid="profile-name"
-            text={userName}
-            size="lg"
-            color="white"
-            weight="bold"
-          />
+          <Text data-testid="profile-name" text={userName} size="lg" color="white" weight="bold" />
         </div>
 
         <div>
@@ -75,15 +69,13 @@ export function ProfileInfo() {
         </Button.root>
         <FormProvider {...wordCountSchema}>
           <Form onSubmit={handleSubmit(onSubmit)} data-testid="profile-form">
-            <Input.root
-              className={tv.profileleInfoInputRootTV({ visible: visibleState })}
-            >
+            <Input.root className={tv.profileleInfoInputRootTV({ visible: visibleState })}>
               <Input.field
                 min={100}
                 name="wordCount"
                 type="number"
                 className={tv.profileleInfoInputFieldTV({
-                  visible: visibleState,
+                  visible: visibleState
                 })}
               />
             </Input.root>

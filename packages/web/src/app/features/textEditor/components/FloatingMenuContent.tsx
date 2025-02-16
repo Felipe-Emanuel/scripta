@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 import { Icon, Text } from '@shared/components'
 import { IToolbarEditor } from './ToolbarEditorHeader'
 import { floatingMenuContentButtons } from './componentUtils'

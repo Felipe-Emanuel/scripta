@@ -19,7 +19,8 @@ export const CreateBookService = async ({
 }: TCreateBookServiceRequest): Promise<TCreateBookServiceResponse> => {
   const { createBook, getAllBooks } = actions
 
-  const allBooks = await getAllBooks(userEmail)
+  const onlyFirstChapter = false
+  const allBooks = await getAllBooks(userEmail, onlyFirstChapter)
 
   const alreadyExists = allBooks.find((b) => b.title === book.title)
 

@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const highlightRootTV = tv({
-  base: 'w-full max-w-[300px] h-[400px] rounded-2xl'
+  base: 'w-full max-w-[300px] h-[500px] rounded-2xl'
 })
 
 export const cardHeaderTV = tv({
@@ -53,5 +53,5 @@ export const cardFooterWrapperTV = tv({
 })
 
 export const cardWrapperTV = tv({
-  base: 'w-full max-w-[300px] h-[400px] overflow-hidden'
+  base: 'w-full max-w-[300px] h-[500px] overflow-hidden'
 })

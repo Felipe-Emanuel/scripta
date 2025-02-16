@@ -11,13 +11,15 @@ import {
   PatchActiveBookService,
   IPatchActiveBookServiceRequest,
   UpdateBookService,
-  TUpdateBookServiceRequest
+  TUpdateBookServiceRequest,
+  GetBookByIdService
 } from '@services'
 import {
   IPatchConcluedBookServiceRequest,
   PatchConcluedBookService
 } from 'src/services/bookServices/patchConclued'
 import { authorization } from 'src/middlewares'
+import { bookByIdSchema } from '../entities/Book/utils/bookSchemas'
 
 type TPatchBookState = {
   where: 'conclued' | 'isActive'
@@ -54,8 +56,8 @@ export async function bookController(app: FastifyInstance): Promise<void> {
     updateBook
   }
 
-  app.get('/books/:userEmail', async (req, apply) => {
-    const { userEmail } = req.params as Partial<TGetAllBooksServiceRequest>
+  app.get('/allBooks/:userEmail/:onlyFirstChapter', async (req, apply) => {
+    const { userEmail, onlyFirstChapter } = req.params as Partial<TGetAllBooksServiceRequest>
     const provider = req.headers.provider
     const accessToken = req.headers.authorization
 
@@ -63,7 +65,24 @@ export async function bookController(app: FastifyInstance): Promise<void> {
 
     const books = await GetAllBooksService({
       action: actionGetAllBooks,
-      userEmail
+      userEmail,
+      onlyFirstChapter
+    })
+
+    try {
+      apply.send(books)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  app.get('/books/:userEmail/:bookId', async (req, apply) => {
+    const { userEmail, bookId } = bookByIdSchema.parse(req.params)
+
+    const books = await GetBookByIdService({
+      action: actionGetAllBooks,
+      paramUserEmail: userEmail,
+      paramBookId: bookId
     })
 
     try {

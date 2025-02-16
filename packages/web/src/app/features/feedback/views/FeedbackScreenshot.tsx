@@ -9,7 +9,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { motionProps } from '../FeedbackUtils'
 import { Icon, Title } from '@shared/components'
 import * as tv from '../FeedbackTV'
@@ -26,7 +26,7 @@ export function FeedbackScreenshot() {
         <Button
           data-testid="clear-feedback-thumb"
           isIconOnly
-          onClick={clearimage}
+          onPress={clearimage}
           className={tv.feedbackScreenshotClearButtonTV()}
         >
           <Icon icon={FaTrashAlt} size="responsive" color="danger" />

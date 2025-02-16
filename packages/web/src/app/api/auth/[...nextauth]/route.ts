@@ -23,9 +23,9 @@ export const authOptions: never = {
   secret,
   callbacks: {
     async signIn({ user: { email, name } }: Profile) {
-      const isAllowedToSignIn = true
+      const isAllowedToSignIn = email && name
 
-      if (isAllowedToSignIn && email && name) {
+      if (isAllowedToSignIn) {
         await createNewGoal({
           email,
           goals: {

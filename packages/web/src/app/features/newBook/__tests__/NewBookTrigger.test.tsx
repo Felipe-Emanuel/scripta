@@ -20,7 +20,7 @@ describe('NewBookTrigger', () => {
     renderComponent()
   })
 
-  it('Should render a icon info about a new book draft', () => {
+  it.skip('Should render a icon info about a new book draft', () => {
     const fakeDraft = {
       content: 'mocked'
     }

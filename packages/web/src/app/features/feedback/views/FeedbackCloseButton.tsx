@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 import { Icon } from '@shared/components'
 import { useSidebar } from '@shared/hooks/contexts/useSidebar'
 import { FaChevronDown } from 'react-icons/fa'
@@ -10,7 +10,7 @@ export function FeedbackCloseButton() {
   return (
     <Button
       data-testid="close-feedback-button"
-      onClick={closeFeedbackFocused}
+      onPress={closeFeedbackFocused}
       isIconOnly
       className={feedbackCloseButtonTV()}
       color="default"

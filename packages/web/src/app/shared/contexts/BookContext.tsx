@@ -5,7 +5,7 @@ interface IBookContextProps {
   selectedBook: TBookResponse | null
   isBookLoading: boolean
   showForm: boolean
-  handleToggleCreateBook: () => void
+  handleToggleCreateBook: VoidFunction
   choiseBookToSeeInfo: (book: TBookResponse) => void
 }
 

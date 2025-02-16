@@ -7,7 +7,7 @@ import { useUser } from '@shared/hooks/useUser'
 import { TCreateFeedbackRequest, TRootComponent } from '@shared/types'
 import { extractBase64 } from '@shared/utils/transformers'
 
-import { isBase64 } from '@memorize/server/src/shared/utils/stringValidations'
+import { isBase64 } from '@scripta/server/src/shared/utils/stringValidations'
 
 type THandleSelectionEventChange = {
   target: {
@@ -28,11 +28,11 @@ type TCreateContext = {
   image: string | ArrayBuffer | null
   setFeedback: (value: React.SetStateAction<string>) => void
   handleSelectionChange: (e: THandleSelectionEventChange) => void
-  toggleFeedbackFocused: () => void
-  clearimage: () => void
-  toggleSidebar: () => void
-  closeFeedbackFocused: () => void
-  clearAll: () => void
+  toggleFeedbackFocused: VoidFunction
+  clearimage: VoidFunction
+  toggleSidebar: VoidFunction
+  closeFeedbackFocused: VoidFunction
+  clearAll: VoidFunction
   setChangeImageAlert: React.Dispatch<React.SetStateAction<boolean>>
   getRootProps: <T extends DropzoneRootProps>(props?: T | undefined) => T
   onPaste: (event: React.ClipboardEvent<HTMLDivElement>) => void

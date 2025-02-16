@@ -2,7 +2,7 @@
 
 import { EditorContent, BubbleMenu, FloatingMenu } from '@tiptap/react'
 
-import { ScrollShadow } from '@nextui-org/react'
+import { ScrollShadow } from "@heroui/react"
 
 import { ToolbarEditor } from '../components/ToolbarEditor'
 import ToolbarEditorHeader from '../components/ToolbarEditorHeader'
@@ -11,12 +11,9 @@ import { FloatingMenuContent } from '../components/FloatingMenuContent'
 import { useEditorController } from '../controller'
 import { TextEditorFooter } from '../components/TextEditorFooter'
 import * as tv from '../TextEditorTV'
+import { IUseLocalEditor } from '@shared/hooks/useLocalEditor'
 
-interface ITextEditor {
-  bookId: string
-}
-
-export function TextEditor({ bookId }: ITextEditor) {
+export function TextEditor({ callBack, initialContent }: IUseLocalEditor) {
   const {
     editor,
     fullscreen,
@@ -27,7 +24,10 @@ export function TextEditor({ bookId }: ITextEditor) {
     updateMenuState,
     togleMenu,
     menuIcon
-  } = useEditorController(bookId)
+  } = useEditorController({
+    callBack,
+    initialContent
+  })
 
   if (!editor) return null
 

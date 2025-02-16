@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 
 import { State } from '@features/books/BooksUtils'
 import { newBookFormActionsTV } from '@features/newBook/NewBookTV'
@@ -8,9 +8,9 @@ import { IoChevronBack, IoChevronForward, IoCloudDone } from 'react-icons/io5'
 import { toast } from 'react-toastify'
 
 interface INewBookFormActionsProps {
-  handleBackFormState: () => void
-  handleNextFormState: () => void
-  handleNewBookSubmit: () => void
+  handleBackFormState: VoidFunction
+  handleNextFormState: VoidFunction
+  handleNewBookSubmit: VoidFunction
   state: State
   isValid: boolean
 }

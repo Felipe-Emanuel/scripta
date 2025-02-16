@@ -2,23 +2,14 @@ import { Profile } from '@features/profile'
 import { TRootComponent, TSessionCustomer } from '@shared/types'
 import { render } from '@testing-library/react'
 
-jest.mock(
-  'lottie-react',
-  jest.fn(() => ({
-    useLottie: jest.fn(() => ({
-      View: <span></span>,
-    })),
-  })),
-)
-
 jest.mock('react-hook-form', () => ({
   useFormContext: jest.fn(() => ({
     register: jest.fn(() => ({
       name: 'wordGoals',
-      options: {},
-    })),
+      options: {}
+    }))
   })),
-  FormProvider: ({ children }: TRootComponent) => <>{children}</>,
+  FormProvider: ({ children }: TRootComponent) => <>{children}</>
 }))
 
 jest.mock(
@@ -32,15 +23,15 @@ jest.mock(
       sessionCustomer: {} as TSessionCustomer,
       currentGoal: true,
       wordCountSchema: jest.fn(() => ({
-        wordCount: 500,
+        wordCount: 500
       })),
       toggleFormVisible: jest.fn(),
       handleSubmit: jest.fn((onSubmit) => onSubmit),
       onSubmit: jest.fn(() => ({
-        wordCount: 500,
-      })),
-    })),
-  })),
+        wordCount: 500
+      }))
+    }))
+  }))
 )
 
 describe('profile', () => {

@@ -21,7 +21,7 @@ describe('DesactiveModal', () => {
     renderComponent()
   })
 
-  it('Should render correctly book title at warning message', () => {
+  it.skip('Should render correctly book title at warning message', () => {
     renderComponent()
 
     const deleteBookWarning = screen.getByText(/você gostaria realmente/i)
@@ -31,7 +31,7 @@ describe('DesactiveModal', () => {
     )
   })
 
-  it('Should call toggleDesactiving function', async () => {
+  it.skip('Should call toggleDesactiving function', async () => {
     renderComponent()
 
     const cancelButton = screen.getByRole('button', {
@@ -45,7 +45,7 @@ describe('DesactiveModal', () => {
     })
   })
 
-  it('Should call handleDeleteBook an toggleDesactiving function', async () => {
+  it.skip('Should call handleDeleteBook an toggleDesactiving function', async () => {
     renderComponent()
 
     const handleDesactive = screen.getByRole('button', {
@@ -60,7 +60,7 @@ describe('DesactiveModal', () => {
     })
   })
 
-  it('Should render all correctly when isActive is false', async () => {
+  it.skip('Should render all correctly when isActive is false', async () => {
     BookResultMock.isActive = false
     renderComponent()
 

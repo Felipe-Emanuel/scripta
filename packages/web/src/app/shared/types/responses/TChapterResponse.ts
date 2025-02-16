@@ -10,4 +10,6 @@ export type TChapterResponse = {
   lineHeight: string
   createdAt: string
   updatedAt: string
+  isConclued: boolean
+  message?: string
 }

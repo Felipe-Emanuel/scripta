@@ -1,4 +1,4 @@
-import { Tabs, Tab, Chip, Tooltip } from '@nextui-org/react'
+import { Tabs, Tab, Chip, Tooltip } from "@heroui/react"
 import { Icon, Text } from '@shared/components'
 import { TCurrentTab } from '@shared/types'
 import { useMemo } from 'react'
@@ -10,7 +10,7 @@ export interface IFilterTabsProps {
   currentTab: TCurrentTab
   totalReaders: number
   totalReadersByBook: number
-  handleFilterByAll: () => void
+  handleFilterByAll: VoidFunction
 }
 
 export function FilterTabs({

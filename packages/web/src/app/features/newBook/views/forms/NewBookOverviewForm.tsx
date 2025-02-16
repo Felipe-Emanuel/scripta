@@ -1,7 +1,7 @@
 import { FaBook } from 'react-icons/fa'
-import { Button, Chip, Image, ScrollShadow, Tooltip } from '@nextui-org/react'
+import { Button, Chip, Image, ScrollShadow, Tooltip } from "@heroui/react"
 
-import { isLink } from '@memorize/server/src/shared/utils/stringValidations'
+import { isLink } from '@scripta/server/src/shared/utils/stringValidations'
 
 import { TCreateBookSchemaWithImage } from '@features/newBook/controller'
 import { useDraft } from '@shared/hooks/useDraft'

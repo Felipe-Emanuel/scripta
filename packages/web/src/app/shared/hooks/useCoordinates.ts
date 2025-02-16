@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
  * @returns companie longitude and latitude
  */
 
-export const useCoordinates = (errorResolver?: () => void) => {
+export const useCoordinates = (errorResolver?: VoidFunction) => {
   const [coordinates, setCoordinates] = useState({
     latitude: -23.5489,
     longitude: -46.6388

@@ -13,7 +13,7 @@ services:
       - backend_network
 
   server:
-    image: 'sullivanfelipe/memorize-server:latest'
+    image: 'sullivanfelipe/scripta-server:latest'
     depends_on:
       - postgress
     env_file:

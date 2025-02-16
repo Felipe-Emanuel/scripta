@@ -7,7 +7,7 @@ import {
   getReadersByEmail
 } from '@features/readers/services'
 import { TBookResponse, TCurrentTab, TReader, TReaderResponse } from '@shared/types'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { cacheName } from '@shared/utils/constants/cacheName'
 import { useForm } from 'react-hook-form'
 import { TSearchBookSchema, searchBookSchema } from '@features/readers/ReaderUtils'
@@ -38,12 +38,12 @@ export const useReadersController = () => {
     return readers
   }, [sessionCustomer?.email])
 
-  const { data: allReadersByAuthor } = useQueryData(
-    getAllReaders,
-    'allReaders',
-    '6-hours',
-    !!sessionCustomer?.email
-  )
+  const { data: allReadersByAuthor } = useQueryData({
+    getDataFn: getAllReaders,
+    cacheName: 'allReaders',
+    cacheTime: '6-hours',
+    enabled: !!sessionCustomer?.email
+  })
 
   const seeReader = useCallback((userEmail: string) => {
     setReaderEmail(userEmail)
@@ -64,7 +64,7 @@ export const useReadersController = () => {
 
   const queryClient = useQueryClient()
 
-  const cachedBooks = queryClient.getQueryData<TBookResponse[]>(cacheName.allBooks)
+  const cachedBooks = queryClient.getQueryData<TBookResponse[]>([cacheName.allBooks])
 
   const getAllReadersByBook = useCallback(
     async (bookId: string) => {

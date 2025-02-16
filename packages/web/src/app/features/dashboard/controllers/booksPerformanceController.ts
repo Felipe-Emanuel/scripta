@@ -3,9 +3,9 @@ import { useQueryData } from '@shared/hooks/useReactQuery'
 import { useUser } from '@shared/hooks/useUser'
 import { useCallback, useMemo, useState } from 'react'
 import { BsRocketTakeoffFill } from 'react-icons/bs'
-import { getAllBooks } from '@features/dashboard/services/bookPerformanceServices'
 import { TBookPerformanceProperty, TBookResponse, TTab } from '@shared/types'
 import { ImBooks } from 'react-icons/im'
+import { getAllBooks } from '../../Highlight/services'
 
 let id = 0
 
@@ -13,8 +13,7 @@ export const useBooksPerformanceController = () => {
   const { sessionCustomer } = useUser()
   const [selectedGenre, setSelectedGenre] = useState('')
   const [selectedTheme, setSelectedTheme] = useState('')
-  const [selectedProperty, setSelectedProperty] =
-    useState<TBookPerformanceProperty>('Gender')
+  const [selectedProperty, setSelectedProperty] = useState<TBookPerformanceProperty>('Gender')
 
   const getBooks = useCallback(async () => {
     if (sessionCustomer) {
@@ -24,17 +23,15 @@ export const useBooksPerformanceController = () => {
     }
   }, [sessionCustomer])
 
-  const { data } = useQueryData(
-    getBooks,
-    'allBooks',
-    '12-hours',
-    !!sessionCustomer,
-  )
+  const { data } = useQueryData({
+    cacheName: 'allBooks',
+    cacheTime: '12-hours',
+    getDataFn: getBooks,
+    enabled: !!sessionCustomer
+  })
 
   const themesByGenre = () => {
-    const filteredBooks = data?.filter(
-      (book) => book.Gender.toLowerCase() === selectedGenre,
-    )
+    const filteredBooks = data?.filter((book) => book.Gender.toLowerCase() === selectedGenre)
 
     return filteredBooks?.length ? getUniqueItems(filteredBooks, 'Theme') : []
   }
@@ -44,7 +41,7 @@ export const useBooksPerformanceController = () => {
 
   const countOccurrences = (
     data: TBookResponse[] | undefined,
-    property: TBookPerformanceProperty,
+    property: TBookPerformanceProperty
   ): Record<string, number> => {
     const genderCounts: Record<string, number> = {}
     if (data)
@@ -62,16 +59,16 @@ export const useBooksPerformanceController = () => {
         selectedTheme
           ? book.Gender.toLowerCase() === selectedGenre &&
             book.Theme.toLowerCase() === selectedTheme
-          : book.Gender.toLowerCase() === selectedGenre,
+          : book.Gender.toLowerCase() === selectedGenre
       ),
-    [data, selectedGenre, selectedTheme],
+    [data, selectedGenre, selectedTheme]
   )
 
   const allFilteredData = selectedGenre ? filtaredByGenreOrTheme : data
 
   const genreCounts = useMemo(
     () => countOccurrences(allFilteredData, selectedProperty),
-    [allFilteredData, selectedProperty],
+    [allFilteredData, selectedProperty]
   )
   const allBooks = useMemo(() => Object.keys(genreCounts), [genreCounts])
 
@@ -80,44 +77,42 @@ export const useBooksPerformanceController = () => {
       selectedProperty === 'Gender' && !selectedGenre.length
         ? allBooks
         : allFilteredData?.map((book) => book.title) || [],
-    [allBooks, allFilteredData, selectedGenre.length, selectedProperty],
+    [allBooks, allFilteredData, selectedGenre.length, selectedProperty]
   )
 
   const uniqueGenders: { [key: string]: boolean } = {}
-  const filteredDataByGenre: TBookResponse[] | undefined =
-    allFilteredData?.filter((item) => {
-      if (!uniqueGenders[item.Gender]) {
-        uniqueGenders[item.Gender] = true
-        return true
-      }
-      return false
-    })
+  const filteredDataByGenre: TBookResponse[] | undefined = allFilteredData?.filter((item) => {
+    if (!uniqueGenders[item.Gender]) {
+      uniqueGenders[item.Gender] = true
+      return true
+    }
+    return false
+  })
 
   const booksByGenreOrTheme = useMemo(() => {
     return filtaredByGenreOrTheme?.map((book) => ({
       name: 'Palavras escritas',
-      data: [book.totalWords],
+      data: [book.totalWords]
     }))
   }, [filtaredByGenreOrTheme])
 
   const generateAllBooksSeries = useMemo(() => {
     return filteredDataByGenre?.map((book) => ({
       name: 'Livros neste gênero',
-      data: [genreCounts[book.Gender]],
+      data: [genreCounts[book.Gender]]
     }))
   }, [filteredDataByGenre, genreCounts])
 
   const generateHitsSeries = useMemo(() => {
     return allFilteredData?.map((book) => ({
       name: 'Acessos',
-      data: [book.hits],
+      data: [book.hits]
     }))
   }, [allFilteredData])
 
   const allAccesses = allFilteredData?.reduce((acc, book) => acc + book.hits, 0)
 
-  const handleTabFilter = (value: TBookPerformanceProperty) =>
-    setSelectedProperty(value)
+  const handleTabFilter = (value: TBookPerformanceProperty) => setSelectedProperty(value)
 
   const handleGenre = (key: string) => setSelectedGenre(key)
 
@@ -125,20 +120,14 @@ export const useBooksPerformanceController = () => {
 
   const seriesOptions = useMemo(
     () => ({
-      Gender: selectedGenre.length
-        ? booksByGenreOrTheme
-        : generateAllBooksSeries,
-      hits: generateHitsSeries,
+      Gender: selectedGenre.length ? booksByGenreOrTheme : generateAllBooksSeries,
+      hits: generateHitsSeries
     }),
-    [
-      booksByGenreOrTheme,
-      generateAllBooksSeries,
-      generateHitsSeries,
-      selectedGenre.length,
-    ],
+    [booksByGenreOrTheme, generateAllBooksSeries, generateHitsSeries, selectedGenre.length]
   )
 
-  const series = seriesOptions[selectedProperty] || []
+  const filtaredHits = seriesOptions[selectedProperty]?.filter((serie) => serie.data?.[0] !== 0)
+  const series = selectedProperty === 'hits' ? filtaredHits : seriesOptions[selectedProperty] || []
 
   const tabs: TTab[] = [
     {
@@ -148,15 +137,15 @@ export const useBooksPerformanceController = () => {
       amount: selectedGenre.length
         ? booksByGenreOrTheme?.length || 0
         : generateAllBooksSeries?.length || 0,
-      value: 'Gender',
+      value: 'Gender'
     },
     {
       id: id++,
       icon: BsRocketTakeoffFill,
       label: 'Acessos',
       amount: allAccesses ?? 0,
-      value: 'hits',
-    },
+      value: 'hits'
+    }
   ]
 
   return {
@@ -171,6 +160,6 @@ export const useBooksPerformanceController = () => {
     setSelectedTheme,
     handleTabFilter,
     handleGenre,
-    handleTheme,
+    handleTheme
   }
 }

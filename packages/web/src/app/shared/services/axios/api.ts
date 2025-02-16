@@ -7,13 +7,13 @@ import { TSessionCustomer } from '@shared/types'
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
-export const api = axios.create({
+export const api: AxiosInstance = axios.create({
   baseURL
 })
 
 api.interceptors.request.use(async (config) => {
   const cookies = parseCookies()
-  const stringfyiedSessionCustomer = cookies._memorize_
+  const stringfyiedSessionCustomer = cookies._scripta_
   const sessionCustomer: Pick<TSessionCustomer, 'provider' | 'accessToken'> =
     stringfyiedSessionCustomer && JSON.parse(stringfyiedSessionCustomer)
 
@@ -48,5 +48,3 @@ api.interceptors.response.use(
     }
   }
 )
-
-export const FAQApi: AxiosInstance = axios.create({})

@@ -2,7 +2,7 @@ import { MdFormatListBulletedAdd } from 'react-icons/md'
 import { IoMdInformationCircle } from 'react-icons/io'
 import { MdFormatIndentDecrease } from 'react-icons/md'
 
-import { Button, Tooltip } from '@nextui-org/react'
+import { Button, Tooltip } from "@heroui/react"
 
 import { Icon, Text } from '@shared/components'
 import { useDraft } from '@shared/hooks/useDraft'

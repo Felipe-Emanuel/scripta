@@ -1,6 +1,6 @@
 'use client'
 
-import { Switch, SwitchProps } from '@nextui-org/react'
+import { Switch, SwitchProps } from "@heroui/react"
 import { useFormContext } from 'react-hook-form'
 
 type InputSwitchProps = {

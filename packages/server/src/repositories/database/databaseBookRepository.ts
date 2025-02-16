@@ -2,6 +2,7 @@ import { prisma } from 'src/lib'
 import { Book } from '@prisma/client'
 import { IBooksRepository } from '@repositories'
 import { TUpdateBookService } from '@types'
+import { TGetAllBooksServiceResponse } from '~/src/services'
 
 export const databaseBookRepository = (): IBooksRepository => {
   const createBook = async (book: Book): Promise<Book[]> => {
@@ -12,14 +13,21 @@ export const databaseBookRepository = (): IBooksRepository => {
     return [newBook]
   }
 
-  const getAllBooks = async (userEmail: string): Promise<Book[]> => {
+  const getAllBooks = async (
+    userEmail: string,
+    onlyFirstChapter: boolean
+  ): Promise<TGetAllBooksServiceResponse> => {
     const books = await prisma.book.findMany({
       where: {
         userEmail
       },
       include: {
         characters: true,
-        reactions: true
+        reactions: true,
+        chapters: {
+          orderBy: { createdAt: 'desc' },
+          take: onlyFirstChapter ? 1 : undefined
+        }
       },
       orderBy: {
         createdAt: 'desc'

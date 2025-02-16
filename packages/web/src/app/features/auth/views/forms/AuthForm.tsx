@@ -3,7 +3,7 @@ import { ProviderButtons } from '@features/auth/views/nextAuthProviders/Provider
 import { Button, Input, Motion, Text, Title } from '@shared/components'
 import { TArrayComponents } from '@shared/types'
 interface AuthFormProps {
-  changeAuthPageContent: () => void
+  changeAuthPageContent: VoidFunction
 }
 
 let id = 0

@@ -7,7 +7,7 @@ export interface TextProps extends VariantProps<typeof textTv> {
   className?: string
   htmlFor?: string
   as?: 'span' | 'small' | 'b' | 'label'
-  onClick?: () => void
+  onClick?: VoidFunction
 }
 
 export function Text({

@@ -7,7 +7,7 @@ import '@global/globals.css'
 
 export const metadata: Metadata = {
   title: 'Painel do Escritor | Novos',
-  description: 'Memorize personagens'
+  description: 'Scripta personagens'
 }
 
 export default function RootLayout({

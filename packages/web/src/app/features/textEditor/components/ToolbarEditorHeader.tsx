@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/react'
 
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 import * as Toolbar from '@radix-ui/react-toolbar'
 
 import { IconType } from 'react-icons/lib'
@@ -21,7 +21,7 @@ export interface IToolbarEditor {
   menuState?: TTEditorMenu
   menuIcon?: IconType
   updateMenuState?: (newConfig: TTEditorMenu) => void
-  togleMenu?: () => void
+  togleMenu?: VoidFunction
 }
 
 function ToolbarEditorHeader({

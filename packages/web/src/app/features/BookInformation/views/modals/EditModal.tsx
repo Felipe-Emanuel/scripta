@@ -8,7 +8,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure
-} from '@nextui-org/react'
+} from "@heroui/react"
 
 import Image from 'next/image'
 import React from 'react'
@@ -28,7 +28,7 @@ import * as tv from '@features/BookInformation/BookInformationTV'
 interface IEditModalProps {
   isEditing: boolean
   book: TBookResponse
-  toggleEditing: () => void
+  toggleEditing: VoidFunction
 }
 
 export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {

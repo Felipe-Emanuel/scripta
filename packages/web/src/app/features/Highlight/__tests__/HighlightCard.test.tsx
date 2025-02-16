@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event'
 
 const choiseBookToSeeInfo = jest.fn()
 
-jest.mock('react-query', () => ({
+jest.mock('@tanstack/react-query', () => ({
   useQueryClient: jest.fn(() => ({
     getQueryData: jest.fn()
   })),

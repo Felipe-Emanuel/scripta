@@ -1,4 +1,4 @@
-import { Button, Select, SelectItem, Textarea } from '@nextui-org/react'
+import { Button, Select, SelectItem, Textarea } from "@heroui/react"
 import { feedbackTypes } from '../FeedbackUtils'
 import { Icon, Text } from '@shared/components'
 import { useSidebar } from '@shared/hooks/contexts/useSidebar'

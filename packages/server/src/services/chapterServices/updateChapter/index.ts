@@ -44,7 +44,8 @@ export const UpdateChapterService = async ({
 
   const booksByEmail = await GetAllBooksService({
     action: actionGetAllBooks,
-    userEmail: email.userEmail
+    userEmail: email.userEmail,
+    onlyFirstChapter: true
   })
 
   const existentBook = booksByEmail.find((book) => book.id === updatedChapter.bookId)

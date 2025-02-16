@@ -14,6 +14,7 @@ export const chapterSchema = z.object({
       invalid_type_error: throwChapterMessages.idRequired
     })
     .uuid(),
+  isConclued: z.boolean().default(false),
   bookId: z.string().uuid(),
   chapterText: z.string({
     required_error: throwChapterMessages.minLength
@@ -26,12 +27,10 @@ export const chapterSchema = z.object({
     .min(MIN_WORDS_BY_CHAPTER, throwChapterMessages.minLength)
     .max(MAX_WORDS_BY_CHAPTER, throwChapterMessages.maxLength),
   chapterTitle: z
-    .string({
-      required_error: throwChapterMessages.minLengthTitle
-    })
+    .string()
     .min(MIN_CHAPTER_TITLE_CHARACTERS, throwChapterMessages.minLengthTitle)
     .max(MAX_CHAPTER_TITLE_CHARACTERS, throwChapterMessages.maxLengthTitle)
-    .nullable(),
+    .optional(),
   firstLineIndent: z.string({
     required_error: throwChapterMessages.somethingWrong
   }),
@@ -46,6 +45,18 @@ export const chapterSchema = z.object({
   }),
   createdAt: z.date().default(() => new Date()),
   updatedAt: z.date().default(() => new Date())
+})
+
+export const newTitleSchema = z.object({
+  newTitle: z.string({
+    required_error: throwChapterMessages.titleRequired
+  })
+})
+
+export const deleteChapterSchema = z.object({
+  chapterId: z.string({
+    required_error: throwChapterMessages.idRequired
+  })
 })
 
 export type TChapterSchema = z.infer<typeof chapterSchema>

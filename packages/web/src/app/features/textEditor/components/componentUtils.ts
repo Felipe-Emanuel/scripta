@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/react'
-import { removeLeadingSlash } from '../Identations'
+import { removeLeadingSlash } from '@shared/resources'
 import { MdSubtitles, MdFormatListBulletedAdd } from 'react-icons/md'
 import { LuHeading1, LuHeading2, LuHeading3, LuHeading4 } from 'react-icons/lu'
 import { CiText } from 'react-icons/ci'

@@ -8,7 +8,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure
-} from '@nextui-org/react'
+} from "@heroui/react"
 
 import { motionProps } from '@features/feedback/FeedbackUtils'
 import { Text, Title } from '@shared/components'
@@ -17,7 +17,7 @@ import { TBookResponse } from '@shared/types'
 interface IDeleteModalProps {
   isDeleting: boolean
   book: TBookResponse
-  toggleDeleting: () => void
+  toggleDeleting: VoidFunction
   handleDeleteBook: () => Promise<TBookResponse | undefined>
 }
 

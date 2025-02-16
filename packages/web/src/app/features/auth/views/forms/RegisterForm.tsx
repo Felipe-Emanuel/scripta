@@ -3,7 +3,7 @@ import { ProviderButtons } from '@features/auth/views/nextAuthProviders/Provider
 import { Button, Input, Motion, Text, Title } from '@shared/components'
 
 interface TRegisterForm {
-  changeAuthPageContent: () => void
+  changeAuthPageContent: VoidFunction
   strongPasswordMessage: string
 }
 

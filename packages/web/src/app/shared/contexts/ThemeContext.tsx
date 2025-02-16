@@ -5,7 +5,7 @@ import { TTheme } from '@shared/types'
 interface ThemeContextProps {
   isSystem: boolean
   theme: TTheme
-  changeTheme: () => void
+  changeTheme: VoidFunction
 }
 
 interface AppThemeProviderProps {
