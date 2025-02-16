@@ -8,17 +8,27 @@ import {
   ModalFooter,
   Button,
   useDisclosure
-} from "@heroui/react"
+} from '@heroui/react'
 
 import { motionProps } from '@features/feedback/FeedbackUtils'
 import { Text, Title } from '@shared/components'
 import { TBookResponse } from '@shared/types'
+import { UseMutateAsyncFunction } from '@tanstack/react-query'
 
 interface IDeleteModalProps {
   isDeleting: boolean
   book: TBookResponse
   toggleDeleting: VoidFunction
-  handleDeleteBook: () => Promise<TBookResponse | undefined>
+  handleDeleteBook: UseMutateAsyncFunction<
+    | {
+        message: string
+        deletedBook: TBookResponse
+      }
+    | undefined,
+    Error,
+    void,
+    unknown
+  >
 }
 
 export function DeleteModal({

@@ -6,7 +6,7 @@ import {
   TGoalResponse,
   TReferralTrackingHeaderOptions
 } from '@shared/types'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { MdCalendarMonth } from 'react-icons/md'
 import { IoTodayOutline } from 'react-icons/io5'
 import {
@@ -19,8 +19,7 @@ import {
 } from '@shared/utils/dates'
 import { progressGoal } from '@shared/utils/validation'
 import { cacheName } from '@shared/utils/constants/cacheName'
-import { queryClient } from '~/src/app/shared/services/reactQuery'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   date,
   DAY_IN_MILLIS,
@@ -30,13 +29,14 @@ import {
   monthIndex,
   year
 } from '../referralTrackingUtils'
+import { queryClient } from '~/src/app/shared/services/reactQuery'
 
 let id = 0
 
 export const useReferralTrackingController = () => {
   const { sessionCustomer } = useUser()
 
-  const [formattedGoals, setFormattedGoals] = useState<TGoalResponse[]>([])
+  // const [formattedGoals, setFormattedGoals] = useState<TGoalResponse[]>([])
   const [filterOption, setFilterOption] = useState<TGoalFiltersOptions>(defaultFilterOption)
 
   const weekSlug = () => {
@@ -101,64 +101,45 @@ export const useReferralTrackingController = () => {
 
         const goals = await getGoalByFilter(body)
 
-        if (goals) setFormattedGoals(goals)
-
         return goals
       }
     },
     [sessionCustomer, filterOption]
   )
 
-  const { mutate, data: goals } = useMutation({
-    mutationKey: [cacheName.goalsByFilter],
-    mutationFn: getGoals
+  const { data: goals } = useQuery({
+    queryKey: [cacheName.goalsByFilter],
+    queryFn: () => getGoals(defaultFilterOption)
   })
 
-  useEffect(() => {
-    mutate(defaultFilterOption)
-  }, [mutate])
+  const { mutate } = useMutation({
+    mutationKey: [cacheName.goalsByFilter],
+    mutationFn: getGoals,
+    onSuccess(data) {
+      queryClient.setQueryData([cacheName.goalsByFilter], () => data)
+    }
+  })
 
   const handleChangeGoalFilter = async (options: TGoalFiltersOptions) => {
     setFilterOption(options)
     mutate(options)
   }
 
-  const currentGoal: TGoalResponse | undefined = queryClient.getQueryData([cacheName.currentGoal])
-
-  useEffect(() => {
-    if (currentGoal && goals?.[0]) {
-      const goalCompletePercent = progressGoal(currentGoal?.words, currentGoal?.goal)
-
-      const updatedCurrentGoal: TGoalResponse = {
-        ...goals[0],
-        words: currentGoal.words,
-        goal: currentGoal.goal,
-        goalComplete: goalCompletePercent >= 100,
-        goalCompletePercent
-      }
-
-      const newGoalsArray = goals?.map((goal, i) => (i === 0 ? updatedCurrentGoal : goal))
-
-      setFormattedGoals(newGoalsArray)
-    }
-  }, [goals, currentGoal])
-
   const reducedGoalsComplete =
-    (formattedGoals &&
-      formattedGoals?.filter((goal) => goal.goal !== INVALID_GOAL && goal.goalComplete === true)) ??
+    (goals && goals?.filter((goal) => goal.goal !== INVALID_GOAL && goal.goalComplete === true)) ??
     []
 
   const goalsComplete = reducedGoalsComplete.length
 
-  const reducedWordsWritten = formattedGoals?.reduce((acc, goal) => acc + goal.words, 0) ?? 0
+  const reducedWordsWritten = goals?.reduce((acc, goal) => acc + goal.words, 0) ?? 0
 
   const wordsWritten = reducedWordsWritten
 
-  const goalsDeclared = formattedGoals?.reduce((acc, goal) => acc + goal.goal, 0) ?? 0
+  const goalsDeclared = goals?.reduce((acc, goal) => acc + goal.goal, 0) ?? 0
 
   const formattedWords = progressGoal(wordsWritten, goalsDeclared).toFixed(1) || 0
   const formattedGoalsComplete =
-    (formattedGoals && progressGoal(goalsComplete, formattedGoals?.length).toFixed(1)) || 0
+    (goals && progressGoal(goalsComplete, goals?.length).toFixed(1)) || 0
 
   const series = useMemo(
     () => [+formattedGoalsComplete, +formattedWords],

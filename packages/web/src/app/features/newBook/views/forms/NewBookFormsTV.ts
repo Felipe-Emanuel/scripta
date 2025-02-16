@@ -47,7 +47,8 @@ export const newBookMediaFormTrashImageTV = tv({
 })
 
 export const newBookMediaFormHeroTV = tv({
-  base: 'bg-cover object-cover size-full rounded-xl'
+  // class="h-48"
+  base: 'bg-cover object-cover w-full h-[13.5rem] rounded-xl'
 })
 
 export const newBookMediaFormHeroFallbackTV = tv({

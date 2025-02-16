@@ -5,17 +5,23 @@ import { chapterMock } from '@entities/Chapter/mocks'
 import { bookEntitieMock } from '@entities/Book/mocks'
 import { throwChapterMessages } from '@entities/Chapter/utils'
 import { CreateBookService, TCreateBookServiceRequest } from '@services'
-import { inMemoryBooksRepository, inMemoryChapterRepository } from '@repositories'
+import {
+  inMemoryBooksRepository,
+  inMemoryChapterRepository,
+  inMemoryGoalsRepository
+} from '@repositories'
 import { Chapter } from '@prisma/client'
 
 describe('UpdateChapterService', () => {
   const { createChapter, getChapterById, updateChapter } = inMemoryChapterRepository()
   const { createBook, getAllBooks } = inMemoryBooksRepository()
+  const { updateGoal } = inMemoryGoalsRepository()
 
   const actions: TUpdateChapterServiceRequest['actions'] = {
     getAllBooks,
     updateChapter,
-    getChapterById
+    getChapterById,
+    updateGoal
   }
 
   const createBookActions: TCreateBookServiceRequest['actions'] = {
@@ -73,7 +79,7 @@ describe('UpdateChapterService', () => {
       chapter: chapterMock
     })
 
-    const chapterTitle = 'updated now'
+    const chapterTitle = 'Novo capítulo'
 
     const updateChapter: Chapter = {
       ...chapterMock,

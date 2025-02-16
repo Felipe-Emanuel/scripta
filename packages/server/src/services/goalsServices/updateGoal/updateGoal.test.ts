@@ -5,27 +5,25 @@ import {
   CreateGoalsService,
   TCreateGoalsRequest,
   TUpdateGoalRequest,
-  UpdateGoalService,
+  UpdateGoalService
 } from '@services'
 
 describe('UpdateGoalService', () => {
-  const { getGoalsByFilter, updateGoal, createGoals } =
-    inMemoryGoalsRepository()
+  const { getGoalsByFilter, updateGoal, createGoals } = inMemoryGoalsRepository()
 
   const actions: TUpdateGoalRequest['actions'] = {
     getGoalsByFilter,
-    updateGoal,
+    updateGoal
   }
 
   const createGoalsAction: TCreateGoalsRequest['action'] = {
-    createGoals,
+    createGoals
   }
 
   it('should throw excpetion about goal not found', () => {
     const sut = UpdateGoalService({
       actions,
-      goalId: 'unexpectedGoalId',
-      updatedGoal: mockGoal,
+      updatedGoal: mockGoal
     })
 
     expect(sut).rejects.toThrow(throwGoalsMessages.goalNotFound)
@@ -35,21 +33,18 @@ describe('UpdateGoalService', () => {
     const existentGoal = await CreateGoalsService({
       action: createGoalsAction,
       email: mockGoal.email,
-      goals: mockGoal,
+      goals: mockGoal
     })
-
-    const { id } = existentGoal[0]
 
     const sut = await UpdateGoalService({
       actions,
-      goalId: id,
       updatedGoal: {
         ...existentGoal[0],
-        words: 2500,
-      },
+        words: 2500
+      }
     })
 
-    expect(sut.goalCompletePercent).toEqual(100)
-    expect(sut.goalComplete).toEqual(true)
+    expect(sut.goalCompletePercent).toEqual(80)
+    expect(sut.goalComplete).toEqual(false)
   })
 })

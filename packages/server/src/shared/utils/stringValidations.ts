@@ -38,3 +38,11 @@ export const generateRandomString = (length: number) => {
 
   return result
 }
+
+export const countWords = (htmlText: string): number => {
+  const plainText = htmlText.replace(/<[^>]*>/g, ' ').trim()
+
+  const words = plainText.match(/\b[\p{L}-]+\b/gu) || []
+
+  return words.length
+}

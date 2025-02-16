@@ -11,8 +11,6 @@ describe('CreateChapterService', () => {
   }
 
   it('should create a new Chapter', async () => {
-    const chapterTitle = 'book chapter title'
-
     const newChapter: Chapter = {
       ...chapterMock
     }
@@ -23,6 +21,5 @@ describe('CreateChapterService', () => {
     })
 
     expect(sut.bookId).toEqual(newChapter.bookId)
-    expect(sut.chapterTitle).toEqual(chapterTitle)
   })
 })

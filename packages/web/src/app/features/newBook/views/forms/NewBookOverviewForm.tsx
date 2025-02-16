@@ -1,19 +1,17 @@
-import { FaBook } from 'react-icons/fa'
-import { Button, Chip, Image, ScrollShadow, Tooltip } from "@heroui/react"
+import { Button, Chip, Image, ScrollShadow, Tooltip } from '@heroui/react'
 
 import { isLink } from '@scripta/server/src/shared/utils/stringValidations'
 
 import { TCreateBookSchemaWithImage } from '@features/newBook/controller'
 import { useDraft } from '@shared/hooks/useDraft'
-import { formatNumber } from '@shared/utils/validation'
 import { capitalizeName } from '@shared/utils/transformers'
-import { Icon, Text, Title } from '@shared/components'
+import { Text, Title } from '@shared/components'
 import * as tv from './NewBookFormsTV'
 
 export function NewBookOverviewForm() {
   const { draft } = useDraft<TCreateBookSchemaWithImage>('newBook')
 
-  const isUrl = isLink(draft?.publishedUrl ?? '')
+  const isUrl = isLink(draft?.socialLink ?? '')
 
   const ellipsis = draft?.title.length > 35 ? '...' : ''
 
@@ -76,16 +74,8 @@ export function NewBookOverviewForm() {
               />
             </Chip>
           </div>
-          <div className={tv.newBookOverviewFormHeroSideTotalWordsTV()}>
-            <Tooltip showArrow content={draft?.totalWords}>
-              <div className={tv.newBookOverviewFormHeroSideIconWrapperTV()}>
-                <Icon icon={FaBook} color="white" size="md" />
-              </div>
-            </Tooltip>
-            <Text text={`${formatNumber(draft?.totalWords) ?? 0} Palavras`} />
-          </div>
-          {draft?.publishedUrl && isUrl ? (
-            <a href={draft?.publishedUrl} target="_blank" rel="noreferrer">
+          {draft?.socialLink && isUrl ? (
+            <a href={draft?.socialLink} target="_blank" rel="noreferrer">
               <Button color="primary" variant="solid" size="sm" fullWidth>
                 Acessar
               </Button>

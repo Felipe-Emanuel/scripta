@@ -27,8 +27,8 @@ export const UpdateBookService = async ({
     description: book.description,
     Gender: book.Gender,
     heroPathUrl: book.heroPathUrl,
-    publishedUrl: book.publishedUrl,
-    Theme: book.publishedUrl,
+    socialLink: book.socialLink,
+    Theme: book.Theme,
     title: book.title,
     totalWords: book.totalWords
   }

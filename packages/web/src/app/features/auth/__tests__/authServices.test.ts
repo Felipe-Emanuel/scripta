@@ -9,7 +9,7 @@ let mockApi: {
 
 beforeEach(() => {
   mockApi = {
-    post: jest.fn(),
+    post: jest.fn()
   }
 })
 
@@ -18,7 +18,7 @@ describe('authServices', () => {
     const endpoint = '/auth'
     const body: TAuthRequest = {
       email: 'test@example.com',
-      password: 'A@a12345',
+      password: 'A@a12345'
     }
 
     await mockApi.post(endpoint, body)
@@ -36,6 +36,7 @@ describe('createUser', () => {
       email: 'test@example.com',
       password: 'A@a12345',
       name: 'John Doe',
+      hasProvider: true
     }
 
     await mockApi.post(endpoint, body)

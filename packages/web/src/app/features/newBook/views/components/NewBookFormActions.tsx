@@ -1,4 +1,4 @@
-import { Button } from "@heroui/react"
+import { Button } from '@heroui/react'
 
 import { State } from '@features/books/BooksUtils'
 import { newBookFormActionsTV } from '@features/newBook/NewBookTV'
@@ -39,7 +39,7 @@ export function NewBookFormActions({
         <Button
           data-testid="new-book-form-action"
           size="sm"
-          onClick={handleBackFormState}
+          onPress={handleBackFormState}
           type="button"
           variant="bordered"
           color="secondary"
@@ -52,7 +52,7 @@ export function NewBookFormActions({
         data-testid="new-book-form-action"
         size="sm"
         color="primary"
-        onClick={() => (isLastStateOfNewBookForm ? submitBook() : handleNextFormState())}
+        onPress={() => (isLastStateOfNewBookForm ? submitBook() : handleNextFormState())}
         endContent={<Icon icon={submitButtonIcon} size="md" color="white" />}
       >
         <Text size="sm" text={isLastStateOfNewBookForm ? 'Publicar' : state.label} />

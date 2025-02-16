@@ -1,7 +1,9 @@
-import { Chapter } from '@prisma/client'
+import { Book, Chapter } from '@prisma/client'
 import { IChapterRepository } from '../ChapterRepository'
+import { bookEntitieMock } from '~/src/entities/Book/mocks'
 
 let chapters: Chapter[] = []
+const books: Book[] = [bookEntitieMock]
 
 export const inMemoryChapterRepository = (): IChapterRepository => {
   const createChapter = async (chapter: Chapter): Promise<Chapter> => {
@@ -41,11 +43,28 @@ export const inMemoryChapterRepository = (): IChapterRepository => {
     return 'Capítulo deletado com sucesso!'
   }
 
+  const getAllUpdatedChapters = async (userEmail: string): Promise<Chapter[]> => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const userBooks = books.filter((book) => book.userEmail === userEmail)
+
+    const updatedChapters = chapters.filter((chapter) => {
+      const isUserChapter = userBooks.some((book) => book.id === chapter.bookId)
+      const isUpdatedToday = chapter.updatedAt >= today
+
+      return isUserChapter && isUpdatedToday
+    })
+
+    return updatedChapters
+  }
+
   return {
     createChapter,
     getChapterById,
     updateChapter,
     getAllChapters,
-    deleteChapter
+    deleteChapter,
+    getAllUpdatedChapters
   }
 }

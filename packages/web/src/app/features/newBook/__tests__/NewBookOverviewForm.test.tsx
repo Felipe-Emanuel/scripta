@@ -33,16 +33,12 @@ describe('NewBookOverviewForm fallbacks', () => {
   })
 
   it('Should render 0 words and access button fallbacks', () => {
-    const { container } = renderComponent()
+    renderComponent()
 
-    const fallbackWords = container.querySelector(
-      'div > div > div:nth-child(1) > div:nth-child(2) > div:nth-child(4)'
-    )
     const fallbackAccessButton = screen.getByRole('button', {
       name: /insira uma url/i
     })
 
-    expect(fallbackWords?.textContent).toBe('0 Palavras')
     expect(fallbackAccessButton.firstChild?.textContent).toBe('Insira uma URL')
     expect(fallbackAccessButton.classList).toContain('pointer-events-none')
   })
@@ -94,16 +90,11 @@ describe('NewBookOverviewForm', () => {
   })
 
   it('Should render correctly 10k words and access button', () => {
-    const { container } = renderComponent()
-
-    const words = container.querySelector(
-      'div > div > div:nth-child(1) > div:nth-child(2) > div:nth-child(4)'
-    )
+    renderComponent()
     const accessButton = screen.getByRole('button', {
       name: /acessar/i
     })
 
-    expect(words?.textContent).toBe('10.0k Palavras')
     expect(accessButton.firstChild?.textContent).toBe('Acessar')
     expect(accessButton.classList).not.toContain('pointer-events-none')
   })

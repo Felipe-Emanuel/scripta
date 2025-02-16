@@ -40,10 +40,10 @@ describe('BookInformationCardInfo.test', () => {
   it.skip('Should render a link to published url', () => {
     renderComponent()
 
-    const publishedUrlLink = screen.getByTestId('book-information-card-info-published-link')
+    const socialLink = screen.getByTestId('book-information-card-info-published-link')
 
-    expect(publishedUrlLink.getAttribute('href')).toBe(BookResultMock.publishedUrl)
-    expect(publishedUrlLink.getAttribute('target')).toBe('_blank')
+    expect(socialLink.getAttribute('href')).toBe(BookResultMock.socialLink)
+    expect(socialLink.getAttribute('target')).toBe('_blank')
   })
 
   it.skip('Should render correctly infos', () => {

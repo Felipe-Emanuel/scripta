@@ -102,8 +102,8 @@ describe('isAllAttributeFilled', () => {
 })
 
 describe('isLink', () => {
-  it('should valid if publishedUrl is a URL', () => {
-    const isValidLink = isLink(bookEntitieMock.publishedUrl)
+  it('should valid if socialLink is a URL', () => {
+    const isValidLink = isLink(bookEntitieMock.socialLink)
 
     expect(isValidLink).toBeTruthy()
   })

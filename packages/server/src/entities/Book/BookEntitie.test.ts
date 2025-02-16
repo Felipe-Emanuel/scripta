@@ -84,10 +84,10 @@ describe('updatedBook', () => {
 
     const sut = updatedBook({
       ...bookEntitieMock,
-      publishedUrl: 'unexpected-url'
+      socialLink: 'unexpected-url'
     })
 
-    expect(sut).rejects.toThrow(throwBookMessages.invalidPublishedUrl)
+    expect(sut).rejects.toThrow(throwBookMessages.invalidSocialLink)
   })
 })
 

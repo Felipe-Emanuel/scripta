@@ -4,14 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
 
-import { useHighlightController } from '@features/Highlight/controller'
 import { useBook } from '@shared/hooks/contexts/useBook'
-import {
-  TBookResponse,
-  TCreateChapterRequest,
-  TPatchActiveBookRequest,
-  TUpdateBookRequest
-} from '@shared/types'
+import { TCreateChapterRequest, TPatchActiveBookRequest, TUpdateBookRequest } from '@shared/types'
 import { TEditBookSchema, editBookSchema } from '../BookInformationUtils'
 import { deleteBook, patchActiveOrConcluedBook, updateBook } from '../services'
 import { useRouter } from 'next/navigation'
@@ -22,14 +16,17 @@ import { toast } from 'react-toastify'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { cacheName } from '@shared/utils/constants/cacheName'
 import { useLocalEditor } from '@hooks/useLocalEditor'
+import { useDragAndPasteImage } from '~/src/app/shared/hooks/useDragAndPasteImage'
+import { useHighlightController } from '../../Highlight/controller'
 
-export const useBookController = (image?: string) => {
+export const useBookController = () => {
+  const { isDragActive, image, getRootProps, onPaste, clearimage } = useDragAndPasteImage()
+
   const { sessionCustomer } = useUser()
   const { menuState } = useLocalEditor({})
+  const { selectedBook, choiseBookToSeeInfo, clearSelectedBook } = useBook()
   const { push } = useRouter()
   const { refetch } = useHighlightController()
-  const { choiseBookToSeeInfo, selectedBook } = useBook()
-
   const [newChapterId, setNewChapterId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState(0)
   const [prevTab, setPrevTab] = useState(activeTab)
@@ -74,6 +71,8 @@ export const useBookController = (image?: string) => {
     [action]
   )
 
+  const queryClient = useQueryClient()
+
   const handleUpdateBook = useCallback(
     async (data: TEditBookSchema) => {
       if (selectedBook) {
@@ -82,11 +81,10 @@ export const useBookController = (image?: string) => {
             createdAt: selectedBook.createdAt,
             description: data.description,
             Gender: data.gender!,
-            heroPathUrl: image !== '' ? selectedBook?.heroPathUrl : data.heroPathUrl!,
-            publishedUrl: data.publishedUrl!,
+            heroPathUrl: String(image) || selectedBook?.heroPathUrl,
+            socialLink: data.socialLink!,
             Theme: data.theme!,
-            title: data.title!,
-            totalWords: data.totalWords
+            title: data.title!
           }
         }
 
@@ -102,7 +100,7 @@ export const useBookController = (image?: string) => {
         return updatedBook
       }
     },
-    [choiseBookToSeeInfo, refetch, image, selectedBook]
+    [choiseBookToSeeInfo, image, refetch, selectedBook]
   )
 
   const patchBookActiveAndConclued = useCallback(
@@ -124,9 +122,9 @@ export const useBookController = (image?: string) => {
   const { mutateAsync: handlePatchActiveOrConcluedBook } = useMutation({
     mutationKey: [cacheName.allBooks],
     mutationFn: patchBookActiveAndConclued,
-    onSuccess(editedItem) {
-      queryClient.setQueryData([cacheName.allBooks], (data: TBookResponse[] = []) => {
-        return data.map((item) => (item.id === editedItem?.id ? editedItem : item))
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: [cacheName.allBooks]
       })
     }
   })
@@ -139,19 +137,15 @@ export const useBookController = (image?: string) => {
     }
   }, [selectedBook])
 
-  const queryClient = useQueryClient()
-
   const { mutateAsync: handleDeleteBook } = useMutation({
     mutationKey: [cacheName.allBooks],
     mutationFn: deletingBook,
     onSuccess() {
-      if (selectedBook) {
-        const cachedBooks = queryClient.getQueryData<TBookResponse[]>([cacheName.allBooks])
+      clearSelectedBook()
 
-        queryClient.setQueryData([cacheName.allBooks], () =>
-          cachedBooks?.filter((book) => book.id !== selectedBook.id)
-        )
-      }
+      return queryClient.invalidateQueries({
+        queryKey: [cacheName.allBooks]
+      })
     }
   })
 
@@ -167,13 +161,12 @@ export const useBookController = (image?: string) => {
 
   useEffect(() => {
     if (selectedBook) {
-      setValue('publishedUrl', selectedBook.publishedUrl)
+      setValue('socialLink', selectedBook.socialLink)
       setValue('description', selectedBook.description)
       setValue('heroPathUrl', selectedBook.heroPathUrl)
       setValue('gender', selectedBook.Gender)
       setValue('theme', selectedBook.Theme)
       setValue('title', selectedBook.title)
-      setValue('totalWords', selectedBook.totalWords)
     }
   }, [selectedBook, setValue])
 
@@ -200,7 +193,6 @@ export const useBookController = (image?: string) => {
       if (sessionCustomer) {
         const response = await createNewChapter(newChapter, sessionCustomer.email)
 
-        console.log('chapterId', chapterId)
         if (response?.data?.message === 'O ultimo capítulo não está concluído') {
           return ToggleConfirm()
         }
@@ -242,6 +234,12 @@ export const useBookController = (image?: string) => {
     handlePatchActiveOrConcluedBook,
     handleDeleteBook,
     goToNewChapter,
-    goToChapters
+    goToChapters,
+
+    isDragActive,
+    image,
+    getRootProps,
+    onPaste,
+    clearimage
   }
 }

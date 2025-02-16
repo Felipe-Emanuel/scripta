@@ -1,6 +1,6 @@
 'use client'
 
-import { Autocomplete, AutocompleteItem, Button, Tooltip } from "@heroui/react"
+import { Autocomplete, AutocompleteItem, Button, Tooltip } from '@heroui/react'
 import { useEffect } from 'react'
 
 import { IoMdCloseCircle } from 'react-icons/io'
@@ -70,7 +70,7 @@ export function MenuSearch({ defaultItems }: IMenuSearchProps) {
         }}
       >
         <Tooltip showArrow content="Dispensar">
-          <Button isIconOnly onClick={clearing} className={tv.closeIconTV()}>
+          <Button isIconOnly onPress={clearing} className={tv.closeIconTV()}>
             <Icon icon={IoMdCloseCircle} />
           </Button>
         </Tooltip>

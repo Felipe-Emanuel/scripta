@@ -1,6 +1,6 @@
 import { IChapterRepository } from '@repositories'
-import { deleteChapterSchema } from '~/src/entities/Chapter/chapterSchema'
 import { throwChapterMessages } from '~/src/entities/Chapter/utils'
+import { deleteChapterSchema } from '@schemas'
 
 export type TDeleteChapterServiceRequest = {
   actions: Pick<IChapterRepository, 'getChapterById' | 'deleteChapter'>

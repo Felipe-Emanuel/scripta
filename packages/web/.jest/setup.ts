@@ -2,6 +2,13 @@ import '@testing-library/jest-dom'
 
 import React from 'react'
 
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(() => ({
+    push: jest.fn()
+  })),
+  usePathname: jest.fn()
+}))
+
 jest.mock(
   '@tanstack/react-query',
   jest.fn(() => ({

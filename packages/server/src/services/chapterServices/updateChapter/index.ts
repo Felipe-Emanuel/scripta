@@ -1,18 +1,21 @@
-import { z } from 'zod'
 import { Chapter } from '@prisma/client'
-import { ChapterEntitie } from '@entities/Chapter'
-import { IChapterRepository } from '@repositories'
+import { IChapterRepository, IGoalRepository } from '@repositories'
 import { GetAllBooksService, TGetAllBooksServiceRequest } from '@services'
 import { throwChapterMessages } from '@entities/Chapter/utils'
 import { GetChapterByIdService, TGetChapterByIdServiceRequest } from '../getChapterById'
+import { updateChapterServiceSchema } from '@schemas'
+import { TUpdateChapter } from '@types'
+import { countWords } from '@utils'
 
 type TAction = Pick<IChapterRepository, 'updateChapter' | 'getChapterById'> &
-  TGetAllBooksServiceRequest['action']
+  TGetAllBooksServiceRequest['action'] &
+  Pick<IGoalRepository, 'updateGoal'>
 
 export type TUpdateChapterServiceRequest = {
   actions: TAction
-  updatedChapter: Omit<Chapter, 'updatedAt'>
+  updatedChapter: TUpdateChapter
   userEmail: string
+  newWords?: number
 }
 
 type TUpdateChapterServiceResponse = Chapter
@@ -20,27 +23,15 @@ type TUpdateChapterServiceResponse = Chapter
 export const UpdateChapterService = async ({
   actions,
   updatedChapter,
-  userEmail
+  userEmail,
+  newWords = 0
 }: TUpdateChapterServiceRequest): Promise<TUpdateChapterServiceResponse> => {
-  const { updateChapter, getAllBooks, getChapterById } = actions
+  const { updateChapter, getAllBooks, getChapterById, updateGoal } = actions
 
-  const paramSchema = z.object({
-    userEmail: z
-      .string({
-        required_error: throwChapterMessages.requiredEmail
-      })
-      .email(throwChapterMessages.invalidEmail)
-  })
+  const email = updateChapterServiceSchema.parse({ userEmail })
 
-  const email = paramSchema.parse({ userEmail })
-
-  const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = {
-    getAllBooks
-  }
-
-  const getChapterAction: TGetChapterByIdServiceRequest['action'] = {
-    getChapterById
-  }
+  const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = { getAllBooks }
+  const getChapterAction: TGetChapterByIdServiceRequest['action'] = { getChapterById }
 
   const booksByEmail = await GetAllBooksService({
     action: actionGetAllBooks,
@@ -49,7 +40,6 @@ export const UpdateChapterService = async ({
   })
 
   const existentBook = booksByEmail.find((book) => book.id === updatedChapter.bookId)
-
   if (!existentBook) throw new Error(throwChapterMessages.wrongId)
 
   const existentChapter = await GetChapterByIdService({
@@ -57,17 +47,15 @@ export const UpdateChapterService = async ({
     chapterId: updatedChapter.id
   })
 
-  const { createChapter: create } = ChapterEntitie({
-    updatedAt: new Date(),
-    bookId: existentBook.id,
-    id: existentChapter.id,
-    createdAt: existentChapter.createdAt,
-    ...updatedChapter
-  })
+  const oldWordCount = countWords(existentChapter.chapterText)
+  const newWordCount = countWords(updatedChapter.chapterText)
+  const wordsAdded = newWordCount - oldWordCount
 
-  const newChapter = await create()
+  const res = await updateChapter(updatedChapter, newWords)
 
-  await updateChapter(newChapter)
+  if (wordsAdded > 0) {
+    await updateGoal(userEmail, wordsAdded)
+  }
 
-  return newChapter
+  return res
 }

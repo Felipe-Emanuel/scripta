@@ -6,15 +6,36 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "~/*": ["./*"],
-      "__tests__/*": ["./__tests__/*"],
-      "@constants/*": ["src/shared/utils/constants/*"],
-      "@utils": ["src/shared/utils/index.ts"],
-      "@entities/*": ["src/entities/*"],
-      "@types": ["src/shared/types/index.ts"],
-      "@services": ["src/services/index.ts"],
-      "@repositories": ["src/repositories/index.ts"],
-      "@controllers": ["src/controllers/index.ts"]
+      "~/*": [
+        "./*"
+      ],
+      "__tests__/*": [
+        "./__tests__/*"
+      ],
+      "@constants/*": [
+        "src/shared/utils/constants/*"
+      ],
+      "@utils": [
+        "src/shared/utils/index.ts"
+      ],
+      "@entities/*": [
+        "src/entities/*"
+      ],
+      "@types": [
+        "src/shared/types/index.ts"
+      ],
+      "@services": [
+        "src/services/index.ts"
+      ],
+      "@repositories": [
+        "src/repositories/index.ts"
+      ],
+      "@controllers": [
+        "src/controllers/index.ts"
+      ],
+      "@schemas": [
+        "src/shared/schemas/index.ts"
+      ]
     }
   }
 }

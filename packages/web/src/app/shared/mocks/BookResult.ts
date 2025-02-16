@@ -12,7 +12,7 @@ export const BookResultMock: TBookResponse = {
   hits: 350,
   id: randomUUID(),
   isActive: true,
-  publishedUrl: 'https://link-to-published.com',
+  socialLink: 'https://link-to-published.com',
   reaction: [],
   Theme: 'oldschool',
   title: 'A Nice Title',

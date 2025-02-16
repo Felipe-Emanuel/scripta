@@ -1,6 +1,7 @@
 import { Chapter } from '@prisma/client'
 import { IChapterRepository } from '../ChapterRepository'
 import { prisma } from '~/src/lib'
+import { TUpdateChapter } from '@types'
 
 export const databaseChapterRepository = (): IChapterRepository => {
   const createChapter = async (chapter: Chapter): Promise<Chapter> => {
@@ -21,12 +22,43 @@ export const databaseChapterRepository = (): IChapterRepository => {
     return existentChapter || null
   }
 
-  const updateChapter = async (chapter: Chapter): Promise<Chapter> => {
+  const updateChapter = async (chapter: TUpdateChapter, newWords: number): Promise<Chapter> => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const existingRecord = await prisma.dailyWordCount.findFirst({
+      where: {
+        chapterId: chapter.id,
+        date: {
+          gte: today
+        }
+      }
+    })
+
+    if (existingRecord) {
+      await prisma.dailyWordCount.update({
+        where: { id: existingRecord.id },
+        data: {
+          wordsWritten: existingRecord.wordsWritten + newWords
+        }
+      })
+    } else {
+      await prisma.dailyWordCount.create({
+        data: {
+          chapterId: chapter.id,
+          wordsWritten: newWords
+        }
+      })
+    }
+
     const updatedChapter = await prisma.chapter.update({
       where: {
         id: chapter.id
       },
-      data: chapter
+      data: {
+        ...chapter,
+        wordsCounter: { increment: newWords }
+      }
     })
 
     return updatedChapter || null
@@ -55,11 +87,32 @@ export const databaseChapterRepository = (): IChapterRepository => {
     return 'Capítulo deletado com sucesso!'
   }
 
+  const getAllUpdatedChapters = async (userEmail: string): Promise<Chapter[]> => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const chapters = await prisma.chapter.findMany({
+      where: {
+        Book: {
+          User: {
+            email: userEmail
+          }
+        },
+        updatedAt: {
+          gte: today
+        }
+      }
+    })
+
+    return chapters || []
+  }
+
   return {
     createChapter,
     getChapterById,
     updateChapter,
     getAllChapters,
-    deleteChapter
+    deleteChapter,
+    getAllUpdatedChapters
   }
 }

@@ -1,4 +1,4 @@
-import { Image } from "@heroui/react"
+import { Image } from '@heroui/react'
 
 import { BsEmojiHeartEyes } from 'react-icons/bs'
 import { HiTrophy } from 'react-icons/hi2'
@@ -14,8 +14,8 @@ import { IconType } from 'react-icons/lib'
 
 interface IDetailsProps {
   selectedBook: TBookResponse
-  characterIcon: IconType
   isCharactersCardHovered: boolean
+  characterIcon: IconType
   setIsCharactersCardHovered: Dispatch<SetStateAction<boolean>>
 }
 
@@ -40,11 +40,11 @@ export function Details({
   return (
     <div className={tv.cardInfoWrapperTV()}>
       <div className={tv.publishedHeroWrapperTV()}>
-        {selectedBook?.publishedUrl ? (
+        {selectedBook?.socialLink ? (
           <a
             data-testid="book-information-card-info-published-link"
             target="_blank"
-            href={selectedBook?.publishedUrl}
+            href={selectedBook?.socialLink}
             rel="noreferrer"
           >
             {hero}

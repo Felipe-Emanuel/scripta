@@ -8,9 +8,9 @@ import { TCreateBookSchema, createBookSchema } from '../NewBookUtils'
 import { createBook } from '../services'
 import { useDebounce } from '@shared/hooks/useDebounce'
 import { useDraft } from '@shared/hooks/useDraft'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { cacheName } from '@shared/utils/constants/cacheName'
-import { getAllBooks } from '@features/Highlight/services'
+import { useHighlightController } from '../../Highlight/controller'
 
 const DELAY_TO_SEE_FORM = 600 // in ms
 
@@ -21,6 +21,7 @@ export type TCreateBookSchemaWithImage = {
 export const useNewBookController = () => {
   const { draft, updateDraft, clearDraft } = useDraft<TCreateBookSchemaWithImage>('newBook')
   const { sessionCustomer } = useUser()
+  const { refetch } = useHighlightController()
 
   const [isFirstAccess, setIsFirstAccess] = useState(true)
 
@@ -42,10 +43,10 @@ export const useNewBookController = () => {
           Gender: gender,
           heroPathUrl: String(draft?.heroPathUrl),
           Theme: theme,
-          publishedUrl: data.publishedUrl ?? ''
+          socialLink: data.socialLink ?? ''
         }
 
-        const newBook = createBook({
+        const newBook = await createBook({
           userEmail,
           book
         })
@@ -56,18 +57,11 @@ export const useNewBookController = () => {
     [draft, sessionCustomer]
   )
 
-  const queryClient = useQueryClient()
-
   const { mutateAsync } = useMutation({
     mutationKey: [cacheName.allBooks],
     mutationFn: createNewBook,
     async onSuccess() {
-      if (sessionCustomer) {
-        const { email: userEmail } = sessionCustomer
-        const allbooks = await getAllBooks(userEmail)
-
-        queryClient.setQueryData([cacheName.allBooks], () => allbooks)
-      }
+      refetch()
     }
   })
 
@@ -75,7 +69,7 @@ export const useNewBookController = () => {
     resolver: zodResolver(createBookSchema),
     defaultValues: {
       description: draft?.description,
-      publishedUrl: draft?.publishedUrl ?? ''
+      socialLink: draft?.socialLink ?? ''
     }
   })
 
@@ -97,8 +91,7 @@ export const useNewBookController = () => {
   const theme = watch('theme')
   const conclued = watch('conclued')
   const isActive = watch('isActive')
-  const publishedUrl = watch('publishedUrl')
-  const totalWords = watch('totalWords')
+  const socialLink = watch('socialLink')
 
   const newBook = {
     ...watch(),
@@ -113,7 +106,6 @@ export const useNewBookController = () => {
     if (draft) {
       setValue('conclued', draft?.conclued ?? false)
       setValue('isActive', draft?.isActive ?? true)
-      setValue('totalWords', draft?.totalWords ?? 0)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -127,7 +119,7 @@ export const useNewBookController = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title, description, gender, theme, conclued, isActive, publishedUrl, totalWords])
+  }, [title, description, gender, theme, conclued, isActive, socialLink])
 
   return {
     bookSchema,

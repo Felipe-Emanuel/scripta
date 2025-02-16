@@ -1,7 +1,7 @@
 import { BiTrashAlt } from 'react-icons/bi'
 
 import { useEffect, useState } from 'react'
-import { Button, Image } from "@heroui/react"
+import { Button, Image } from '@heroui/react'
 
 import { TCreateBookSchemaWithImage } from '@features/newBook/controller'
 import { useDragAndPasteImage } from '@shared/hooks/useDragAndPasteImage'
@@ -58,15 +58,13 @@ export function NewBookMediaForm() {
               variant="solid"
               size="sm"
               className={tv.newBookMediaFormTrashImageTV()}
-              onClick={clearing}
+              onPress={clearing}
             >
               <Icon icon={BiTrashAlt} color="white" />
             </Button>
             <Image
               removeWrapper
               alt="Imagem de capa do novo livro"
-              height={400}
-              width={300}
               src={String(useImage ? image : currentImage)}
               className={tv.newBookMediaFormHeroTV()}
             />

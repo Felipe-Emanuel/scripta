@@ -6,7 +6,7 @@ import { AxiosError } from 'axios'
 export const getGoalByFilter = async ({
   email,
   endGoalFilter,
-  startGoalFilter,
+  startGoalFilter
 }: TGetGoalRequest) => {
   try {
     const endpoint = '/getGoals'
@@ -14,16 +14,12 @@ export const getGoalByFilter = async ({
     const body: TGetGoalRequest = {
       email,
       startGoalFilter,
-      endGoalFilter,
+      endGoalFilter
     }
 
     const { data } = await api.post<TGoalResponse[]>(endpoint, body)
 
-    if (data) {
-      return data
-    }
-
-    return []
+    return data || []
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(defaultErrorMessages.wordCountNotFound)

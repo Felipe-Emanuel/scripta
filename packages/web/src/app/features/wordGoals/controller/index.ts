@@ -1,16 +1,16 @@
-import { getCurrentGoal, updateCurrentGoal } from '@features/profile/services'
+import { updateCurrentGoal } from '@features/profile/services'
 import { TUpdateWordGoalsSchema, updateWordGoalsSchema } from '@features/wordGoals/WordGoaldUtils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TGoalResponse, TUpdateCurrentGoalRequest } from '@shared/types'
+import { TUpdateCurrentGoalRequest } from '@shared/types'
 import { cacheName } from '@shared/utils/constants/cacheName'
 
-import { progressGoal } from '@shared/utils/validation'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useQueryData, useQueryMutation } from '@hooks/useReactQuery'
 import { useUser } from '@hooks/useUser'
 import { queryClient } from '@shared/services/reactQuery'
+import { getGoalProgress } from '../services'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export const useWordGoalsController = () => {
   const { sessionCustomer } = useUser()
@@ -18,21 +18,10 @@ export const useWordGoalsController = () => {
 
   const toggleFormVisible = () => setIsFormVisible((prev) => !prev)
 
-  const getGoal = useCallback(async () => {
-    if (sessionCustomer) {
-      const current = getCurrentGoal(sessionCustomer.email)
-
-      return current
-    }
-  }, [sessionCustomer])
-
-  const { data: currentGoal } = useQueryData({
-    getDataFn: getGoal,
-    cacheName: 'currentGoal',
-    cacheTime: '1-hours'
+  const { data: currentGoal, isLoading } = useQuery({
+    queryFn: () => getGoalProgress(sessionCustomer?.email),
+    queryKey: [cacheName.currentGoal]
   })
-
-  const isLoading = !currentGoal?.id
 
   const goal = currentGoal?.goal
   const words = currentGoal?.words
@@ -46,28 +35,38 @@ export const useWordGoalsController = () => {
 
   const { handleSubmit, reset } = wordGoalsSchema
 
-  const { mutateAsync } = useQueryMutation<TGoalResponse, TUpdateCurrentGoalRequest>({
-    mutationFn: updateCurrentGoal,
-    cacheName: 'currentGoal',
-    variablePath: 'updatedGoal'
+  const putGoal = async (goal: number) => {
+    if (currentGoal) {
+      const body: TUpdateCurrentGoalRequest = {
+        updatedGoal: {
+          ...currentGoal,
+          words: 0,
+          goal
+        }
+      }
+      const updatedGoal = await updateCurrentGoal(body)
+
+      return updatedGoal
+    }
+  }
+
+  const { mutateAsync } = useMutation({
+    mutationFn: putGoal,
+    mutationKey: [cacheName.currentGoal],
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [cacheName.currentGoal]
+      })
+    }
   })
 
   const visibleState: 'visible' | 'hidden' | undefined = isFormVisible ? 'visible' : 'hidden'
 
-  const series = (goal && words && progressGoal(words, goal).toFixed(2)) || 0
+  const series = currentGoal?.goalCompletePercent?.toFixed(2) || 0
 
   const onSubmit = async (data: TUpdateWordGoalsSchema) => {
     if (currentGoal) {
-      const goalComplete = progressGoal(currentGoal.words, data.goal)
-
-      await mutateAsync({
-        goalId: currentGoal.id,
-        updatedGoal: {
-          ...currentGoal,
-          goal: data.goal,
-          goalComplete: goalComplete >= 100
-        }
-      })
+      await mutateAsync(data.goal)
 
       queryClient.invalidateQueries({
         queryKey: [cacheName.goalsByFilter]

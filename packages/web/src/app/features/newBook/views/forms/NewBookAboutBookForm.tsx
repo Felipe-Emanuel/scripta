@@ -2,16 +2,20 @@ import { generateRandomStringForExemple } from '@features/newBook/NewBookUtils'
 import { TCreateBookSchemaWithImage, useNewBookController } from '@features/newBook/controller'
 import { titlesExemples } from '@shared/utils/constants/titlesExemples'
 import { genres, themes } from '@shared/utils/constants/genresAndThemes'
-import { formatNumber } from '@shared/utils/validation'
 import { Input } from '@shared/components'
 import { useDraft } from '@shared/hooks/useDraft'
 import * as tv from './NewBookFormsTV'
+import { useMemo } from 'react'
 
 export function NewBookAboutBookForm() {
   const { draft } = useDraft<TCreateBookSchemaWithImage>('newBook')
   const { errors, isActive, conclued, setValue } = useNewBookController()
 
   const toggle = (field: 'conclued' | 'isActive', value: boolean) => setValue(field, value)
+
+  const memoredTitlesExemples = useMemo(() => generateRandomStringForExemple(titlesExemples), [])
+  const memoredGenres = useMemo(() => generateRandomStringForExemple(genres), [])
+  const memoredThemes = useMemo(() => generateRandomStringForExemple(themes), [])
 
   return (
     <div className={tv.newBookAboutBookFormTV()}>
@@ -21,7 +25,7 @@ export function NewBookAboutBookForm() {
           <Input.field
             defaultValue={draft?.title}
             name="title"
-            placeholder={`ex: ${generateRandomStringForExemple(titlesExemples)}`}
+            placeholder={`ex: ${memoredTitlesExemples}`}
           />
           <Input.error field="title" />
         </Input.root>
@@ -50,7 +54,7 @@ export function NewBookAboutBookForm() {
             <Input.field
               defaultValue={draft?.gender}
               name="gender"
-              placeholder={`ex: ${generateRandomStringForExemple(genres)}`}
+              placeholder={`ex: ${memoredGenres}`}
             />
             <Input.error field="gender" />
           </Input.root>
@@ -60,22 +64,11 @@ export function NewBookAboutBookForm() {
             <Input.field
               defaultValue={draft?.theme}
               name="theme"
-              placeholder={`ex: ${generateRandomStringForExemple(themes)}`}
+              placeholder={`ex: ${memoredThemes}`}
             />
             <Input.error field="theme" />
           </Input.root>
         </div>
-
-        <Input.root>
-          <Input.label text="Total de palavras" htmlFor="totalWords" />
-          <Input.field
-            type="number"
-            defaultValue={draft?.totalWords > 0 ? formatNumber(draft?.totalWords) : ''}
-            name="totalWords"
-            placeholder={`ex: ${formatNumber(35240)}`}
-          />
-          <Input.error field="totalWords" />
-        </Input.root>
 
         <div className={tv.newBookAboutBookSwitchSideTV()}>
           <div className={tv.newBookAboutBookSwitchTV()}>

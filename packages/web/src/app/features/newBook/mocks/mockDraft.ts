@@ -1,5 +1,5 @@
 export const mockDraft = {
-  publishedUrl: 'https://publishedUrl.com',
+  socialLink: 'https://socialLink.com',
   description: 'a nice description',
   totalWords: 10000,
   isActive: true,

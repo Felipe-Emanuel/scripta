@@ -19,7 +19,7 @@ import {
   SortDescriptor,
   SlotsToClasses,
   TableSlots
-} from "@heroui/react"
+} from '@heroui/react'
 
 import { columns, statusOptions } from '@features/myOwnBooks/MyOwnBooksUtils'
 import { TBookResponse } from '@shared/types'
@@ -234,9 +234,9 @@ export default function BooksTable() {
                   endContent={<Icon icon={FaChevronDown} color="gray" />}
                   size="sm"
                   variant="flat"
-                  color="secondary"
+                  color="primary"
                 >
-                  Estado
+                  <Text text="Estado" size="sm" color="white" />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
@@ -263,9 +263,9 @@ export default function BooksTable() {
                   endContent={<Icon icon={FaChevronDown} color="gray" />}
                   size="sm"
                   variant="flat"
-                  color="secondary"
+                  color="primary"
                 >
-                  Colunas
+                  <Text text="Colunas" size="sm" color="white" />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu

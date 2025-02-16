@@ -6,13 +6,12 @@ import { chapterMock } from '~/src/entities/Chapter/mocks'
 import { jestErrorHandler } from '~/__tests__/jestErrorHandler'
 
 describe('PatchChapterTitleService', () => {
-  const { getChapterById, createChapter, updateChapter } = inMemoryChapterRepository()
+  const { getChapterById, createChapter } = inMemoryChapterRepository()
   const createChapterAction: TCreateChapterServiceRequest['action'] = {
     createChapter
   }
   const patchConcluedChapterAction: TPatchChapterTitleServiceRequest['actions'] = {
-    getChapterById,
-    updateChapter
+    getChapterById
   }
 
   it('should throw about id required', () => {

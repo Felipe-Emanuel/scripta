@@ -12,14 +12,7 @@ type InputFieldProps = {
 } & InputHTMLAttributes<HTMLInputElement> &
   VariantProps<typeof inputFieldTV>
 
-export function InputField({
-  name,
-  type,
-  className,
-  variant,
-  icon,
-  ...props
-}: InputFieldProps) {
+export function InputField({ name, type, className, variant, icon, ...props }: InputFieldProps) {
   const { register } = useFormContext()
 
   return (

@@ -6,7 +6,9 @@ import { useUser } from '@hooks/useUser'
 import { useLocalEditor } from '@hooks/useLocalEditor'
 import { useLocalParams } from '@hooks/useLocalParams'
 import { TChapterResponse, TPatchChapterHTMLRequest } from '@shared/types'
-import { useQueryMutation } from '~/src/app/shared/hooks/useReactQuery'
+import { useQueryMutation } from '@hooks/useReactQuery'
+import { queryClient } from '~/src/app/shared/services/reactQuery'
+import { cacheName } from '~/src/app/shared/utils/constants/cacheName'
 
 export const useChapterEditorController = () => {
   const { currentParams } = useLocalParams()
@@ -26,15 +28,19 @@ export const useChapterEditorController = () => {
       if (sessionCustomer) {
         const body: TPatchChapterHTMLRequest = {
           data: {
-            chapter: {
+            updatedChapter: {
+              ...menuState,
               bookId: String(params.bookId),
               id: String(params.chapterId || currentParams.chapterId),
-              chapterText: String(html),
-              ...menuState
+              chapterText: String(html)
             }
           },
           userEmail: sessionCustomer?.email
         }
+
+        queryClient.invalidateQueries({
+          queryKey: [cacheName.currentGoal]
+        })
 
         mutate(body)
       }

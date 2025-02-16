@@ -4,13 +4,12 @@ import { z } from 'zod'
 
 export const createBookSchema = z.object({
   conclued: z.boolean().default(false),
-  description: z.string().min(10, 'Mínimo de 10 palavras').max(500, 'Máximo de 500 palavras'),
-  gender: z.string().min(3, 'Mínimo de 3 palavras').max(25, 'Máximo de 25 palavras'),
+  description: z.string().min(10, 'Mínimo de 10 caracteres').max(500, 'Máximo de 500 caracteres'),
+  gender: z.string().min(3, 'Mínimo de 3 caracteres').max(25, 'Máximo de 25 caracteres'),
   isActive: z.boolean().default(true),
-  publishedUrl: z.string().nullable(),
-  theme: z.string().min(3, 'Mínimo de 3 palavras').max(25, 'Máximo de 25 palavras'),
-  title: z.string().min(3, 'Mínimo de 3 palavras').max(50, 'Máximo de 50 palavras'),
-  totalWords: z.coerce.number()
+  socialLink: z.string().nullable(),
+  theme: z.string().min(3, 'Mínimo de 3 caracteres').max(25, 'Máximo de 25 caracteres'),
+  title: z.string().min(3, 'Mínimo de 3 caracteres').max(50, 'Máximo de 50 caracteres')
 })
 
 export type TCreateBookSchema = z.infer<typeof createBookSchema>

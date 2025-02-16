@@ -82,7 +82,7 @@ export const newBookFormWrapperTV = tv({
 })
 
 export const newBookAnimatedFormWrapperTV = tv({
-  base: 'bg-primary-background flex flex-col gap-6 rounded-2xl md:p-6 h-80 overflow-y-scroll sm:overflow-y-hidden overflow-x-scroll'
+  base: 'bg-primary-background flex flex-col gap-6 rounded-2xl md:p-6 h-96 overflow-y-scroll sm:overflow-y-hidden overflow-x-scroll'
 })
 
 export const newBookAnimatedFormContentTV = tv({

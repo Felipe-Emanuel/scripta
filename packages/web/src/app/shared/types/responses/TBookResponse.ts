@@ -4,7 +4,7 @@ export type TBookResponse = {
   id: string
   title: string
   description: string
-  publishedUrl: string
+  socialLink: string
   userId: string
   heroPathUrl: string
   conclued: boolean

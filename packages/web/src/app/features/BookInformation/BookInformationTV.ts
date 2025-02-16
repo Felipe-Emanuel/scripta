@@ -85,7 +85,16 @@ export const modalBodyHeroSideTV = tv({
 })
 
 export const dragAndPasteTV = tv({
-  base: 'relative w-44 flex items-center justify-center cursor-pointer'
+  base: 'relative h-[13.5rem] w-44 flex items-center justify-center cursor-pointer rounded-xl',
+  variants: {
+    hasImage: {
+      true: 'border-dotted border-2 border-white/50',
+      false: 'border-none'
+    }
+  },
+  defaultVariants: {
+    hasImage: false
+  }
 })
 
 export const clearImageButtonTV = tv({
@@ -97,7 +106,7 @@ export const isDragingFallbackTV = tv({
 })
 
 export const copyAndPasteHeroTV = tv({
-  base: 'flex-shrink-0 rounded-2xl bg-cover h-44 w-32 size-full'
+  base: 'flex-shrink-0 rounded-2xl bg-cover h-44 w-32 size-full pointer-events-none'
 })
 
 export const inputsWrapperTV = tv({

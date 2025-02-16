@@ -20,7 +20,7 @@ describe('NewBookSocialForm', () => {
 
   it('Should render a default value link', () => {
     const mockDraft = {
-      publishedUrl: 'https://publishedUrl.com'
+      socialLink: 'https://socialLink.com'
     }
     const { result } = renderHook(() => useDraft('newBook'))
     const { updateDraft } = result.current
@@ -29,11 +29,13 @@ describe('NewBookSocialForm', () => {
 
     renderComponent()
 
-    const publishedUrlInput = screen.getByRole('textbox', {
-      name: /link de acesso/i
+    screen.logTestingPlaygroundURL()
+
+    const socialLinkInput = screen.getByRole('textbox', {
+      name: /link social/i
     })
 
-    expect(publishedUrlInput.getAttribute('value')).toBe(mockDraft.publishedUrl)
+    expect(socialLinkInput.getAttribute('value')).toBe(mockDraft.socialLink)
   })
 
   it('Should not broken ih havent draft and return a empty string as value', () => {
@@ -44,10 +46,10 @@ describe('NewBookSocialForm', () => {
 
     renderComponent()
 
-    const publishedUrlInput = screen.getByRole('textbox', {
-      name: /link de acesso/i
+    const socialLinkInput = screen.getByRole('textbox', {
+      name: /link social/i
     })
 
-    expect(publishedUrlInput.getAttribute('value')).toBe('')
+    expect(socialLinkInput.getAttribute('value')).toBe('')
   })
 })

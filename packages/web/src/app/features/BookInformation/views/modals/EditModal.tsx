@@ -8,19 +8,17 @@ import {
   ModalFooter,
   Button,
   useDisclosure
-} from "@heroui/react"
+} from '@heroui/react'
 
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FormProvider } from 'react-hook-form'
 
 import { BiTrash } from 'react-icons/bi'
 
 import { Icon, Input, Text, Title } from '@shared/components'
-import { useDragAndPasteImage } from '@shared/hooks/useDragAndPasteImage'
 import { TBookResponse } from '@shared/types'
 import { capitalizeName } from '@shared/utils/transformers'
-import { formatNumber } from '@shared/utils/validation'
 import { useBookController } from '@features/BookInformation/controller'
 import { motionProps } from '@features/feedback/FeedbackUtils'
 import * as tv from '@features/BookInformation/BookInformationTV'
@@ -33,8 +31,30 @@ interface IEditModalProps {
 
 export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
   const { onOpenChange } = useDisclosure()
-  const { isDragActive, image, getRootProps, onPaste, clearimage } = useDragAndPasteImage()
-  const { editSchema, errors, isValid, handleSubmit, onSubmit } = useBookController(String(image))
+
+  const {
+    editSchema,
+    errors,
+    isValid,
+    handleSubmit,
+    onSubmit,
+
+    isDragActive,
+    image,
+    getRootProps,
+    onPaste,
+    clearimage
+  } = useBookController()
+
+  const [originalHeroPathUrl, setOriginalHeroPathUrl] = useState(book.heroPathUrl)
+  const [imageUrl, setImageUrl] = useState(image || book.heroPathUrl)
+
+  useEffect(() => {
+    if (isEditing) {
+      setOriginalHeroPathUrl(book.heroPathUrl)
+      setImageUrl(image || book.heroPathUrl)
+    }
+  }, [isEditing, book.heroPathUrl, image])
 
   return (
     <Modal
@@ -57,10 +77,37 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
             <FormProvider {...editSchema}>
               <ModalBody as="form" onSubmit={handleSubmit(onSubmit)} className={tv.modalBodyTV()}>
                 <div className={tv.modalBodyHeroSideTV()}>
-                  <div onPaste={onPaste} {...getRootProps()} className={tv.dragAndPasteTV()}>
-                    {image && (
+                  <div
+                    onPaste={onPaste}
+                    {...getRootProps()}
+                    className={tv.dragAndPasteTV({ hasImage: !book.heroPathUrl })}
+                  >
+                    {imageUrl ? (
+                      <Image
+                        width={250}
+                        height={400}
+                        alt="Imagem de capa do livro"
+                        src={String(imageUrl)}
+                        className={tv.copyAndPasteHeroTV()}
+                        fetchPriority="low"
+                      />
+                    ) : (
+                      <Text
+                        text={
+                          isDragActive
+                            ? 'Solte aqui...'
+                            : 'Dê mais personalidade para sua história arrastando bopa capa até aqui.'
+                        }
+                        align="center"
+                        color="gray"
+                      />
+                    )}
+
+                    {imageUrl && (
                       <Button
-                        onClick={clearimage}
+                        onPress={() => {
+                          setImageUrl('')
+                        }}
                         variant="light"
                         isIconOnly
                         className={tv.clearImageButtonTV()}
@@ -68,23 +115,7 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
                         <Icon color="danger" icon={BiTrash} size="responsive" />
                       </Button>
                     )}
-
-                    {isDragActive && (
-                      <div className={tv.isDragingFallbackTV()}>
-                        <Text text="Solte aqui" />
-                      </div>
-                    )}
-
-                    {book.heroPathUrl && (
-                      <Image
-                        width={250}
-                        height={400}
-                        alt="Imagem de capa do livro"
-                        src={String(image) || book.heroPathUrl}
-                        className={tv.copyAndPasteHeroTV()}
-                        fetchPriority="low"
-                      />
-                    )}
+                    <Input.error field="heroPathUrl" />
                   </div>
 
                   <div className={tv.inputsWrapperTV()}>
@@ -107,25 +138,6 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
                         <Input.error field="theme" />
                       </Input.root>
                     </div>
-
-                    <div className={tv.inputSideTV()}>
-                      <Input.root>
-                        <Input.label text="Link de publicação" htmlFor="publishedUrl" />
-                        <Input.field name="publishedUrl" placeholder={book.publishedUrl} />
-                        <Input.error field="publishedUrl" />
-                      </Input.root>
-
-                      <Input.root>
-                        <Input.label text="Total de palavras" htmlFor="totalWords" />
-                        <Input.field
-                          min={0}
-                          type="number"
-                          name="totalWords"
-                          placeholder={String(formatNumber(book.totalWords))}
-                        />
-                        <Input.error field="totalWords" />
-                      </Input.root>
-                    </div>
                   </div>
                 </div>
 
@@ -143,7 +155,13 @@ export function EditModal({ isEditing, book, toggleEditing }: IEditModalProps) {
                 </div>
 
                 <ModalFooter>
-                  <Button color="danger" onPress={onClose}>
+                  <Button
+                    color="danger"
+                    onPress={() => {
+                      setImageUrl(originalHeroPathUrl)
+                      onClose()
+                    }}
+                  >
                     Cancelar
                   </Button>
                   <Button

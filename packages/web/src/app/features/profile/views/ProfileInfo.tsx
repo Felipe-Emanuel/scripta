@@ -3,22 +3,14 @@
 import * as tv from '@features/profile/ProfileTV'
 import { useProfileController } from '@features/profile/controller'
 import { RightArrow } from '@shared/animations/animatedRightArrow'
-import { Button, Form, Input, Text } from '@shared/components'
-import { FormProvider } from 'react-hook-form'
+import { Button, Text } from '@shared/components'
+import { useRouter } from 'next/navigation'
+import { APP_ROUTES } from '@shared/utils/constants/app-routes'
 
 export function ProfileInfo() {
-  const {
-    userName,
-    wordsCountText,
-    currentGoalLoading,
-    sessionCustomer,
-    currentGoal,
-    wordCountSchema,
-    visibleState,
-    toggleFormVisible,
-    handleSubmit,
-    onSubmit
-  } = useProfileController()
+  const { push } = useRouter()
+  const { userName, wordsCountText, currentGoalLoading, sessionCustomer, currentGoal } =
+    useProfileController()
 
   if (currentGoalLoading || !sessionCustomer) return null
 
@@ -57,30 +49,16 @@ export function ProfileInfo() {
           )}
         </div>
       </div>
-      <div className={tv.profileleInfoFormWrapperTV({ visible: visibleState })}>
+      <div className={tv.profileleInfoFormWrapperTV()}>
         <Button.root
           radius="full"
           color="primary"
           variant="light"
-          onClick={toggleFormVisible}
+          onPress={() => push(APP_ROUTES.private.books.name)}
           endContent={<RightArrow />}
         >
-          <Button.label size="xs" text="Atualizar" />
+          <Button.label size="xs" text="Acessar livros" />
         </Button.root>
-        <FormProvider {...wordCountSchema}>
-          <Form onSubmit={handleSubmit(onSubmit)} data-testid="profile-form">
-            <Input.root className={tv.profileleInfoInputRootTV({ visible: visibleState })}>
-              <Input.field
-                min={100}
-                name="wordCount"
-                type="number"
-                className={tv.profileleInfoInputFieldTV({
-                  visible: visibleState
-                })}
-              />
-            </Input.root>
-          </Form>
-        </FormProvider>
       </div>
     </div>
   )

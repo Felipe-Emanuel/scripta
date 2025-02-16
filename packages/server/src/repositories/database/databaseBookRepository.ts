@@ -18,9 +18,7 @@ export const databaseBookRepository = (): IBooksRepository => {
     onlyFirstChapter: boolean
   ): Promise<TGetAllBooksServiceResponse> => {
     const books = await prisma.book.findMany({
-      where: {
-        userEmail
-      },
+      where: { userEmail },
       include: {
         characters: true,
         reactions: true,
@@ -29,12 +27,15 @@ export const databaseBookRepository = (): IBooksRepository => {
           take: onlyFirstChapter ? 1 : undefined
         }
       },
-      orderBy: {
-        createdAt: 'desc'
-      }
+      orderBy: { createdAt: 'desc' }
     })
 
-    return books || []
+    const booksWithWordCount = books.map((book) => ({
+      ...book,
+      totalWords: book.chapters.reduce((sum, chapter) => sum + chapter.wordsCounter, 0)
+    }))
+
+    return booksWithWordCount
   }
 
   const updateBook = async (bookId: string, updatedBook: TUpdateBookService): Promise<Book> => {
@@ -60,21 +61,11 @@ export const databaseBookRepository = (): IBooksRepository => {
   }
 
   const deleteBook = async (bookId: string): Promise<Book> => {
-    const existentBook = await prisma.book.findUniqueOrThrow({
+    return await prisma.book.delete({
       where: {
         id: bookId
       }
     })
-
-    if (existentBook) {
-      return await prisma.book.delete({
-        where: {
-          id: existentBook.id
-        }
-      })
-    }
-
-    return null
   }
 
   const toggleIsActiveBook = async (bookId: string): Promise<Book> => {

@@ -21,8 +21,8 @@ export const BookEntitie = (book: Book) => {
   }
 
   const updatedBook = async (updatedBook: Book) => {
-    if (updatedBook.publishedUrl && !isLink(updatedBook.publishedUrl))
-      throw new Error(throwBookMessages.invalidPublishedUrl)
+    if (updatedBook.socialLink && !isLink(updatedBook.socialLink))
+      throw new Error(throwBookMessages.invalidSocialLink)
 
     return updatedBook
   }

@@ -1,5 +1,6 @@
 import { Goal } from '@prisma/client'
-import { IGoalRepository } from 'src/repositories/GoalRepository'
+import { IGoalRepository } from '@repositories'
+import { TGetTodayGoalProgressResponse } from '@types'
 
 export const inMemoryGoalsRepository = (): IGoalRepository => {
   let userGoals: Goal[] = []
@@ -25,23 +26,34 @@ export const inMemoryGoalsRepository = (): IGoalRepository => {
     return existentGoals || []
   }
 
-  const updateGoal = async (goalId: string, updatedGoal: Goal): Promise<Goal> => {
-    const existingGoal = userGoals.find((goal) => goal.id === goalId)
+  const updateGoal = async (userEmail: string, newWords: number, goal = 500): Promise<Goal> => {
+    const goalByUserEmail = userGoals.find((goal) => goal.email === userEmail)
 
-    if (!existingGoal) {
-      throw new Error('Goal not found')
+    const updatedGoal: Goal = {
+      ...goalByUserEmail,
+      words: goalByUserEmail.words + newWords,
+      goal
     }
 
-    return { ...existingGoal, ...updatedGoal }
+    return { ...goalByUserEmail, ...updatedGoal }
   }
 
   const getLastGoal = async (email: string): Promise<Goal | null> =>
     userGoals.find((goals) => goals.email === email) || null
 
+  const getTodayGoalProgress = async (
+    userEmail: string
+  ): Promise<TGetTodayGoalProgressResponse> => {
+    const dailyGoal = userGoals.find((goal) => goal.email === userEmail)
+
+    return dailyGoal
+  }
+
   return {
     createGoals,
     getGoalsByFilter,
     updateGoal,
-    getLastGoal
+    getLastGoal,
+    getTodayGoalProgress
   }
 }

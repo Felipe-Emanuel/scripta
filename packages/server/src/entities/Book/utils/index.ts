@@ -7,5 +7,5 @@ export const throwBookMessages = {
   missingBookId: 'ID do livro é necessário.',
   emailMissing: 'Livro sem email vinculado.',
   concluedRequired: 'O estado do concluído é obrigatório.',
-  invalidPublishedUrl: 'A URL de publicação é inválida.'
+  invalidSocialLink: 'A URL social não é válida.'
 }

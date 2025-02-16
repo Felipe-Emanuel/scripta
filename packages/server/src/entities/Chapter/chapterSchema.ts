@@ -53,10 +53,4 @@ export const newTitleSchema = z.object({
   })
 })
 
-export const deleteChapterSchema = z.object({
-  chapterId: z.string({
-    required_error: throwChapterMessages.idRequired
-  })
-})
-
 export type TChapterSchema = z.infer<typeof chapterSchema>

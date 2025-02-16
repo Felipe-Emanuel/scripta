@@ -7,7 +7,7 @@ export const updateBookMock: TUpdateBook = {
   isActive: false,
   description: 'description',
   heroPathUrl: fakeBase64,
-  publishedUrl: 'https://link',
+  socialLink: 'https://link',
   id: randomUUID(),
   title: 'title'
 }

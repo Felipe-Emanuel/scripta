@@ -72,7 +72,6 @@ export const useLocalEditor = (props: IUseLocalEditor) => {
   const clearMenuState = useCallback(() => setMenuState(defaultConfig), [])
 
   const updateMenuState = useCallback((newConfig: TTEditorMenu) => {
-    console.log('newConfig RECEBIDA agora: ', newConfig)
     setMenuState({ ...newConfig })
   }, [])
 

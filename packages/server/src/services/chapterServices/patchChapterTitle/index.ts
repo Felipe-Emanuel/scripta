@@ -7,7 +7,7 @@ import { IChapterRepository } from '@repositories'
 export type TPatchChapterTitleServiceRequest = {
   chapterId: string
   newTitle: string
-  actions: Pick<IChapterRepository, 'getChapterById' | 'updateChapter'>
+  actions: Pick<IChapterRepository, 'getChapterById'>
 }
 
 type TPatchChapterTitleServiceResponse = Chapter
@@ -17,7 +17,7 @@ export const PatchChapterTitleService = async ({
   newTitle,
   actions
 }: TPatchChapterTitleServiceRequest): Promise<TPatchChapterTitleServiceResponse> => {
-  const { getChapterById, updateChapter } = actions
+  const { getChapterById } = actions
 
   const paramSchema = z.object({
     chapterId: z.string({
@@ -44,8 +44,6 @@ export const PatchChapterTitleService = async ({
   })
 
   const patchedChapter = await patchChapterTitle(newChapterTitle)
-
-  await updateChapter(patchedChapter)
 
   return patchedChapter
 }

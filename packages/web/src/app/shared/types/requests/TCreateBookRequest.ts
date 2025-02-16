@@ -1,13 +1,12 @@
 export type TNewBook = {
   title: string
   description: string
-  publishedUrl: string
+  socialLink: string
   heroPathUrl: string
   conclued: boolean
   isActive: boolean
   Gender: string
   Theme: string
-  totalWords: number
 }
 
 export type TCreateBookRequest = {

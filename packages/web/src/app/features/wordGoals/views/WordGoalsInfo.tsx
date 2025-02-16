@@ -24,7 +24,7 @@ export function WordGoalsInfo() {
             radius="full"
             color="primary"
             variant="light"
-            onClick={toggleFormVisible}
+            onPress={toggleFormVisible}
             className="flex border-0"
             endContent={<RightArrow />}
           >

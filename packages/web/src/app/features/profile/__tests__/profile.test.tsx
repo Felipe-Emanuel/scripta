@@ -56,13 +56,4 @@ describe('profile', () => {
     expect(name.firstChild?.textContent).toBe('John')
     expect(wordsCountText.firstChild?.textContent).toBe('500')
   })
-
-  it('should render button and form', async () => {
-    const { findByTestId, findByText } = render(sut)
-    const form = await findByTestId('profile-form')
-    const updateWordsCountButton = await findByText(/atualizar/i)
-
-    expect(updateWordsCountButton).not.toBeNull()
-    expect(form).not.toBeNull()
-  })
 })

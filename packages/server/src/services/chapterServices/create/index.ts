@@ -16,10 +16,10 @@ export const CreateChapterService = async ({
   const { createChapter } = action
 
   const { createChapter: create } = ChapterEntitie({
+    ...chapter,
     createdAt: new Date(),
     updatedAt: new Date(),
-    chapterTitle: 'Novo capítulo',
-    ...chapter
+    chapterTitle: 'Novo capítulo'
   })
 
   const newChapter = await create()

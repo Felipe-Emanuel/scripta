@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, wrap } from 'framer-motion'
-import { ScrollShadow } from "@heroui/react"
+import { ScrollShadow } from '@heroui/react'
 
 import { Text } from '@shared/components'
 import { variants } from '../NewBookUtils'
@@ -21,8 +21,6 @@ export function NewBookAnimatedForm({
 
   const formIndex = wrap(0, forms.length, form)
 
-  const content = <div className={tv.newBookAnimatedFormContentTV()}>{forms[formIndex]}</div>
-
   return (
     <ScrollShadow hideScrollBar className={tv.newBookAnimatedFormWrapperTV()}>
       <Text text={String(title)} size="lg" className={tv.newBookAnimatedFormTitleTV()} />
@@ -40,7 +38,7 @@ export function NewBookAnimatedForm({
               x: { ease: direction > 0 ? 'circIn' : 'circInOut', stiffness: 3000, damping: 30 }
             }}
           >
-            {content}
+            <div className={tv.newBookAnimatedFormContentTV()}>{forms[formIndex]}</div>
           </motion.div>
         </AnimatePresence>
       </div>

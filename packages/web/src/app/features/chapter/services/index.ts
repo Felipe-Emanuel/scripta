@@ -27,7 +27,9 @@ export const patchChapterHTML = async ({ data, userEmail }: TPatchChapterHTMLReq
     return updatedChapter
   } catch (err) {
     if (err instanceof Error)
-      throw new Error(`Falha ao atualizar o capítulo com id ${data.chapter.id}: ${err.message}`)
+      throw new Error(
+        `Falha ao atualizar o capítulo com id ${data.updatedChapter.id}: ${err.message}`
+      )
   }
 }
 

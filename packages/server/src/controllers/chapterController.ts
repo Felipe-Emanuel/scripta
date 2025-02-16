@@ -1,5 +1,9 @@
 import { FastifyInstance } from 'fastify'
-import { databaseBookRepository, databaseChapterRepository } from '@repositories'
+import {
+  databaseBookRepository,
+  databaseChapterRepository,
+  databaseGoalsRepository
+} from '@repositories'
 import { globalErrorMessage } from '@utils'
 import { authorization } from 'src/middlewares'
 import {
@@ -25,12 +29,17 @@ import {
   TDeleteChapterServiceRequest,
   DeleteChapterService
 } from '@services'
-import { deleteChapterSchema } from '../entities/Chapter/chapterSchema'
+import {
+  updateChapterControllerSchema,
+  updateChapterServiceSchema,
+  deleteChapterSchema
+} from '@schemas'
 
 export async function chapterController(app: FastifyInstance): Promise<void> {
   const { createChapter, getChapterById, updateChapter, getAllChapters, deleteChapter } =
     databaseChapterRepository()
   const { getAllBooks } = databaseBookRepository()
+  const { updateGoal } = databaseGoalsRepository()
 
   const actionCreateChapter: TCreateChapterServiceRequest['action'] = {
     createChapter
@@ -39,7 +48,8 @@ export async function chapterController(app: FastifyInstance): Promise<void> {
   const actionsUpdateChapter: TUpdateChapterServiceRequest['actions'] = {
     getAllBooks,
     updateChapter,
-    getChapterById
+    getChapterById,
+    updateGoal
   }
 
   const getChapterAction: TGetChapterByIdServiceRequest['action'] = {
@@ -108,18 +118,35 @@ export async function chapterController(app: FastifyInstance): Promise<void> {
   })
 
   app.put('/chapter/:userEmail', async (req, apply) => {
-    const { userEmail } = req.params as Partial<TGetAllBooksServiceRequest>
-    const { chapter } = req.body as Partial<TCreateChapterServiceRequest>
+    const { userEmail } = updateChapterServiceSchema.parse(req.params)
+    const { updatedChapter } = updateChapterControllerSchema.parse(req.body)
 
     const provider = req.headers.provider
     const accessToken = req.headers.authorization
 
     await authorization(provider, accessToken, apply)
 
+    const countWords = (text: string) => text.trim().split(/\s+/).length
+
+    const previousChapter = await actionsUpdateChapter.getChapterById(updatedChapter.id)
+    const previousWordCount = previousChapter ? countWords(previousChapter.chapterText) : 0
+    const newWordCount = countWords(updatedChapter.chapterText)
+
+    const newWords = Math.max(newWordCount - previousWordCount, 0)
+
     const updatedBook = await UpdateChapterService({
       actions: actionsUpdateChapter,
-      updatedChapter: chapter,
-      userEmail
+      updatedChapter: {
+        id: updatedChapter.id,
+        chapterText: updatedChapter.chapterText,
+        lineHeight: updatedChapter.lineHeight,
+        fontWeight: updatedChapter.fontWeight,
+        fontSize: updatedChapter.fontSize,
+        firstLineIndent: updatedChapter.firstLineIndent,
+        bookId: updatedChapter.bookId
+      },
+      userEmail,
+      newWords
     })
 
     try {

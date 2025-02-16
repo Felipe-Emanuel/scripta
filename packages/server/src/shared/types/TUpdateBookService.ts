@@ -1,7 +1,7 @@
 export type TUpdateBookService = {
   title: string
   description: string
-  publishedUrl: string
+  socialLink: string
   heroPathUrl: string
   Gender: string
   Theme: string

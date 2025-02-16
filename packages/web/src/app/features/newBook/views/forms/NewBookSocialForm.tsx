@@ -9,13 +9,13 @@ export function NewBookSocialForm() {
   return (
     <div className={newBookSocialFormTV()}>
       <Input.root>
-        <Input.label text="Link de acesso" htmlFor="publishedUrl" />
+        <Input.label text="Link social" htmlFor="socialLink" />
         <Input.field
-          defaultValue={draft?.publishedUrl ?? ''}
-          name="publishedUrl"
-          placeholder="https://..."
+          defaultValue={draft?.socialLink ?? ''}
+          name="socialLink"
+          placeholder="Tem um espaço especial para seu livro? Adicione o link aqui."
         />
-        <Input.error field="publishedUrl" />
+        <Input.error field="socialLink" />
       </Input.root>
     </div>
   )

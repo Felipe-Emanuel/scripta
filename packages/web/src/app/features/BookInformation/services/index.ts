@@ -24,7 +24,10 @@ export const deleteBook = async (bookId: string) => {
   try {
     const endpoint = `books/${bookId}`
 
-    const { data } = await api.delete<TBookResponse>(endpoint)
+    const { data } = await api.delete<{
+      message: string
+      deletedBook: TBookResponse
+    }>(endpoint)
 
     toast('Livro deletado com sucesso', {
       type: 'info'

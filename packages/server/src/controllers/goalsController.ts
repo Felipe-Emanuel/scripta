@@ -1,7 +1,7 @@
-import { globalErrorMessage, progressGoal } from '@utils'
+import { globalErrorMessage } from '@utils'
 import { isToday } from 'date-fns'
 import { FastifyInstance } from 'fastify'
-import { databaseGoalsRepository } from '@repositories'
+import { databaseChapterRepository, databaseGoalsRepository } from '@repositories'
 import {
   TGetGoalsByFilterServiceRequest,
   TCreateGoalsRequest,
@@ -10,12 +10,19 @@ import {
   TUpdateGoalRequest,
   UpdateGoalService,
   TGetLastGoalRequest,
-  GetLastGoalService
+  GetLastGoalService,
+  GetAllChaptersByUserEmailService,
+  TGetAllChaptersByUserEmailRequest,
+  TGoalProgressServiceRequest,
+  GoalProgressService
 } from '@services'
 import { authorization } from 'src/middlewares'
+import { goalProgressServiceSchema, getLastGoalSchema } from '@schemas'
 
 export async function goalsController(app: FastifyInstance): Promise<void> {
-  const { getGoalsByFilter, createGoals, updateGoal, getLastGoal } = databaseGoalsRepository()
+  const { getGoalsByFilter, createGoals, updateGoal, getLastGoal, getTodayGoalProgress } =
+    databaseGoalsRepository()
+  const { getAllUpdatedChapters } = databaseChapterRepository()
 
   const getByFilterGoalAction: TGetGoalsByFilterServiceRequest['actions'] = {
     getGoalsByFilter
@@ -28,7 +35,14 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
     updateGoal
   }
   const getLastGoalAction: TGetLastGoalRequest['action'] = {
-    getLastGoal
+    getLastGoal,
+    updateGoal
+  }
+  const getAllChaptersByUserEmailAction: TGetAllChaptersByUserEmailRequest['action'] = {
+    getAllUpdatedChapters
+  }
+  const progressAction: TGoalProgressServiceRequest['action'] = {
+    getTodayGoalProgress
   }
 
   // cria uma nova meta caso o job já não o tenha feito
@@ -46,8 +60,7 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
     const newGoals = {
       ...goal,
       email,
-      goalComplete: false,
-      goalCompletePercent: progressGoal(goal.words, goal.goal)
+      goalComplete: false
     }
 
     const newGoal = await CreateGoalsService({
@@ -88,7 +101,7 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
 
   // atualiza a meta e a quantidade de palavras, tal como a porcentagem
   app.put('/updateGoals', async (req, apply) => {
-    const { goalId, updatedGoal } = req.body as Partial<TUpdateGoalRequest>
+    const { updatedGoal } = req.body as Partial<TUpdateGoalRequest>
     const provider = req.headers.provider
     const accessToken = req.headers.authorization
 
@@ -96,7 +109,6 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
 
     const updateGoal = await UpdateGoalService({
       actions: updateGoalActions,
-      goalId,
       updatedGoal
     })
 
@@ -108,20 +120,45 @@ export async function goalsController(app: FastifyInstance): Promise<void> {
   })
 
   // recupera a meta atual
-  app.post('/getLastGoal', async (req, apply) => {
-    const { email } = req.body as Partial<TGetLastGoalRequest>
+  app.get('/getLastGoal/:userEmail', async (req, apply) => {
+    const { userEmail } = getLastGoalSchema.parse(req.params)
     const provider = req.headers.provider
     const accessToken = req.headers.authorization
 
     await authorization(provider, accessToken, apply)
 
+    const chapters = await GetAllChaptersByUserEmailService({
+      action: getAllChaptersByUserEmailAction,
+      paramUserEmail: userEmail
+    })
+
     const lastGoal = await GetLastGoalService({
       action: getLastGoalAction,
-      email
+      paramUserEmail: userEmail,
+      chapters
     })
 
     try {
       apply.send(lastGoal)
+    } catch {
+      apply.status(500).send({ message: globalErrorMessage.unexpected })
+    }
+  })
+
+  app.get('/getGoalProgress/:userEmail', async (req, apply) => {
+    const { userEmail } = goalProgressServiceSchema.parse(req.params)
+    const provider = req.headers.provider
+    const accessToken = req.headers.authorization
+
+    await authorization(provider, accessToken, apply)
+
+    const progress = await GoalProgressService({
+      action: progressAction,
+      userEmail
+    })
+
+    try {
+      apply.send(progress)
     } catch {
       apply.status(500).send({ message: globalErrorMessage.unexpected })
     }

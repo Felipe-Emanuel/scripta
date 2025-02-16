@@ -2,19 +2,13 @@ import { api } from '@shared/services/axios/api'
 import { AxiosError } from 'axios'
 import { TGoalResponse, TUpdateCurrentGoalRequest } from '@shared/types'
 
-export const getCurrentGoal = async (email: string) => {
+export const getCurrentGoal = async (userEmail: string) => {
   try {
-    const endpoint = '/getLastGoal'
+    const endpoint = `/getLastGoal/${userEmail}`
 
-    const body = {
-      email,
-    }
+    const { data } = await api.get<TGoalResponse>(endpoint)
 
-    const { data } = await api.post<TGoalResponse>(endpoint, body)
-
-    if (data) {
-      return data
-    }
+    return data
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.message)

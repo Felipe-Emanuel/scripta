@@ -6,6 +6,7 @@ interface IBookContextProps {
   isBookLoading: boolean
   showForm: boolean
   handleToggleCreateBook: VoidFunction
+  clearSelectedBook: VoidFunction
   choiseBookToSeeInfo: (book: TBookResponse) => void
 }
 
@@ -16,6 +17,7 @@ export const BookProvider = ({ children }: TRootComponent) => {
   const [bookScreenState, setBookScreenState] = useState<TBookScreenState>('SHOW_BOOKS')
 
   const choiseBookToSeeInfo = useCallback((book: TBookResponse) => setSelectedBook(book), [])
+  const clearSelectedBook = useCallback(() => setSelectedBook(null), [])
 
   const handleToggleCreateBook = useCallback(
     () =>
@@ -31,7 +33,14 @@ export const BookProvider = ({ children }: TRootComponent) => {
 
   return (
     <BookContext.Provider
-      value={{ selectedBook, isBookLoading, showForm, handleToggleCreateBook, choiseBookToSeeInfo }}
+      value={{
+        selectedBook,
+        isBookLoading,
+        showForm,
+        handleToggleCreateBook,
+        choiseBookToSeeInfo,
+        clearSelectedBook
+      }}
     >
       {children}
     </BookContext.Provider>

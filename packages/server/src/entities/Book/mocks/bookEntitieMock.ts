@@ -11,7 +11,7 @@ export const bookEntitieMock: Book = {
   description: 'Book description Fake',
   Gender: 'Horror',
   Theme: 'Love',
-  publishedUrl: 'https://linktobook.com',
+  socialLink: 'https://linktobook.com',
   conclued: true,
   heroPathUrl: fakeBase64,
   hits: 50,
