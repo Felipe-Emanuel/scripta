@@ -1,26 +1,25 @@
 import { databaseUserRepository } from '@repositories'
-import { TCreateUserServiceRequest, GetUserByEmailService } from '@services'
+import { GetUserByEmailService } from '@services'
 import { generateToken } from '@utils'
-import { FastifyInstance } from 'fastify'
 import { throwUserMessages } from '@entities/User/utils'
+import { TFastifyInstance } from '@types'
+import { authUserSchema } from '@schemas'
 
-export async function authController(app: FastifyInstance): Promise<void> {
+export async function authController(app: TFastifyInstance): Promise<void> {
   const { getUserByEmail } = databaseUserRepository()
 
-  app.post('/auth', async (req, apply) => {
-    const { email, password } = req.body as Partial<TCreateUserServiceRequest>
+  app.post('/auth', authUserSchema, async (req, apply) => {
+    const { email, password } = req.body
 
     const user = await GetUserByEmailService({
       email,
       action: {
-        getUserByEmail,
-      },
+        getUserByEmail
+      }
     })
 
     if (email !== user.email || password !== user.password) {
-      return apply
-        .status(401)
-        .send({ message: throwUserMessages.wrongEmailOrPassword })
+      return apply.status(401).send({ message: throwUserMessages.wrongEmailOrPassword })
     }
 
     if (!user) {
@@ -28,15 +27,18 @@ export async function authController(app: FastifyInstance): Promise<void> {
     }
 
     const payload = {
-      sub: email,
+      sub: email
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: pass, ...userWithoutPassword } = user
 
-    return apply.send({
+    return apply.status(201).send({
       ...userWithoutPassword,
-      accessToken: generateToken(payload),
+      createdAt: userWithoutPassword.createdAt.toISOString(),
+      updatedAt: userWithoutPassword.updatedAt.toISOString(),
+      expirationTime: userWithoutPassword.expirationTime.toISOString(),
+      accessToken: generateToken(payload)
     })
   })
 }

@@ -5,8 +5,12 @@ import { verifyToken } from 'src/shared/utils/tokens'
 export const authorization = async (
   provider: string | string[],
   accessToken: string,
-  apply: FastifyReply
+  reply: FastifyReply
 ) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return console.log('🚀 Executando em ambiente de desenvolvimento!')
+  }
+
   let isTokenValid = false
   const decoded = accessToken && (await verifyToken(accessToken))
 
@@ -18,7 +22,7 @@ export const authorization = async (
     decoded ? (isTokenValid = true) : (isTokenValid = false)
   }
 
-  if (!isTokenValid) apply.status(401).send({ message: globalErrorMessage.unauthorized })
+  if (!isTokenValid) reply.status(401).send({ message: globalErrorMessage.unauthorized })
 
-  if (provider && accessToken) apply.status(409).send({ message: globalErrorMessage.conflict })
+  if (provider && accessToken) reply.status(409).send({ message: globalErrorMessage.conflict })
 }

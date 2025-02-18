@@ -12,7 +12,9 @@
     "prepare": "husky",
     "eslint:server": "yarn workspace @scripta/server eslint src --ext .ts --fix",
     "eslint:web": "yarn workspace @scripta/web eslint src src/**/*.{ts,tsx} --fix",
-    "buld:web": "yarn workspace @scripta/web next build"
+    "build:web": "yarn workspace @scripta/web next build",
+    "build:server": "yarn workspace @scripta/server tsup",
+    "pre-commit": "yarn eslint:server && yarn test:server && yarn build:server && yarn eslint:web && yarn test:web && yarn build:web"
   },
   "workspaces": {
     "packages": [

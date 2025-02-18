@@ -14,7 +14,7 @@ export type TCreateUserServiceRequest = {
   actions: Pick<IUserRepository, 'createUser' | 'getUserByEmail'>
 }
 
-type TCreateUserServiceResponse = User
+type TCreateUserServiceResponse = Omit<User, 'password'>
 
 export const threeDays = 3 * 24 * 60 * 60 * 1000 // 3 dias
 export const expirationTime = new Date(Date.now() + threeDays)
@@ -24,7 +24,7 @@ export const CreateUserService = async ({
   name,
   hasProvider,
   password,
-  actions,
+  actions
 }: TCreateUserServiceRequest): Promise<TCreateUserServiceResponse> => {
   const { createUser, getUserByEmail } = actions
 
@@ -32,13 +32,12 @@ export const CreateUserService = async ({
 
   const existingUser = await getUserByEmail(email)
 
-  if (existingUser && !hasProvider)
-    throw new Error(throwUserMessages.userAlreadyExist)
+  if (existingUser && !hasProvider) throw new Error(throwUserMessages.userAlreadyExist)
 
   if (existingUser && hasProvider) return
 
   const payload = {
-    sub: email,
+    sub: email
   }
 
   const { setUser } = UserEntitie({
@@ -52,12 +51,15 @@ export const CreateUserService = async ({
     picture: '',
     rule: 'client',
     expirationTime,
-    accessToken: generateToken(payload),
+    accessToken: generateToken(payload)
   })
 
   const newUser = await setUser(hasProvider)
 
   await createUser(newUser)
 
-  return newUser
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password: pass, ...userWithoutPassword } = newUser
+
+  return userWithoutPassword
 }

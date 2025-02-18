@@ -1,2 +1,2 @@
-export * from './chapterSchemas'
-export * from './goalSchemas'
+export * from './controllers'
+export * from './services'

@@ -7,5 +7,7 @@ export const throwBookMessages = {
   missingBookId: 'ID do livro é necessário.',
   emailMissing: 'Livro sem email vinculado.',
   concluedRequired: 'O estado do concluído é obrigatório.',
-  invalidSocialLink: 'A URL social não é válida.'
+  invalidSocialLink: 'A URL social não é válida.',
+  onlyFirstChapter: 'O parâmetro onlyFirstChapter deve ser "true" ou "false".',
+  where: 'informe onde deve ser feita a atualziação: conclued ou isActive'
 }

@@ -1,5 +1,5 @@
 import { IBooksRepository } from '@repositories'
-import { bookByIdSchema } from '~/src/entities/Book/utils/bookSchemas'
+import { bookByIdSchema } from '@schemas'
 import { BookWithChapters } from '../getAllBooks'
 
 export type TGetBookByIdServiceRequest = {

@@ -21,8 +21,23 @@ export const updateChapterControllerSchema = z.object({
   })
 })
 
-export const deleteChapterSchema = z.object({
+export const deleteChapterParamSchema = z.object({
   chapterId: z.string({
     required_error: throwChapterMessages.idRequired
   })
+})
+
+export const chapterSchema = z.object({
+  id: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  bookId: z.string(),
+  isConclued: z.boolean(),
+  chapterTitle: z.string(),
+  chapterText: z.string(),
+  wordsCounter: z.number(),
+  firstLineIndent: z.string(),
+  lineHeight: z.string(),
+  fontSize: z.string(),
+  fontWeight: z.string()
 })

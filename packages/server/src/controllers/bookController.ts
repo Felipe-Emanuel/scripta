@@ -1,6 +1,9 @@
 import { globalErrorMessage } from '@utils'
-import { FastifyInstance } from 'fastify'
+import { TFastifyInstance } from '@types'
 import { databaseBookRepository } from '@repositories'
+import { authorization } from 'src/middlewares'
+import { CreateBookCoverService } from '../services/bookCover/create'
+
 import {
   CreateBookService,
   TCreateBookServiceRequest,
@@ -12,21 +15,21 @@ import {
   IPatchActiveBookServiceRequest,
   UpdateBookService,
   TUpdateBookServiceRequest,
-  GetBookByIdService
+  GetBookByIdService,
+  PatchConcluedBookService,
+  IPatchConcluedBookServiceRequest
 } from '@services'
+
 import {
-  IPatchConcluedBookServiceRequest,
-  PatchConcluedBookService
-} from 'src/services/bookServices/patchConclued'
-import { authorization } from 'src/middlewares'
-import { bookByIdSchema } from '../entities/Book/utils/bookSchemas'
+  createBookSchema,
+  deleteBookSchema,
+  getAllBooksSchema,
+  getBookByIdSchema,
+  updateBookInfoSchema,
+  updateBoolsBookInfoSchema
+} from '@schemas'
 
-type TPatchBookState = {
-  where: 'conclued' | 'isActive'
-  bookId: string
-}
-
-export async function bookController(app: FastifyInstance): Promise<void> {
+export async function bookController(app: TFastifyInstance): Promise<void> {
   const {
     getAllBooks,
     createBook,
@@ -39,153 +42,252 @@ export async function bookController(app: FastifyInstance): Promise<void> {
   const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = {
     getAllBooks
   }
+
   const actionCreateBook: TCreateBookServiceRequest['actions'] = {
     createBook,
     getAllBooks
   }
+
   const deleteBookAction: TDeleteBookServiceRequest['action'] = {
     deleteBook
   }
+
   const patchActiveBookAction: IPatchActiveBookServiceRequest['action'] = {
     toggleIsActiveBook
   }
+
   const patchConcluedBookAction: IPatchConcluedBookServiceRequest['action'] = {
     toggleConcluedBook
   }
+
   const updateBookAction: TUpdateBookServiceRequest['action'] = {
     updateBook
   }
 
-  app.get('/allBooks/:userEmail/:onlyFirstChapter', async (req, apply) => {
-    const { userEmail, onlyFirstChapter } = req.params as Partial<TGetAllBooksServiceRequest>
-    const provider = req.headers.provider
-    const accessToken = req.headers.authorization
+  app.get(
+    '/allBooks/:userEmail/:onlyFirstChapter',
+    {
+      preHandler: async (req, reply) => {
+        const provider = req.headers.provider
+        const accessToken = req.headers.authorization
+        await authorization(provider, accessToken, reply)
+      },
+      schema: getAllBooksSchema.schema
+    },
+    async (req, apply) => {
+      const { userEmail, onlyFirstChapter } = req.params
 
-    await authorization(provider, accessToken, apply)
+      const isFirstChapterOnly = onlyFirstChapter === 'true'
 
-    const books = await GetAllBooksService({
-      action: actionGetAllBooks,
-      userEmail,
-      onlyFirstChapter
-    })
+      const books = await GetAllBooksService({
+        action: actionGetAllBooks,
+        userEmail,
+        onlyFirstChapter: isFirstChapterOnly
+      })
 
-    try {
-      apply.send(books)
-    } catch {
-      apply.status(500).send({ message: globalErrorMessage.unexpected })
+      const booksWithDateStrings = books.map((book) => ({
+        ...book,
+        createdAt: book.createdAt.toISOString(),
+        updatedAt: book.updatedAt.toISOString(),
+        ...(book.chapters && {
+          chapters: book.chapters.map((chapter) => ({
+            ...chapter,
+            createdAt: chapter.createdAt.toISOString(),
+            updatedAt: chapter.updatedAt.toISOString()
+          }))
+        })
+      }))
+
+      try {
+        apply.send(booksWithDateStrings)
+      } catch (err) {
+        console.error('Error in response:', err)
+        apply.status(500).send({ message: globalErrorMessage.unexpected })
+      }
     }
-  })
+  )
 
-  app.get('/books/:userEmail/:bookId', async (req, apply) => {
-    const { userEmail, bookId } = bookByIdSchema.parse(req.params)
+  app.get('/books/:userEmail/:bookId', getBookByIdSchema, async (req, apply) => {
+    const { userEmail, bookId } = req.params
 
     const books = await GetBookByIdService({
       action: actionGetAllBooks,
       paramUserEmail: userEmail,
       paramBookId: bookId
     })
-
     try {
-      apply.send(books)
+      apply.status(200).send(books)
     } catch {
       apply.status(500).send({ message: globalErrorMessage.unexpected })
     }
   })
 
-  app.post('/books/:userEmail', async (req, apply) => {
-    const { userEmail } = req.params as Partial<TCreateBookServiceRequest>
-    const { book } = req.body as Partial<TCreateBookServiceRequest>
-    const provider = req.headers.provider
-    const accessToken = req.headers.authorization
+  app.post(
+    '/books/:userEmail',
+    {
+      preHandler: async (req, reply) => {
+        const provider = req.headers.provider
+        const accessToken = req.headers.authorization
+        await authorization(provider, accessToken, reply)
+      },
+      schema: createBookSchema.schema
+    },
+    async (req, apply) => {
+      const { userEmail } = req.params
+      const { book } = req.body
 
-    await authorization(provider, accessToken, apply)
+      let newBook = book
 
-    const newBook = await CreateBookService({
-      actions: actionCreateBook,
-      book,
-      userEmail
-    })
+      if (book.heroPathUrl) {
+        const base64Data = book.heroPathUrl.replace(/^data:image\/[a-z]+;base64,/, '')
+        const bookCover = await CreateBookCoverService({
+          base64Image: base64Data
+        })
 
-    try {
-      apply.send(newBook)
-    } catch {
-      apply.status(500).send({ message: globalErrorMessage.unexpected })
-    }
-  })
+        newBook.heroPathUrl = bookCover
+      }
 
-  app.delete('/books/:bookId', async (req, apply) => {
-    const { bookId } = req.params as Partial<TDeleteBookServiceRequest>
-    const provider = req.headers.provider
-    const accessToken = req.headers.authorization
-
-    await authorization(provider, accessToken, apply)
-
-    const deletedBook = await DeleteBookService({
-      action: deleteBookAction,
-      bookId
-    })
-
-    if (!deletedBook) apply.status(404).send({ message: globalErrorMessage.unableToDelete })
-
-    try {
-      apply.send({
-        message: globalErrorMessage.successfullyDeleted,
-        deletedBook
+      newBook = await CreateBookService({
+        actions: actionCreateBook,
+        book,
+        userEmail
       })
-    } catch {
-      apply.status(500).send({ message: globalErrorMessage.unexpected })
-    }
-  })
 
-  app.put('/books/:bookId', async (req, apply) => {
-    const { bookId } = req.params as Partial<TPatchBookState>
-    const { where } = req.body as Partial<TPatchBookState>
-    const provider = req.headers.provider
-    const accessToken = req.headers.authorization
-
-    await authorization(provider, accessToken, apply)
-
-    try {
-      if (where === 'isActive') {
-        const patchedIsActiveBook = await PatchActiveBookService({
-          action: patchActiveBookAction,
-          bookId
-        })
-
-        return apply.send(patchedIsActiveBook)
+      try {
+        apply.send(newBook)
+      } catch {
+        apply.status(500).send({ message: globalErrorMessage.unexpected })
       }
+    }
+  )
 
-      if (where === 'conclued') {
-        const patchedConcluedBook = await PatchConcluedBookService({
-          action: patchConcluedBookAction,
-          bookId
+  app.delete(
+    '/books/:bookId',
+    {
+      preHandler: async (req, reply) => {
+        const provider = req.headers.provider
+        const accessToken = req.headers.authorization
+        await authorization(provider, accessToken, reply)
+      },
+      schema: deleteBookSchema.schema
+    },
+    async (req, apply) => {
+      const { bookId } = req.params as Partial<TDeleteBookServiceRequest>
+
+      const deletedBook = await DeleteBookService({
+        action: deleteBookAction,
+        bookId
+      })
+
+      if (!deletedBook) apply.status(404).send({ message: globalErrorMessage.unableToDelete })
+
+      try {
+        apply.status(202).send({
+          message: globalErrorMessage.successfullyDeleted,
+          deletedBook
         })
-
-        return apply.send(patchedConcluedBook)
+      } catch {
+        apply.status(500).send({ message: globalErrorMessage.unexpected })
       }
-    } catch {
-      apply.status(500).send({ message: globalErrorMessage.unexpected })
     }
-  })
+  )
 
-  app.put('/updateBook/:bookId', async (req, apply) => {
-    const { bookId } = req.params as Partial<TUpdateBookServiceRequest>
-    const { book } = req.body as Partial<TUpdateBookServiceRequest>
-    const provider = req.headers.provider
-    const accessToken = req.headers.authorization
+  app.put(
+    '/books/:bookId',
+    {
+      preHandler: async (req, reply) => {
+        const provider = req.headers.provider
+        const accessToken = req.headers.authorization
+        await authorization(provider, accessToken, reply)
+      },
+      schema: updateBoolsBookInfoSchema.schema
+    },
+    async (req, apply) => {
+      const { bookId } = req.params
+      const { where } = req.body
 
-    await authorization(provider, accessToken, apply)
+      try {
+        if (where === 'isActive') {
+          const patchedIsActiveBook = await PatchActiveBookService({
+            action: patchActiveBookAction,
+            bookId
+          })
 
-    const newBook = await UpdateBookService({
-      action: updateBookAction,
-      bookId,
-      book
-    })
+          return apply.status(200).send(patchedIsActiveBook)
+        }
 
-    try {
-      apply.send(newBook)
-    } catch {
-      apply.status(500).send({ message: globalErrorMessage.unexpected })
+        if (where === 'conclued') {
+          const patchedConcluedBook = await PatchConcluedBookService({
+            action: patchConcluedBookAction,
+            bookId
+          })
+
+          return apply.status(200).send(patchedConcluedBook)
+        }
+      } catch {
+        apply.status(500).send({ message: globalErrorMessage.unexpected })
+      }
     }
-  })
+  )
+
+  app.put(
+    '/updateBook/:bookId',
+    {
+      preHandler: async (req, reply) => {
+        const provider = req.headers.provider
+        const accessToken = req.headers.authorization
+        await authorization(provider, accessToken, reply)
+      },
+      schema: updateBookInfoSchema.schema
+    },
+    async (req, apply) => {
+      const { bookId } = req.params
+      const { book } = req.body
+
+      const {
+        Gender,
+        Theme,
+        conclued,
+        createdAt,
+        description,
+        heroPathUrl,
+        hits,
+        id,
+        isActive,
+        socialLink,
+        title,
+        totalWords,
+        updatedAt,
+        userEmail
+      } = book
+
+      const newBook = await UpdateBookService({
+        action: updateBookAction,
+        bookId,
+        book: {
+          Gender,
+          Theme,
+          conclued,
+          createdAt: new Date(createdAt),
+          description,
+          heroPathUrl,
+          hits,
+          id,
+          isActive,
+          socialLink,
+          title,
+          totalWords,
+          updatedAt: new Date(updatedAt),
+          userEmail
+        }
+      })
+
+      try {
+        apply.status(200).send(newBook)
+      } catch {
+        apply.status(500).send({ message: globalErrorMessage.unexpected })
+        console.log(new Date())
+      }
+    }
+  )
 }

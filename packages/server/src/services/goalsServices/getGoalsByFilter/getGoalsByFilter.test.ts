@@ -4,18 +4,18 @@ import {
   CreateGoalsService,
   TCreateGoalsRequest,
   GetGoalsByFilterService,
-  TGetGoalsByFilterServiceRequest,
+  TGetGoalsByFilterServiceRequest
 } from '@services'
 
 describe('GetGoalsByFilterService', () => {
   const { getGoalsByFilter, createGoals } = inMemoryGoalsRepository()
 
   const actions: TGetGoalsByFilterServiceRequest['actions'] = {
-    getGoalsByFilter,
+    getGoalsByFilter
   }
 
   const createGoalActions: TCreateGoalsRequest['action'] = {
-    createGoals,
+    createGoals
   }
 
   const { email } = mockGoal
@@ -28,7 +28,7 @@ describe('GetGoalsByFilterService', () => {
       actions,
       email,
       startGoalFilter,
-      endGoalFilter,
+      endGoalFilter
     })
 
     expect(sut).toEqual([])
@@ -39,9 +39,14 @@ describe('GetGoalsByFilterService', () => {
       action: createGoalActions,
       email,
       goals: {
-        ...mockGoal,
-        words: 2500,
-      },
+        goal: {
+          goal: mockGoal.goal,
+          goalComplete: mockGoal.goalComplete,
+          goalCompletePercent: mockGoal.goalCompletePercent,
+          words: mockGoal.words
+        },
+        email: mockGoal.email
+      }
     })
 
     const { createdAt, email: newEmail, goalComplete } = newGoal[0]
@@ -50,7 +55,7 @@ describe('GetGoalsByFilterService', () => {
       actions,
       email: newEmail,
       startGoalFilter: createdAt,
-      endGoalFilter: createdAt,
+      endGoalFilter: createdAt
     })
 
     expect(sut[0].goalComplete).toEqual(goalComplete)

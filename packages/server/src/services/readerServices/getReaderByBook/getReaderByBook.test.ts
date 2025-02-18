@@ -47,8 +47,7 @@ describe('GetReaderByBook', () => {
     await CreateBookService({
       actions: createBookActions,
       book: {
-        ...bookEntitieMock,
-        id: bookEntitieMock.id
+        ...bookEntitieMock
       },
       userEmail: bookEntitieMock.userEmail
     })

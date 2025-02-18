@@ -21,7 +21,8 @@ export const PatchConcluedChapterService = async ({
 
   const patchedChapter = { ...existingChapter, isConclued: !existingChapter.isConclued }
 
-  await updateChapter(patchedChapter)
+  const newWords = 0
+  await updateChapter(patchedChapter, newWords)
 
   return patchedChapter
 }

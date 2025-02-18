@@ -1,1 +1,1 @@
-yarn eslint:server; yarn eslint:web; yarn buld:web; yarn test:server; yarn test:web
+yarn eslint:server && yarn test:server && yarn build:server && yarn eslint:web && yarn test:web && yarn build:web

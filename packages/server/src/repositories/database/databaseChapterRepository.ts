@@ -26,11 +26,15 @@ export const databaseChapterRepository = (): IChapterRepository => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 
+    const tomorrow = new Date(today)
+    tomorrow.setDate(today.getDate() + 1) // Define a meia-noite do próximo dia
+
     const existingRecord = await prisma.dailyWordCount.findFirst({
       where: {
         chapterId: chapter.id,
         date: {
-          gte: today
+          gte: today,
+          lt: tomorrow // Filtra apenas registros do dia atual
         }
       }
     })
