@@ -19,5 +19,6 @@ export const throwChapterMessages = {
   invalidEmail: 'e-mail inválido para atualziar o capítulo!',
   idRequired: 'id do capítulo inexistente e necessário',
   notFound: 'Capítulo não encontrado.',
-  titleRequired: 'Novo título inexistente.'
+  titleRequired: 'Novo título inexistente.',
+  lastChapterActive: 'O ultimo capítulo não está concluído'
 }

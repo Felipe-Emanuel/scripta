@@ -1,10 +1,7 @@
 import { mockGoal } from '@entities/Goals/mocks'
 import { throwGoalsMessages } from 'src/entities/Goals/utils'
 import { inMemoryGoalsRepository } from 'src/repositories/inMemory/inMemoryGoalsRepository'
-import {
-  CreateGoalsService,
-  TCreateGoalsRequest,
-} from 'src/services/goalsServices/create'
+import { CreateGoalsService, TCreateGoalsRequest } from 'src/services/goalsServices/create'
 
 describe('CreateGoalsService', () => {
   const { createGoals } = inMemoryGoalsRepository()
@@ -15,7 +12,15 @@ describe('CreateGoalsService', () => {
     const sut = CreateGoalsService({
       action,
       email: 'unexistent user email',
-      goals: mockGoal,
+      goals: {
+        goal: {
+          goal: mockGoal.goal,
+          goalComplete: mockGoal.goalComplete,
+          goalCompletePercent: mockGoal.goalCompletePercent,
+          words: mockGoal.words
+        },
+        email: mockGoal.email
+      }
     })
 
     expect(sut).rejects.toThrow(throwGoalsMessages.goalNotFound)
@@ -25,7 +30,15 @@ describe('CreateGoalsService', () => {
     const sut = await CreateGoalsService({
       action,
       email: mockGoal.email,
-      goals: mockGoal,
+      goals: {
+        goal: {
+          goal: mockGoal.goal,
+          goalComplete: mockGoal.goalComplete,
+          goalCompletePercent: mockGoal.goalCompletePercent,
+          words: mockGoal.words
+        },
+        email: mockGoal.email
+      }
     })
 
     expect(sut[0].words).toEqual(mockGoal.words)

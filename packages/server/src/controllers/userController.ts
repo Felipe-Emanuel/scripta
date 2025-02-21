@@ -1,26 +1,19 @@
-import { FastifyInstance } from 'fastify'
+import { TFastifyInstance } from '@types'
 import { throwUserMessages } from 'src/entities/User/utils'
-import { databaseUserRepository } from 'src/repositories/database/databaseUserRepository'
+import { databaseUserRepository } from '@repositories'
 import { CreateUserService, TCreateUserServiceRequest } from '@services'
-import { z } from 'zod'
+import { createUserSchema } from '@schemas'
 
-export async function userController(app: FastifyInstance): Promise<void> {
-  const { createUser, getUserByEmail, patchUserPicture } = databaseUserRepository()
+export async function userController(app: TFastifyInstance): Promise<void> {
+  const { createUser, getUserByEmail } = databaseUserRepository()
 
-  const actions = {
+  const actions: TCreateUserServiceRequest['actions'] = {
     createUser,
-    getUserByEmail,
-    patchUserPicture
+    getUserByEmail
   }
 
-  app.post('/users', async (req, reply) => {
-    const { name, password, hasProvider } = req.body as TCreateUserServiceRequest
-
-    const userSchema = z.object({
-      email: z.string().email(throwUserMessages.invalidEmail)
-    })
-
-    const { email } = userSchema.parse(req.body)
+  app.post('/users', createUserSchema, async (req, apply) => {
+    const { name, password, hasProvider, email } = req.body
 
     const user = await CreateUserService({
       email,
@@ -30,12 +23,19 @@ export async function userController(app: FastifyInstance): Promise<void> {
       hasProvider
     })
 
-    if (hasProvider) reply.status(200).send({ message: throwUserMessages.providerAuthenticated })
+    if (hasProvider) apply.status(200).send({ message: throwUserMessages.providerAuthenticated })
 
     if (!user) {
-      reply.status(404).send({ message: throwUserMessages.userNotFound })
+      apply.status(404).send({ message: throwUserMessages.userNotFound })
     }
 
-    reply.send(user)
+    const userResponse = {
+      ...user,
+      expirationTime: user.expirationTime.toISOString(),
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString()
+    }
+
+    apply.status(201).send(userResponse)
   })
 }

@@ -1,6 +1,6 @@
-import { inMemoryGoalsRepository } from '~/src/repositories'
+import { inMemoryGoalsRepository } from '@repositories'
 import { GoalProgressService, TGoalProgressServiceRequest } from '.'
-import { mockGoal } from '~/src/entities/Goals/mocks'
+import { mockGoal } from '@entities/Goals/mocks'
 import { CreateGoalsService, TCreateGoalsRequest } from '../create'
 
 describe('GoalProgressService', () => {
@@ -17,7 +17,15 @@ describe('GoalProgressService', () => {
     await CreateGoalsService({
       action: createGoalAction,
       email: mockGoal.email,
-      goals: mockGoal
+      goals: {
+        goal: {
+          goal: mockGoal.goal,
+          goalComplete: mockGoal.goalComplete,
+          goalCompletePercent: mockGoal.goalCompletePercent,
+          words: mockGoal.words
+        },
+        email: mockGoal.email
+      }
     })
 
     const sut = await GoalProgressService({

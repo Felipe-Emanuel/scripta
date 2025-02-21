@@ -1,5 +1,3 @@
-import { Image } from '@heroui/react'
-
 import { BsEmojiHeartEyes } from 'react-icons/bs'
 import { HiTrophy } from 'react-icons/hi2'
 import { FaBook } from 'react-icons/fa'
@@ -11,6 +9,7 @@ import * as tv from '../../BookInformationTV'
 import { TBookResponse } from '~/src/app/shared/types'
 import { Dispatch, SetStateAction } from 'react'
 import { IconType } from 'react-icons/lib'
+import { BookCover } from '~/src/app/shared/components/BookCover'
 
 interface IDetailsProps {
   selectedBook: TBookResponse
@@ -27,15 +26,7 @@ export function Details({
 }: IDetailsProps) {
   const { clearing } = useMenuController()
 
-  const hero = (
-    <Image
-      alt="imagem do livro"
-      className={tv.heroTV()}
-      shadow="md"
-      src={selectedBook?.heroPathUrl}
-      width={130}
-    />
-  )
+  const hero = <BookCover base64Image={selectedBook?.heroPathUrl} />
 
   return (
     <div className={tv.cardInfoWrapperTV()}>

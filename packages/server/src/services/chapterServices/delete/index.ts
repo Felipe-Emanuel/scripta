@@ -1,6 +1,6 @@
 import { IChapterRepository } from '@repositories'
 import { throwChapterMessages } from '~/src/entities/Chapter/utils'
-import { deleteChapterSchema } from '@schemas'
+import { deleteChapterParamSchema } from '@schemas'
 
 export type TDeleteChapterServiceRequest = {
   actions: Pick<IChapterRepository, 'getChapterById' | 'deleteChapter'>
@@ -15,7 +15,7 @@ export const DeleteChapterService = async ({
 }: TDeleteChapterServiceRequest): Promise<TDeleteChapterServiceResponse> => {
   const { getChapterById, deleteChapter } = actions
 
-  const { chapterId } = deleteChapterSchema.parse({ chapterId: paramChapterId })
+  const { chapterId } = deleteChapterParamSchema.parse({ chapterId: paramChapterId })
 
   const currentChapter = getChapterById(chapterId)
 

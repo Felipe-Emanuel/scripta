@@ -3,10 +3,11 @@ import { IBooksRepository } from '@repositories'
 import { Book } from '@prisma/client'
 import { v4 as uuiv4 } from 'uuid'
 import { throwBookMessages } from '@entities/Book/utils'
+import { TreateBookBodySchema } from '@schemas'
 
 export type TCreateBookServiceRequest = {
   actions: Pick<IBooksRepository, 'createBook' | 'getAllBooks'>
-  book: Book
+  book: TreateBookBodySchema['book']
   userEmail: string
 }
 
@@ -28,13 +29,23 @@ export const CreateBookService = async ({
     throw new Error(throwBookMessages.alreadyExists)
   }
 
+  const { Gender, Theme, conclued, description, heroPathUrl, isActive, socialLink, title } = book
+
   const { setBook } = BookEntitie({
-    ...book,
+    conclued,
+    description,
+    Gender,
+    heroPathUrl,
+    isActive,
+    socialLink,
+    Theme,
+    title,
     userEmail,
     id: uuiv4(),
     createdAt: new Date(),
     updatedAt: new Date(),
-    hits: 0
+    hits: 0,
+    totalWords: 0
   })
 
   const newBook = await setBook()

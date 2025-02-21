@@ -9,26 +9,26 @@ describe('Create Book', () => {
 
   const actions: TCreateBookServiceRequest['actions'] = {
     createBook,
-    getAllBooks,
+    getAllBooks
   }
 
   it('should create a new book', async () => {
     const newBook: Book = {
       ...bookEntitieMock,
-      title: `Book Title Fake Number ${Math.random() * 100}`,
+      title: `Book Title Fake Number ${Math.random() * 100}`
     }
 
     const expected = {
       ...newBook,
       id: randomUUID(),
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date()
     }
 
     const sut = await CreateBookService({
       actions,
       book: newBook,
-      userEmail: bookEntitieMock.userEmail,
+      userEmail: bookEntitieMock.userEmail
     })
 
     expect(sut.title).toEqual(expected.title)
@@ -39,7 +39,7 @@ describe('Create Book', () => {
       CreateBookService({
         actions,
         book: bookEntitieMock,
-        userEmail: bookEntitieMock.userEmail,
+        userEmail: bookEntitieMock.userEmail
       })
 
     await sut()

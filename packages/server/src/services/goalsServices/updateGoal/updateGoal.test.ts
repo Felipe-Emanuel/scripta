@@ -33,7 +33,15 @@ describe('UpdateGoalService', () => {
     const existentGoal = await CreateGoalsService({
       action: createGoalsAction,
       email: mockGoal.email,
-      goals: mockGoal
+      goals: {
+        goal: {
+          goal: mockGoal.goal,
+          goalComplete: mockGoal.goalComplete,
+          goalCompletePercent: mockGoal.goalCompletePercent,
+          words: mockGoal.words
+        },
+        email: mockGoal.email
+      }
     })
 
     const sut = await UpdateGoalService({
