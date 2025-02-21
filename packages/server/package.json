@@ -2,7 +2,7 @@
   "name": "@scripta/server",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "private": true,
   "engines": {
     "node": ">=20"
   },
@@ -45,6 +45,7 @@
     "@jest/globals": "^29.7.0",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/uuid": "^9.0.8",
-    "tsup": "^8.2.4"
+    "tsup": "^8.2.4",
+    "tsx": "^4.19.3"
   }
 }

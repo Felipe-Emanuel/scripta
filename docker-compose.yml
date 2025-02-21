@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: scripta-db
+    restart: always
+    environment:
+      POSTGRES_USER: scripta
+      POSTGRES_PASSWORD: scripta
+      POSTGRES_DB: scripta
+    ports:
+      - "5432:5432"
+    networks:
+      - backend_network
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  server:
+    build: 
+      context: .
+      dockerfile: ./docker/Dockerfile.server
+    container_name: scripta-server
+    depends_on:
+      - db
+    environment:
+      - packages/server/.env
+    ports:
+      - "3333:3333"
+    networks:
+      - backend_network
+      - frontend_network
+    volumes:
+      - ./:/monorepo
+
+  # web:
+  #   build: 
+  #     context: .
+  #     dockerfile: packages/web/Dockerfile
+  #   container_name: scripta-web
+  #   depends_on:
+  #     - server
+  #   ports:
+  #     - "3000:3000"
+
+networks:
+  backend_network:
+    driver: bridge
+  frontend_network:
+    driver: bridge
+
+
+volumes:
+  db_data:

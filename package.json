@@ -1,7 +1,6 @@
 {
   "name": "scripta",
   "version": "1.0.0",
-  "description": "a full stack project with monorepo",
   "main": "index.js",
   "private": true,
   "scripts": {

@@ -1,7 +1,5 @@
 import fastify from 'fastify'
 import cors from '@fastify/cors'
-import { dailySatisfactionRateJob } from 'src/shared/jobs/dailySatisfactionRateJob'
-import { routes } from 'src/routes'
 import {
   validatorCompiler,
   serializerCompiler,
@@ -10,6 +8,10 @@ import {
 } from 'fastify-type-provider-zod'
 import { fastifySwagger } from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
+import { dailySatisfactionRateJob } from './shared/jobs/dailySatisfactionRateJob'
+import { routes } from './routes'
+
+console.log('teste')
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 

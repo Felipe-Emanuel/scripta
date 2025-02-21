@@ -44,7 +44,6 @@ const resetGoals = async () => {
         if (existentGoal) {
           await UpdateGoalService({
             actions: updateGoalAction,
-            goalId: existentGoal.id,
             updatedGoal: existentGoal
           })
 
@@ -58,7 +57,10 @@ const resetGoals = async () => {
           CreateGoalsService({
             action: createGoalAction,
             email: user.email,
-            goals: newGoal
+            goals: {
+              goal: newGoal,
+              email: user.email
+            }
           })
         }
       } catch (error) {

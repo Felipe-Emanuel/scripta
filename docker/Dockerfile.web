@@ -1,0 +1,16 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+ENV PROJECT_ROOT=/monorepo/
+
+COPY ./ ./monorepo
+
+WORKDIR /monorepo
+
+RUN npm install -G yarn \
+    && uarn global add typescript \
+    && yarn install \
+    && yarn build
+
+CMD yarn dev

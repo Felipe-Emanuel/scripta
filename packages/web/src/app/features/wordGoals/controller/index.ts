@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { TUpdateCurrentGoalRequest } from '@shared/types'
 import { cacheName } from '@shared/utils/constants/cacheName'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useUser } from '@hooks/useUser'
 import { queryClient } from '@shared/services/reactQuery'
@@ -35,20 +35,26 @@ export const useWordGoalsController = () => {
 
   const { handleSubmit, reset } = wordGoalsSchema
 
-  const putGoal = async (goal: number) => {
-    if (currentGoal) {
-      const body: TUpdateCurrentGoalRequest = {
-        updatedGoal: {
-          ...currentGoal,
-          words: 0,
-          goal
+  const putGoal = useCallback(
+    async (goal: number) => {
+      if (currentGoal) {
+        if (sessionCustomer) {
+          const body: TUpdateCurrentGoalRequest = {
+            updatedGoal: {
+              ...currentGoal,
+              words: 0,
+              goal,
+              email: sessionCustomer?.email
+            }
+          }
+          const updatedGoal = await updateCurrentGoal(body)
+
+          return updatedGoal
         }
       }
-      const updatedGoal = await updateCurrentGoal(body)
-
-      return updatedGoal
-    }
-  }
+    },
+    [currentGoal, sessionCustomer]
+  )
 
   const { mutateAsync } = useMutation({
     mutationFn: putGoal,

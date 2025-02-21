@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -11,6 +11,9 @@ model User {
   id             String     @id @default(uuid())
   name           String
   email          String     @unique
+  uniqueName     String     @unique
+  hashtags       String[]
+  description    String
   picture        String?
   portfolioUrl   String?
   rule           String
@@ -40,25 +43,50 @@ model Reader {
 }
 
 model Book {
-  id          String      @id @default(uuid())
-  title       String
-  description String
-  socialLink  String?
-  heroPathUrl String
-  characters  Character[]
-  conclued    Boolean     @default(false)
-  isActive    Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  reactions   Reaction[]
-  Gender      String?
-  Theme       String?
-  hits        Int
-  totalWords  Int?
-  readers     Reader[]
-  User        User?       @relation(fields: [userEmail], references: [email])
-  userEmail   String?
-  chapters    Chapter[]
+  id                 String               @id @default(uuid())
+  title              String
+  tags               String[]
+  description        String
+  socialLink         String?
+  heroPathUrl        String
+  characters         Character[]
+  conclued           Boolean              @default(false)
+  isActive           Boolean              @default(false)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  reactions          Reaction[]
+  Gender             String?
+  Theme              String?
+  hits               Int
+  totalWords         Int?
+  readers            Reader[]
+  User               User?                @relation(fields: [userEmail], references: [email])
+  userEmail          String?
+  chapters           Chapter[]
+  LastPublishedBooks LastPublishedBooks[]
+}
+
+model LastPublishedBooks {
+  id        String   @id @default(uuid())
+  bookId    String
+  createdAt DateTime @default(now())
+  book      Book     @relation(fields: [bookId], references: [id])
+}
+
+model LastPublishedChapter {
+  id        Int      @id @default(1)
+  chapterId String   @unique
+  updatedAt DateTime @updatedAt
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
+model LastPublishedCharacter {
+  id          Int      @id @default(1)
+  characterId String   @unique
+  updatedAt   DateTime @updatedAt
+
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -72,23 +100,25 @@ model Comment {
 }
 
 model Chapter {
-  id              String           @id @default(uuid())
-  isConclued      Boolean          @default(false)
-  chapterTitle    String
-  chapterText     String
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  Book            Book             @relation(fields: [bookId], references: [id], onDelete: Cascade)
-  bookId          String
-  characters      Character[]
-  wordsCounter    Int
-  dailyWordCounts DailyWordCount[]
-  comments        Comment[]
-  reactions       Reaction[]
-  firstLineIndent String
-  lineHeight      String
-  fontSize        String
-  fontWeight      String
+  id                   String                @id @default(uuid())
+  isConclued           Boolean               @default(false)
+  chapterTitle         String
+  catchingText         String?
+  chapterText          String
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  Book                 Book                  @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId               String
+  characters           Character[]
+  wordsCounter         Int
+  dailyWordCounts      DailyWordCount[]
+  comments             Comment[]
+  reactions            Reaction[]
+  firstLineIndent      String
+  lineHeight           String
+  fontSize             String
+  fontWeight           String
+  LastPublishedChapter LastPublishedChapter?
 }
 
 model DailyWordCount {
@@ -110,23 +140,25 @@ model Reaction {
 }
 
 model Character {
-  id                String         @id @default(uuid())
-  name              String
-  heroPathUrl       String
-  description       String
-  age               Int
-  hairColor         String
-  sexuality         String
-  race              String
-  lifeStatus        String
-  lifeStatusDetails String
-  relationships     Relationship[]
-  book              Book           @relation(fields: [bookId], references: [id])
-  bookId            String
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  Chapter           Chapter?       @relation(fields: [chapterId], references: [id])
-  chapterId         String?
+  id                     String                  @id @default(uuid())
+  name                   String
+  uniqueName             String                  @unique
+  heroPathUrl            String
+  description            String
+  age                    Int
+  hairColor              String
+  sexuality              String
+  race                   String
+  lifeStatus             String
+  lifeStatusDetails      String
+  relationships          Relationship[]
+  book                   Book                    @relation(fields: [bookId], references: [id])
+  bookId                 String
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  Chapter                Chapter?                @relation(fields: [chapterId], references: [id])
+  chapterId              String?
+  LastPublishedCharacter LastPublishedCharacter?
 }
 
 model Relationship {
