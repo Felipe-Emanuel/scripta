@@ -5,21 +5,19 @@ import { CreateUserService, TCreateUserServiceRequest } from '@services'
 import { z } from 'zod'
 
 export async function userController(app: FastifyInstance): Promise<void> {
-  const { createUser, getUserByEmail, patchUserPicture } =
-    databaseUserRepository()
+  const { createUser, getUserByEmail, patchUserPicture } = databaseUserRepository()
 
   const actions = {
     createUser,
     getUserByEmail,
-    patchUserPicture,
+    patchUserPicture
   }
 
-  app.post('/users', async (req, apply) => {
-    const { name, password, hasProvider } =
-      req.body as TCreateUserServiceRequest
+  app.post('/users', async (req, reply) => {
+    const { name, password, hasProvider } = req.body as TCreateUserServiceRequest
 
     const userSchema = z.object({
-      email: z.string().email(throwUserMessages.invalidEmail),
+      email: z.string().email(throwUserMessages.invalidEmail)
     })
 
     const { email } = userSchema.parse(req.body)
@@ -29,18 +27,15 @@ export async function userController(app: FastifyInstance): Promise<void> {
       name,
       password,
       actions,
-      hasProvider,
+      hasProvider
     })
 
-    if (hasProvider)
-      apply
-        .status(200)
-        .send({ message: throwUserMessages.providerAuthenticated })
+    if (hasProvider) reply.status(200).send({ message: throwUserMessages.providerAuthenticated })
 
     if (!user) {
-      apply.status(404).send({ message: throwUserMessages.userNotFound })
+      reply.status(404).send({ message: throwUserMessages.userNotFound })
     }
 
-    apply.send(user)
+    reply.send(user)
   })
 }

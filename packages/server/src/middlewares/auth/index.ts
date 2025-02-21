@@ -1,24 +1,15 @@
 import { FastifyReply } from 'fastify'
-import { globalErrorMessage } from 'src/shared/utils/globalErrorMessage'
-import { verifyToken } from 'src/shared/utils/tokens'
+import { globalErrorMessage } from '@utils'
+import { verifyToken } from '@utils'
 
-export const authorization = async (
-  provider: string | string[],
-  accessToken: string,
-  apply: FastifyReply
-) => {
+export const authorization = async (accessToken: string, reply: FastifyReply) => {
   let isTokenValid = false
-  const decoded = accessToken && (await verifyToken(accessToken))
-
-  if (provider) {
-    isTokenValid = true
-  }
+  const veryfiedToken = await verifyToken(accessToken)
+  const decoded = accessToken && veryfiedToken
 
   if (accessToken) {
     decoded ? (isTokenValid = true) : (isTokenValid = false)
   }
 
-  if (!isTokenValid) apply.status(401).send({ message: globalErrorMessage.unauthorized })
-
-  if (provider && accessToken) apply.status(409).send({ message: globalErrorMessage.conflict })
+  if (!isTokenValid) reply.status(401).send({ message: globalErrorMessage.unauthorized })
 }

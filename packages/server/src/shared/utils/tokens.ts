@@ -15,9 +15,7 @@ export const generateToken = (data: TGenerateToken): string => {
 
 export const verifyToken = async (token: string) => {
   try {
-    const decoded = jwt.verify(token, secretKey, {
-      algorithms: ['HS384', 'HS256']
-    })
+    const decoded = jwt.decode(token) as { sub: string; email: string }
 
     return decoded
   } catch (error) {

@@ -22,30 +22,36 @@ export const authOptions: never = {
   ],
   secret,
   callbacks: {
-    async signIn({ user: { email, name } }: Profile) {
-      const isAllowedToSignIn = email && name
+    // async signIn({ user: { email, name } }: Profile) {
+    async signIn(a, b, c) {
+      // const isAllowedToSignIn = email && name
 
-      if (isAllowedToSignIn) {
-        await createNewGoal({
-          email,
-          goals: {
-            createdAt: new Date(),
-            words: 0,
-            goal: 0
-          }
-        })
+      console.log('a', a)
+      console.log('b', b)
+      console.log('c', c)
 
-        await createUser({
-          email,
-          name,
-          password: '', // as created by a provider, password will be created in the backend and be sent to the user email address
-          hasProvider: true
-        })
+      // if (isAllowedToSignIn) {
+      // await createNewGoal({
+      //   email,
+      //   goals: {
+      //     createdAt: new Date(),
+      //     words: 0,
+      //     goal: 0
+      //   }
+      // })
 
-        return true
-      } else {
-        return false
-      }
+      // await createUser({
+      //   // if user already exists, api will just return the user
+      //   email,
+      //   name,
+      //   password: '', // as created by a provider, password will be created in the backend and be sent to the user email address
+      //   hasProvider: true
+      // })
+
+      //   return true
+      // } else {
+      //   return false
+      // }
     }
   }
 }
