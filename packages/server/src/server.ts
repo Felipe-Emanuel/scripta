@@ -1,6 +1,5 @@
 import fastify from 'fastify'
 import cors from '@fastify/cors'
-import { dailySatisfactionRateJob } from 'src/shared/jobs/dailySatisfactionRateJob'
 import { routes } from 'src/routes'
 import {
   validatorCompiler,
@@ -20,7 +19,7 @@ app.register(fastifySwagger, {
   openapi: {
     info: {
       title: 'Scripta API',
-      version: '1.0.0'
+      version: '2.0.0'
     }
   },
   transform: jsonSchemaTransform
@@ -35,8 +34,6 @@ routes(app)
 app.register(cors, {
   origin: true
 })
-
-dailySatisfactionRateJob.start()
 
 app
   .listen({

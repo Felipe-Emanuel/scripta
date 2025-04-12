@@ -1,38 +1,53 @@
 import { prisma } from 'src/lib'
 import { IReaderRepository } from '../ReaderRepository'
 import { Reader } from '@prisma/client'
-import { TFormattedUser } from '@types'
+import { TGetReaderByAuthorSchemaResponse } from '@schemas'
+import { TCreateReaderEntitie } from '@services'
 
 export const databaseReaderRepository = (): IReaderRepository => {
   const createReader = async (
-    reader: Reader & { bookId: string },
-  ): Promise<Reader> => {
+    reader: Reader & { bookId: string }
+  ): Promise<TCreateReaderEntitie> => {
     const newReader = await prisma.reader.create({
-      data: reader,
-      include: {
-        books: true,
+      data: {
+        id: reader.id,
+        userId: reader.userId,
+        userName: reader.userName,
+        latitude: reader.latitude,
+        longitude: reader.longitude,
+        books: {
+          connect: { id: reader.bookId }
+        }
       },
+      include: {
+        books: true
+      }
     })
 
-    return newReader
+    return {
+      id: newReader.id,
+      picture: newReader.picture,
+      bookId: reader.bookId,
+      userId: newReader.userId,
+      userName: newReader.userName,
+      latitude: newReader.latitude,
+      longitude: newReader.longitude
+    }
   }
 
-  const createOnlyBookReader = async (
-    bookId: string,
-    newReader: Reader,
-  ): Promise<Reader[]> => {
+  const createOnlyBookReader = async (bookId: string, newReader: Reader): Promise<Reader[]> => {
     const updatedBook = await prisma.book.update({
       where: { id: bookId },
       data: {
         readers: {
           create: {
-            ...newReader,
-          },
-        },
+            ...newReader
+          }
+        }
       },
       include: {
-        readers: true,
-      },
+        readers: true
+      }
     })
 
     return updatedBook.readers || []
@@ -41,54 +56,42 @@ export const databaseReaderRepository = (): IReaderRepository => {
   const getAllReadersByBook = async (bookId: string): Promise<Reader[]> => {
     const existentBook = await prisma.book.findFirst({
       where: {
-        id: bookId,
+        id: bookId
       },
       include: {
-        readers: true,
-      },
+        readers: true
+      }
     })
     return existentBook.readers || []
   }
 
-  const updateReader = async (
-    readerId: string,
-    newReader: Reader,
-  ): Promise<Reader> => {
+  const updateReader = async (readerId: string, newReader: Reader): Promise<Reader> => {
     const updatedReader = await prisma.reader.update({
       where: {
-        id: readerId,
+        id: readerId
       },
-      data: newReader,
+      data: newReader
     })
 
     return updatedReader || null
   }
 
   const getAllReadersByAuthor = async (
-    authorEmail: string,
-  ): Promise<Reader[]> => {
+    userId: string
+  ): Promise<TGetReaderByAuthorSchemaResponse> => {
     const readers = await prisma.reader.findMany({
       where: {
-        authorEmail,
-      },
+        userId
+      }
     })
 
-    return readers || []
-  }
-
-  const getReaderFromEmail = async (
-    readerEmail: string,
-  ): Promise<TFormattedUser> => {
-    const existentReader = await prisma.reader.findFirst({
-      where: {
-        userEmail: readerEmail,
-      },
-      include: {
-        books: true,
-      },
-    })
-
-    return existentReader
+    return readers?.map((reader) => ({
+      id: reader.id,
+      latitude: reader.latitude,
+      longitude: reader.longitude,
+      picture: reader.picture,
+      userName: reader.userName
+    }))
   }
 
   return {
@@ -96,7 +99,6 @@ export const databaseReaderRepository = (): IReaderRepository => {
     getAllReadersByBook,
     updateReader,
     getAllReadersByAuthor,
-    createOnlyBookReader,
-    getReaderFromEmail,
+    createOnlyBookReader
   }
 }

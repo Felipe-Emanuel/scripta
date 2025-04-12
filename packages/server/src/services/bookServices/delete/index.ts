@@ -1,21 +1,35 @@
-import { throwBookMessages } from '@entities/Book/utils'
-import { Book } from '@prisma/client'
 import { IBooksRepository } from '@repositories'
+import { TDeleteBookSchemaResponse } from '@schemas'
+import { throwBookMessages } from '@utils'
 
 export type TDeleteBookServiceRequest = {
   action: Pick<IBooksRepository, 'deleteBook'>
   bookId: string
 }
 
-type TDeleteBookServiceRequestResponse = Book
+type TDeleteBookServiceRequestResponse = TDeleteBookSchemaResponse['deletedBook']
 
 export const DeleteBookService = async ({
   action,
-  bookId,
+  bookId
 }: TDeleteBookServiceRequest): Promise<TDeleteBookServiceRequestResponse> => {
   const { deleteBook } = action
 
   if (!bookId) throw new Error(throwBookMessages.missingBookId)
 
-  return await deleteBook(bookId)
+  const deletedBook = await deleteBook(bookId)
+
+  return {
+    title: deletedBook.title,
+    description: deletedBook.description,
+    id: deletedBook.id,
+    socialLink: deletedBook.socialLink,
+    heroPathUrl: deletedBook.heroPathUrl,
+    conclued: deletedBook.conclued,
+    isActive: deletedBook.isActive,
+    Gender: deletedBook.Gender,
+    Theme: deletedBook.Theme,
+    hits: deletedBook.hits,
+    totalWords: deletedBook.totalWords
+  }
 }

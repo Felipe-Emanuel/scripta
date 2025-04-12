@@ -2,29 +2,35 @@ import { Goal } from '@prisma/client'
 import { formateDate } from '@utils'
 import { prisma } from 'src/lib'
 import { IGoalRepository } from '@repositories'
-import { TGetTodayGoalProgressResponse } from '@types'
-import { v4 as uuidv4 } from 'uuid'
+import { TCreateGoalResponseSchema, TGoalByFilterSchemaResponse } from '@schemas'
+import { TGoalEntitie } from '@services'
 
 export const databaseGoalsRepository = (): IGoalRepository => {
-  const createGoals = async (goals: Goal): Promise<Goal[]> => {
+  const createGoals = async (goal: TGoalEntitie): Promise<TCreateGoalResponseSchema> => {
     const updatedGoals = await prisma.goal.create({
-      data: goals
+      data: goal
     })
 
-    return [updatedGoals]
+    return {
+      goal: updatedGoals.goal,
+      goalComplete: updatedGoals.goalComplete,
+      goalCompletePercent: updatedGoals.goalCompletePercent,
+      id: updatedGoals.id,
+      words: updatedGoals.words
+    }
   }
 
   const getGoalsByFilter = async (
-    email: string,
+    userId: string,
     startGoalFilter: Date,
     endGoalFilter: Date
-  ): Promise<Goal[]> => {
+  ): Promise<TGoalByFilterSchemaResponse> => {
     const gte = new Date(formateDate(startGoalFilter, 'yyyy-MM-dd'))
     const lte = endGoalFilter
 
     const existingGoals = await prisma.goal.findMany({
       where: {
-        email,
+        userId,
         createdAt: {
           gte,
           lte
@@ -35,16 +41,25 @@ export const databaseGoalsRepository = (): IGoalRepository => {
       }
     })
 
-    return existingGoals || []
+    const formatedGoals: TGoalByFilterSchemaResponse =
+      existingGoals?.map((goals) => ({
+        id: goals.id,
+        goal: goals.goal,
+        goalComplete: goals.goalComplete,
+        goalCompletePercent: goals.goalCompletePercent,
+        words: goals.words
+      })) || []
+
+    return formatedGoals
   }
 
-  const updateGoal = async (userEmail: string, newWords: number, goal?: number): Promise<Goal> => {
+  const updateGoal = async (userId: string, newWords: number, goal?: number): Promise<Goal> => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 
     let dailyGoal = await prisma.goal.findFirst({
       where: {
-        email: userEmail,
+        userId: userId,
         createdAt: {
           gte: today
         }
@@ -54,7 +69,7 @@ export const databaseGoalsRepository = (): IGoalRepository => {
     if (!dailyGoal) {
       dailyGoal = await prisma.goal.create({
         data: {
-          email: userEmail,
+          userId,
           goal,
           words: 0,
           goalCompletePercent: 0,
@@ -70,7 +85,7 @@ export const databaseGoalsRepository = (): IGoalRepository => {
     const progressPercent = numericGoal > 0 ? (numericUpdatedWords / numericGoal) * 100 : 0
     const isGoalComplete = progressPercent >= 100
 
-    const goals = await prisma.goal.update({
+    const updatedGoal = await prisma.goal.update({
       where: { id: dailyGoal.id },
       data: {
         words: numericUpdatedWords,
@@ -80,57 +95,36 @@ export const databaseGoalsRepository = (): IGoalRepository => {
       }
     })
 
-    return goals
+    return updatedGoal
   }
 
-  const getLastGoal = async (email: string): Promise<Goal | null> => {
-    const existentGaosl = await prisma.goal.findMany({
+  const getLastGoal = async (userId: string): Promise<Goal | null> => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const existentGoals = await prisma.goal.findMany({
       where: {
-        email
+        userId,
+        createdAt: {
+          gte: today
+        }
       },
       orderBy: {
         createdAt: 'desc'
       }
     })
 
-    return existentGaosl[0] || null
-  }
-
-  const getTodayGoalProgress = async (
-    userEmail: string
-  ): Promise<TGetTodayGoalProgressResponse> => {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    const dailyGoal = await prisma.goal.findFirst({
-      where: {
-        email: userEmail,
-        createdAt: {
-          gte: today
-        }
-      }
-    })
-
-    if (!dailyGoal) {
-      return {
-        id: uuidv4(),
-        words: 0,
-        goal: 0,
-        goalCompletePercent: 0,
-        goalComplete: false,
-        createdAt: today,
-        updatedAt: today
-      }
+    if (existentGoals.length === 0) {
+      return null
     }
 
-    return dailyGoal
+    return existentGoals[0]
   }
 
   return {
     createGoals,
     getGoalsByFilter,
     updateGoal,
-    getLastGoal,
-    getTodayGoalProgress
+    getLastGoal
   }
 }

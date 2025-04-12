@@ -1,8 +1,8 @@
 import { Book, Reader } from '@prisma/client'
-import { bookEntitieMock } from '@entities/Book/mocks'
-import { mockReader } from '@entities/Reader/mocks'
 import { IReaderRepository } from '../ReaderRepository'
-import { TFormattedUser } from '@types'
+import { mockReader, bookEntitieMock } from '~/src/shared/mocks'
+import { TCreateReaderSchemaResponse } from '@schemas'
+import { TCreateReaderEntitie } from '~/src/services'
 
 type TBookWithAccessByReader = {
   readers: Reader[]
@@ -16,17 +16,22 @@ export const inMemoryReaderRepository = (): IReaderRepository => {
       readers: [mockReader]
     }
   ] as TBookWithAccessByReader[]
-  const users: TFormattedUser[] = [
-    {
-      ...mockReader,
-      books
+
+  const createReader = async (
+    reader: TCreateReaderSchemaResponse
+  ): Promise<TCreateReaderEntitie> => {
+    const updatedReader = (baseReader = [
+      ...baseReader,
+      {
+        ...baseReader[0],
+        ...reader
+      }
+    ])
+
+    return {
+      ...updatedReader[0],
+      bookId: bookEntitieMock.id
     }
-  ]
-
-  const createReader = async (reader: Reader): Promise<Reader> => {
-    const updatedReader = (baseReader = [...baseReader, reader])
-
-    return updatedReader[0] || null
   }
 
   const createOnlyBookReader = async (bookId: string, newReader: Reader): Promise<Reader[]> => {
@@ -54,16 +59,10 @@ export const inMemoryReaderRepository = (): IReaderRepository => {
     return updatedReader
   }
 
-  const getAllReadersByAuthor = async (authorEmail: string): Promise<Reader[]> => {
-    const readers = baseReader.filter((reader) => reader.userEmail === authorEmail)
+  const getAllReadersByAuthor = async (authorId: string): Promise<Reader[]> => {
+    const readers = baseReader.filter((reader) => reader.userId === authorId)
 
     return readers || []
-  }
-
-  const getReaderFromEmail = async (readerEmail: string): Promise<TFormattedUser> => {
-    const existentUser = users.find((user) => user.userEmail === readerEmail)
-
-    return existentUser || null
   }
 
   return {
@@ -71,7 +70,6 @@ export const inMemoryReaderRepository = (): IReaderRepository => {
     getAllReadersByBook,
     updateReader,
     getAllReadersByAuthor,
-    createOnlyBookReader,
-    getReaderFromEmail
+    createOnlyBookReader
   }
 }

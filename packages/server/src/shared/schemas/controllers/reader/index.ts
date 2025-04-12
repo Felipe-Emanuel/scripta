@@ -1,5 +1,0 @@
-export * from './create'
-export * from './getReaderByBookId'
-export * from './update'
-export * from './getReaderByEmail'
-export * from './getReaderByAuthor'

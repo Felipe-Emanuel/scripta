@@ -8,12 +8,10 @@ export const useProfileController = () => {
   const { sessionCustomer } = useUser()
 
   const getGoal = useCallback(async () => {
-    if (sessionCustomer) {
-      const current = await getCurrentGoal(sessionCustomer.email)
+    const current = await getCurrentGoal()
 
-      return current
-    }
-  }, [sessionCustomer])
+    return current
+  }, [])
 
   const {
     data: currentGoal,

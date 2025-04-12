@@ -1,34 +1,50 @@
-import { User } from '@prisma/client'
-import { IUserRepository } from 'src/repositories/UserRepository'
+import { Book, Reader, User } from '@prisma/client'
+import { IUserRepository } from '@repositories'
+import { TUserEntitie } from '@services'
+import { TCreateUserResponseSchema } from '@schemas'
+import { bookEntitieMock, mockReader } from '~/src/shared/mocks'
 
-let users: User[] = []
+type ExtendedUser = User & { books?: Book[]; readers?: Reader[] }
+
+let users: ExtendedUser[] = []
 
 export const inMemoryUserRepository = (): IUserRepository => {
-  const createUser = async (user: User): Promise<User[]> => {
-    const updatedUsers = (users = [{ ...user, ...user }])
+  const createUser = async (user: TUserEntitie): Promise<TCreateUserResponseSchema[]> => {
+    const updatedUsers = (users = [
+      ...users,
+      {
+        ...users[0],
+        ...user
+      }
+    ])
+
     return updatedUsers
   }
 
-  const getUserByEmail = async (email: string): Promise<User | null> => {
-    const exisintgUser = users.find((user) => user.email === email)
-
-    return exisintgUser || null
-  }
-
-  const patchUserPicture = async (
+  const getUserByEmail = async (
     email: string,
-    picture: string,
+    includeBook?: boolean,
+    includeReaders?: boolean
   ): Promise<User | null> => {
-    const exisintgUser = users.find((user) => user.email === email)
+    const existingUser = users.find((user) => user.email === email) as ExtendedUser
+    const readers: Reader[] = [mockReader]
+    const books: Book[] = [bookEntitieMock]
 
-    if (exisintgUser) {
-      return {
-        ...exisintgUser,
-        picture,
-      }
+    if (includeBook) {
+      existingUser.books = books
     }
 
-    return null
+    if (includeReaders) {
+      existingUser.readers = readers
+    }
+
+    return existingUser || null
+  }
+
+  const getByUserId = async (userId: string): Promise<User | null> => {
+    const existentUser = users.find((user) => user.id === userId)
+
+    return existentUser || null
   }
 
   const getAllUsers = async (): Promise<User[]> => {
@@ -40,7 +56,7 @@ export const inMemoryUserRepository = (): IUserRepository => {
   return {
     createUser,
     getUserByEmail,
-    patchUserPicture,
     getAllUsers,
+    getByUserId
   }
 }

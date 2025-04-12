@@ -1,11 +1,8 @@
-import { Chapter } from '@prisma/client'
 import { IChapterRepository, IGoalRepository } from '@repositories'
 import { GetAllBooksService, TGetAllBooksServiceRequest } from '@services'
-import { throwChapterMessages } from '@entities/Chapter/utils'
 import { GetChapterByIdService, TGetChapterByIdServiceRequest } from '../getChapterById'
-import { updateChapterServiceSchema } from '@schemas'
-import { TUpdateChapter } from '@types'
-import { countWords } from '@utils'
+import { countWords, throwChapterMessages } from '@utils'
+import { TUpdateChapterSchemaRequest, TUpdateChapterSchemaResponse } from '@schemas'
 
 type TAction = Pick<IChapterRepository, 'updateChapter' | 'getChapterById'> &
   TGetAllBooksServiceRequest['action'] &
@@ -13,29 +10,27 @@ type TAction = Pick<IChapterRepository, 'updateChapter' | 'getChapterById'> &
 
 export type TUpdateChapterServiceRequest = {
   actions: TAction
-  updatedChapter: TUpdateChapter
-  userEmail: string
+  updatedChapter: TUpdateChapterSchemaRequest['updatedChapter']
+  userid: string
   newWords?: number
 }
 
-type TUpdateChapterServiceResponse = Chapter
+type TUpdateChapterServiceResponse = TUpdateChapterSchemaResponse
 
 export const UpdateChapterService = async ({
   actions,
   updatedChapter,
-  userEmail,
+  userid,
   newWords = 0
 }: TUpdateChapterServiceRequest): Promise<TUpdateChapterServiceResponse> => {
   const { updateChapter, getAllBooks, getChapterById, updateGoal } = actions
-
-  const email = updateChapterServiceSchema.parse({ userEmail })
 
   const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = { getAllBooks }
   const getChapterAction: TGetChapterByIdServiceRequest['action'] = { getChapterById }
 
   const booksByEmail = await GetAllBooksService({
     action: actionGetAllBooks,
-    userEmail: email.userEmail,
+    userid,
     onlyFirstChapter: true
   })
 
@@ -54,7 +49,7 @@ export const UpdateChapterService = async ({
   const res = await updateChapter(updatedChapter, newWords)
 
   if (wordsAdded > 0) {
-    await updateGoal(userEmail, wordsAdded)
+    await updateGoal(userid, wordsAdded)
   }
 
   return res

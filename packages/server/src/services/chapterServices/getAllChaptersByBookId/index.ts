@@ -1,13 +1,12 @@
-import { Chapter } from '@prisma/client'
-import { ChapterEntitie } from '~/src/entities/Chapter'
-import { IChapterRepository } from '~/src/repositories'
+import { IChapterRepository } from '@repositories'
+import { TGetAllChaptersByBookIdSchemaResponse } from '@schemas'
 
 export type TGetAllChaptersByBookIdServiceRequest = {
   action: Pick<IChapterRepository, 'getAllChapters'>
   bookId: string
 }
 
-type TGetAllChaptersByBookIdServiceResponse = Chapter[]
+type TGetAllChaptersByBookIdServiceResponse = TGetAllChaptersByBookIdSchemaResponse
 
 export const GetAllChaptersByBookIdService = async ({
   action,
@@ -15,13 +14,7 @@ export const GetAllChaptersByBookIdService = async ({
 }: TGetAllChaptersByBookIdServiceRequest): Promise<TGetAllChaptersByBookIdServiceResponse> => {
   const { getAllChapters } = action
 
-  const { validBookdId } = ChapterEntitie()
-
-  const checkedBookId = await validBookdId({
-    bookId
-  })
-
-  const chapters = await getAllChapters(checkedBookId.bookId)
+  const chapters = await getAllChapters(bookId)
 
   return chapters
 }

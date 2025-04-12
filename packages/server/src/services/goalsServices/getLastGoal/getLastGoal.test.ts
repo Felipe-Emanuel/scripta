@@ -1,7 +1,6 @@
-import { mockGoal } from '@entities/Goals/mocks'
 import { inMemoryGoalsRepository } from '@repositories'
-import { GetLastGoalService, TGetLastGoalRequest } from 'src/services/goalsServices/getLastGoal'
-import { chapterMock } from '~/src/entities/Chapter/mocks'
+import { GetLastGoalService, TGetLastGoalRequest } from '@services'
+import { chapterMock, mockGoal } from '~/src/shared/mocks'
 
 describe('GetLastGoalService', () => {
   const { getLastGoal, createGoals, updateGoal } = inMemoryGoalsRepository()
@@ -14,7 +13,7 @@ describe('GetLastGoalService', () => {
   it('should return null', () => {
     const sut = GetLastGoalService({
       action,
-      paramUserEmail: mockGoal.email,
+      userId: 'unexpected userId',
       chapters: [chapterMock]
     })
 
@@ -26,7 +25,7 @@ describe('GetLastGoalService', () => {
 
     const sut = await GetLastGoalService({
       action,
-      paramUserEmail: mockGoal.email,
+      userId: mockGoal.userId,
       chapters: [chapterMock]
     })
 

@@ -1,22 +1,22 @@
 import { databaseFeedbackRepository, databaseUserRepository } from '@repositories'
 
 import { TFastifyInstance } from '@types'
-import { globalErrorMessage } from '@utils'
+import { globalErrorMessage, verifyToken } from '@utils'
 import { authorization } from 'src/middlewares'
 
 import {
   CreateFeedbackService,
+  GetByUserIdService,
   GetFeedbackService,
-  GetUserByEmailService,
   TCreateFeedbackServiceRequest,
-  TGetByEmailRequest,
+  TGetByUserIdServiceRequest,
   TGetFeedbackServiceRequest
 } from '@services'
 import { createFeedbackSchema, getFeedbackSchema } from '@schemas'
 
 export async function feedbackController(app: TFastifyInstance) {
   const { createFeedback, getFeedbacks } = databaseFeedbackRepository()
-  const { getUserByEmail } = databaseUserRepository()
+  const { getByUserId } = databaseUserRepository()
 
   const createFeedbackAction: TCreateFeedbackServiceRequest['action'] = {
     createFeedback
@@ -26,74 +26,74 @@ export async function feedbackController(app: TFastifyInstance) {
     getFeedbacks
   }
 
-  const getUserByEmailAction: TGetByEmailRequest['action'] = {
-    getUserByEmail
+  const getUserbyIdAction: TGetByUserIdServiceRequest['action'] = {
+    getByUserId
   }
 
   app.post(
     '/feedback',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
 
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: createFeedbackSchema.schema
     },
     async (req, apply) => {
-      const { feedback: body } = req.body
-
-      const { feedback, screenshot, type, userEmail } = body
-
-      const newFeedback = await CreateFeedbackService({
-        action: createFeedbackAction,
-        feedback: {
-          userEmail,
-          feedback,
-          screenshot,
-          type
-        }
-      })
-
       try {
-        apply.status(200).send(newFeedback)
-      } catch {
-        apply.status(500).send({ message: globalErrorMessage.unexpected })
+        const decoded = await verifyToken(req.headers.authorization)
+
+        const { feedback: body } = req.body
+
+        const { feedback, screenshot, type } = body
+
+        const createResponse = await CreateFeedbackService({
+          action: createFeedbackAction,
+          userId: decoded?.id,
+          feedback: {
+            feedback,
+            screenshot,
+            type
+          }
+        })
+
+        apply.status(202).send(createResponse)
+      } catch (e) {
+        apply.status(500).send({ message: e || globalErrorMessage.unexpected })
       }
     }
   )
 
   app.get(
-    '/feedback/:adminEmail',
+    '/feedback',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
 
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: getFeedbackSchema.schema
     },
     async (req, apply) => {
-      const { adminEmail } = req.params
-
-      const user = await GetUserByEmailService({
-        action: getUserByEmailAction,
-        email: adminEmail
-      })
-
-      const isAdmin = user.rule === 'adm'
-
-      const newFeedback = await GetFeedbackService({
-        action: getFeedbackAction,
-        isAdmin
-      })
-
       try {
+        const decoded = await verifyToken(req.headers.authorization)
+
+        const user = await GetByUserIdService({
+          action: getUserbyIdAction,
+          userid: decoded?.id
+        })
+
+        const isAdmin = user.rule === '_A'
+
+        const newFeedback = await GetFeedbackService({
+          action: getFeedbackAction,
+          isAdmin
+        })
+
         apply.send(newFeedback)
-      } catch {
-        apply.status(500).send({ message: globalErrorMessage.unexpected })
+      } catch (e) {
+        apply.status(500).send({ message: e || globalErrorMessage.unexpected })
       }
     }
   )

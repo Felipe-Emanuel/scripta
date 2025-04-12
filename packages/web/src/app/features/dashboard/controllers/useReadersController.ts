@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useUser } from '@shared/hooks/useUser'
 import { useQueryData } from '@shared/hooks/useReactQuery'
-import {
-  getOnlyReaderByEmail,
-  getReaderByBook,
-  getReadersByEmail
-} from '@features/readers/services'
+import { getOnlyReaderByEmail, getReaderByBook, getReadersById } from '@features/readers/services'
 import { TBookResponse, TCurrentTab, TReader, TReaderResponse } from '@shared/types'
 import { useQueryClient } from '@tanstack/react-query'
 import { cacheName } from '@shared/utils/constants/cacheName'
@@ -16,7 +11,6 @@ import { IReaderBookDetailsProps } from '@features/readers/views/ReaderBookDetai
 import { IReaderDetailsProps } from '@features/readers/views/ReaderDetails'
 
 export const useReadersController = () => {
-  const { sessionCustomer } = useUser()
   const [readerEmail, setReaderEmail] = useState('')
   const [isShowingDetails, setIsShowingDetails] = useState(false)
   const [isShowingBookDetails, setIsShowingBookDetails] = useState(false)
@@ -32,17 +26,16 @@ export const useReadersController = () => {
   }
 
   const getAllReaders = useCallback(() => {
-    const readers = getReadersByEmail(sessionCustomer?.email)
+    const readers = getReadersById()
 
     setFiltringByBook(false)
     return readers
-  }, [sessionCustomer?.email])
+  }, [])
 
   const { data: allReadersByAuthor } = useQueryData({
     getDataFn: getAllReaders,
     cacheName: 'allReaders',
-    cacheTime: '6-hours',
-    enabled: !!sessionCustomer?.email
+    cacheTime: '6-hours'
   })
 
   const seeReader = useCallback((userEmail: string) => {
@@ -66,18 +59,14 @@ export const useReadersController = () => {
 
   const cachedBooks = queryClient.getQueryData<TBookResponse[]>([cacheName.allBooks])
 
-  const getAllReadersByBook = useCallback(
-    async (bookId: string) => {
-      const readers = await getReaderByBook({
-        authorEmail: sessionCustomer?.email,
-        bookId
-      })
+  const getAllReadersByBook = useCallback(async (bookId: string) => {
+    const readers = await getReaderByBook({
+      bookId
+    })
 
-      setFiltringByBook(true)
-      return setAllReadersByBook(readers)
-    },
-    [sessionCustomer?.email]
-  )
+    setFiltringByBook(true)
+    return setAllReadersByBook(readers)
+  }, [])
 
   const allReaders = filtringByBook ? allReadersByBook : allReadersByAuthor
   const coordinates =

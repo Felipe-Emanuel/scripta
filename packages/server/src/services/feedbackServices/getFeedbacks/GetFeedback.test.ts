@@ -1,8 +1,8 @@
 import { inMemoryFeedbackRepository } from '@repositories'
 import { GetFeedbackService, TGetFeedbackServiceRequest } from '.'
-import { throwFeedbackMessages } from '@entities/Feedback/utils'
 import { CreateFeedbackService, TCreateFeedbackServiceRequest } from '../create'
-import { feedbackEntitieMock } from '@entities/Feedback/mocks'
+import { throwFeedbackMessages } from '@utils'
+import { feedbackEntitieMock, userEntitieMock } from '~/src/shared/mocks'
 
 describe('GetFeedbackService', () => {
   const { getFeedbacks, createFeedback } = inMemoryFeedbackRepository()
@@ -27,6 +27,7 @@ describe('GetFeedbackService', () => {
   it('should return correctly existents feedbacks', async () => {
     await CreateFeedbackService({
       action: createFeedbackAction,
+      userId: userEntitieMock.id,
       feedback: feedbackEntitieMock
     })
 

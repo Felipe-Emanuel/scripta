@@ -1,39 +1,35 @@
-import { FeedbackEntitie } from '@entities/Feedback'
-import { Feedback } from '@prisma/client'
 import { IFeedbackRepository } from '@repositories'
-import { v4 as uuidv4 } from 'uuid'
-import { TCreateFeedbackBodySchema } from '~/src/shared/schemas'
+import { TCreateFeedbackBodySchema, TCreateFeedbackBodySchemaResponse } from '@schemas'
+
+export type TCreateFeedback = TCreateFeedbackBodySchema['feedback'] & { userId: string }
 
 export type TCreateFeedbackServiceRequest = {
   action: Pick<IFeedbackRepository, 'createFeedback'>
   feedback: TCreateFeedbackBodySchema['feedback']
+  userId: string
 }
 
-type TCreateFeedbackServiceResponse = Feedback
+type TCreateFeedbackServiceResponse = TCreateFeedbackBodySchemaResponse
 
 export const CreateFeedbackService = async ({
   action,
+  userId,
   feedback
 }: TCreateFeedbackServiceRequest): Promise<TCreateFeedbackServiceResponse> => {
   const { createFeedback } = action
 
-  const { createFeedback: create } = FeedbackEntitie(feedback)
+  const { feedback: message, screenshot, type } = feedback
 
-  const createdFeedback = await create()
-
-  const { feedback: message, screenshot, type, userEmail } = createdFeedback
-
-  const newFeedback: Feedback = {
+  const newFeedback: TCreateFeedback = {
     feedback: message,
     screenshot,
     type,
-    userEmail,
-    id: uuidv4(),
-    createdAt: new Date(),
-    updatedAt: new Date()
+    userId
   }
 
   await createFeedback(newFeedback)
 
-  return newFeedback
+  return {
+    message: 'Feedback enviado com sucesso!'
+  }
 }

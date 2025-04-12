@@ -1,35 +1,27 @@
-import { Goal } from '@prisma/client'
-import { GoalsEntitie } from '@entities/index'
 import { IGoalRepository } from '@repositories'
+import { TGoalByFilterSchemaResponse } from '@schemas'
+import { throwGoalsMessages } from '@utils'
 
 export type TGetGoalsByFilterServiceRequest = {
   actions: Pick<IGoalRepository, 'getGoalsByFilter'>
-  email: string
+  userId: string
   startGoalFilter: Date
   endGoalFilter: Date
 }
 
-type TGetGoalsByFilterServiceResponse = Goal[]
+type TGetGoalsByFilterServiceResponse = TGoalByFilterSchemaResponse
 
 export const GetGoalsByFilterService = async ({
   actions,
-  email,
+  userId,
   endGoalFilter,
-  startGoalFilter,
+  startGoalFilter
 }: TGetGoalsByFilterServiceRequest): Promise<TGetGoalsByFilterServiceResponse> => {
   const { getGoalsByFilter } = actions
 
-  const existingGoals = await getGoalsByFilter(
-    email,
-    startGoalFilter,
-    endGoalFilter,
-  )
+  if (!userId) throw new Error(throwGoalsMessages.missingGoaluserId)
 
-  if (!existingGoals.length) return []
+  const existingGoals = await getGoalsByFilter(userId, startGoalFilter, endGoalFilter)
 
-  const { getGoals } = GoalsEntitie(email, existingGoals)
-
-  const goals = getGoals(email, endGoalFilter, startGoalFilter)
-
-  return goals || []
+  return existingGoals || []
 }

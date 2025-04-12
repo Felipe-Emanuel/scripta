@@ -2,11 +2,22 @@ import { Chapter } from '@prisma/client'
 import { IChapterRepository } from '../ChapterRepository'
 import { prisma } from '~/src/lib'
 import { TUpdateChapter } from '@types'
+import { TCreateChapterSchemaResponse, TPatchTitleSchemaResponse } from '@schemas'
 
 export const databaseChapterRepository = (): IChapterRepository => {
-  const createChapter = async (chapter: Chapter): Promise<Chapter> => {
+  const createChapter = async (
+    chapter: TCreateChapterSchemaResponse & { chapterTitle: string }
+  ): Promise<TCreateChapterSchemaResponse> => {
     const newChapter = await prisma.chapter.create({
-      data: chapter
+      data: {
+        bookId: chapter.bookId,
+        chapterText: chapter.chapterText,
+        firstLineIndent: chapter.firstLineIndent,
+        lineHeight: chapter.lineHeight,
+        fontSize: chapter.fontSize,
+        fontWeight: chapter.fontWeight,
+        chapterTitle: chapter.chapterTitle
+      }
     })
 
     return newChapter
@@ -27,14 +38,14 @@ export const databaseChapterRepository = (): IChapterRepository => {
     today.setHours(0, 0, 0, 0)
 
     const tomorrow = new Date(today)
-    tomorrow.setDate(today.getDate() + 1) // Define a meia-noite do próximo dia
+    tomorrow.setDate(today.getDate() + 1)
 
     const existingRecord = await prisma.dailyWordCount.findFirst({
       where: {
         chapterId: chapter.id,
         date: {
           gte: today,
-          lt: tomorrow // Filtra apenas registros do dia atual
+          lt: tomorrow
         }
       }
     })
@@ -91,7 +102,7 @@ export const databaseChapterRepository = (): IChapterRepository => {
     return 'Capítulo deletado com sucesso!'
   }
 
-  const getAllUpdatedChapters = async (userEmail: string): Promise<Chapter[]> => {
+  const getAllUpdatedChapters = async (userId: string): Promise<Chapter[]> => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 
@@ -99,7 +110,7 @@ export const databaseChapterRepository = (): IChapterRepository => {
       where: {
         Book: {
           User: {
-            email: userEmail
+            id: userId
           }
         },
         updatedAt: {
@@ -111,12 +122,42 @@ export const databaseChapterRepository = (): IChapterRepository => {
     return chapters || []
   }
 
+  const patchChapterTitle = async (
+    chapterId: string,
+    newTitle: string
+  ): Promise<TPatchTitleSchemaResponse> => {
+    const updatedChapter = await prisma.chapter.update({
+      where: {
+        id: chapterId
+      },
+      data: {
+        chapterTitle: newTitle
+      }
+    })
+
+    const formatedUpdatedChapter: TPatchTitleSchemaResponse = {
+      id: updatedChapter.id,
+      bookId: updatedChapter.bookId,
+      isConclued: updatedChapter.isConclued,
+      chapterTitle: updatedChapter.chapterTitle,
+      chapterText: updatedChapter.chapterText,
+      wordsCounter: updatedChapter.wordsCounter,
+      firstLineIndent: updatedChapter.firstLineIndent,
+      lineHeight: updatedChapter.lineHeight,
+      fontSize: updatedChapter.fontSize,
+      fontWeight: updatedChapter.fontWeight
+    }
+
+    return formatedUpdatedChapter
+  }
+
   return {
     createChapter,
     getChapterById,
     updateChapter,
     getAllChapters,
     deleteChapter,
-    getAllUpdatedChapters
+    getAllUpdatedChapters,
+    patchChapterTitle
   }
 }

@@ -7,19 +7,17 @@ import { cacheName } from '@shared/utils/constants/cacheName'
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useUser } from '@hooks/useUser'
 import { queryClient } from '@shared/services/reactQuery'
 import { getGoalProgress } from '../services'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 export const useWordGoalsController = () => {
-  const { sessionCustomer } = useUser()
   const [isFormVisible, setIsFormVisible] = useState(false)
 
   const toggleFormVisible = () => setIsFormVisible((prev) => !prev)
 
   const { data: currentGoal, isLoading } = useQuery({
-    queryFn: () => getGoalProgress(sessionCustomer?.email),
+    queryFn: () => getGoalProgress(),
     queryKey: [cacheName.currentGoal]
   })
 
@@ -40,7 +38,7 @@ export const useWordGoalsController = () => {
       const body: TUpdateCurrentGoalRequest = {
         updatedGoal: {
           ...currentGoal,
-          words: 0,
+          words: 0, // não adiciona mais nenhuma palavra, este ponto atualiza apenas a meta (goal)
           goal
         }
       }

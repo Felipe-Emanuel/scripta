@@ -1,11 +1,22 @@
 import { Chapter } from '@prisma/client'
-import { TUpdateChapter } from '@types'
+import {
+  TCreateChapterSchemaResponse,
+  TGetAllChaptersByBookIdSchemaResponse,
+  TGetChapterByIdSchemaResponse,
+  TPatchTitleSchemaResponse,
+  TUpdateChapterSchemaRequest,
+  TUpdateChapterSchemaResponse
+} from '@schemas'
 
 export interface IChapterRepository {
-  createChapter: (chapter: Chapter) => Promise<Chapter>
-  getChapterById: (chapterId: string) => Promise<Chapter>
-  updateChapter: (chapter: TUpdateChapter, newWords?: number) => Promise<Chapter>
-  getAllChapters: (bookId: string) => Promise<Chapter[]>
+  createChapter: (chapter: TCreateChapterSchemaResponse) => Promise<TCreateChapterSchemaResponse>
+  getChapterById: (chapterId: string) => Promise<TGetChapterByIdSchemaResponse>
+  updateChapter: (
+    chapter: TUpdateChapterSchemaRequest['updatedChapter'],
+    newWords?: number
+  ) => Promise<TUpdateChapterSchemaResponse>
+  getAllChapters: (bookId: string) => Promise<TGetAllChaptersByBookIdSchemaResponse>
   deleteChapter: (chapterId: string) => Promise<string>
-  getAllUpdatedChapters: (userEmail: string) => Promise<Chapter[]>
+  getAllUpdatedChapters: (userId: string) => Promise<Chapter[]>
+  patchChapterTitle: (chapterId: string, newTitle: string) => Promise<TPatchTitleSchemaResponse>
 }

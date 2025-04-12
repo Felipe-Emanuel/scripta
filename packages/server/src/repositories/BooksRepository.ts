@@ -1,15 +1,23 @@
 import { Book } from '@prisma/client'
-import { TUpdateBookService } from '@types'
-import { TGetAllBooksServiceResponse } from '../services'
+import { TGetAllBooksServiceResponse, TUpdateBookServiceResponse } from '@services'
+import {
+  TreateBookBodySchemaReponse,
+  TreateBookBodySchemaRequest,
+  TUpdateBookInfoSchemaResponse
+} from '@schemas'
 
 export interface IBooksRepository {
-  createBook: (book: Book, userEmail: string) => Promise<Book[]>
-  getAllBooks: (
-    userEmail: string,
-    onlyFirstChapter: boolean
-  ) => Promise<TGetAllBooksServiceResponse>
+  createBook: (
+    book: TreateBookBodySchemaRequest['book'],
+    authorId: string
+  ) => Promise<TreateBookBodySchemaReponse>
+  getAllBooks: (authorId: string, onlyFirstChapter: boolean) => Promise<TGetAllBooksServiceResponse>
   deleteBook: (bookId: string) => Promise<Book>
   toggleIsActiveBook: (bookId: string) => Promise<Book>
   toggleConcluedBook: (bookId: string) => Promise<Book>
-  updateBook: (bookId: string, updatedBook: TUpdateBookService) => Promise<Book>
+  updateBook: (
+    bookId: string,
+    updatedBook: TUpdateBookServiceResponse
+  ) => Promise<TUpdateBookInfoSchemaResponse>
+  getBookById: (bookId: string) => Promise<Book>
 }

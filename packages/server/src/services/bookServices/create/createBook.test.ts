@@ -1,8 +1,8 @@
 import { randomUUID } from 'crypto'
 import { CreateBookService, TCreateBookServiceRequest } from '.'
-import { bookEntitieMock } from '@entities/Book/mocks'
 import { inMemoryBooksRepository } from '@repositories'
 import { Book } from '@prisma/client'
+import { bookEntitieMock } from '~/src/shared/mocks'
 
 describe('Create Book', () => {
   const { createBook, getAllBooks } = inMemoryBooksRepository()
@@ -28,7 +28,7 @@ describe('Create Book', () => {
     const sut = await CreateBookService({
       actions,
       book: newBook,
-      userEmail: bookEntitieMock.userEmail
+      authorId: bookEntitieMock.userId
     })
 
     expect(sut.title).toEqual(expected.title)
@@ -39,7 +39,7 @@ describe('Create Book', () => {
       CreateBookService({
         actions,
         book: bookEntitieMock,
-        userEmail: bookEntitieMock.userEmail
+        authorId: bookEntitieMock.userId
       })
 
     await sut()

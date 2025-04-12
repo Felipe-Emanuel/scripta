@@ -5,6 +5,5 @@ export type TUpdateBookService = {
   heroPathUrl: string
   Gender: string
   Theme: string
-  createdAt: Date
   totalWords: number
 }

@@ -2,16 +2,13 @@ import { api } from '@shared/services/axios/api'
 import { TAuthRequest, TCreateUserRequest, TUser } from '@shared/types'
 import { AxiosError } from 'axios'
 
-export const auth = async ({
-  email,
-  password,
-}: TAuthRequest): Promise<TUser | undefined> => {
+export const auth = async ({ email, password }: TAuthRequest): Promise<TUser | undefined> => {
   try {
     const endpoint = '/auth'
 
     const body = {
       email,
-      password,
+      password
     }
 
     const { data } = await api.post<TUser>(endpoint, body)
@@ -25,20 +22,27 @@ export const auth = async ({
 }
 
 export const createUser = async ({
-  email,
-  name,
-  password,
-  hasProvider,
+  token,
+  user
 }: TCreateUserRequest): Promise<TUser | undefined> => {
   try {
     const endpoint = '/users'
 
-    const body = {
-      email,
-      name,
-      password,
-      hasProvider,
+    let body = {}
+
+    if (token) {
+      body = {
+        token
+      }
     }
+
+    if (user) {
+      body = {
+        user
+      }
+    }
+
+    if (!user && !token) throw new Error('You must provide a user or a token')
 
     const { data } = await api.post<TUser>(endpoint, body)
 

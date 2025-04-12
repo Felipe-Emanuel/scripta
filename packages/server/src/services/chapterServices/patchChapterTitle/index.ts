@@ -1,49 +1,24 @@
-import { Chapter } from '@prisma/client'
-import { z } from 'zod'
-import { ChapterEntitie } from '@entities/Chapter'
-import { throwChapterMessages } from '@entities/Chapter/utils'
 import { IChapterRepository } from '@repositories'
+import { TPatchTitleSchemaRequest, TPatchTitleSchemaResponse } from '@schemas'
 
 export type TPatchChapterTitleServiceRequest = {
   chapterId: string
-  newTitle: string
-  actions: Pick<IChapterRepository, 'getChapterById'>
+  body: TPatchTitleSchemaRequest
+  actions: Pick<IChapterRepository, 'patchChapterTitle'>
 }
 
-type TPatchChapterTitleServiceResponse = Chapter
+type TPatchChapterTitleServiceResponse = TPatchTitleSchemaResponse
 
 export const PatchChapterTitleService = async ({
   chapterId,
-  newTitle,
+  body,
   actions
 }: TPatchChapterTitleServiceRequest): Promise<TPatchChapterTitleServiceResponse> => {
-  const { getChapterById } = actions
+  const { patchChapterTitle } = actions
 
-  const paramSchema = z.object({
-    chapterId: z.string({
-      required_error: throwChapterMessages.idRequired
-    })
-  })
+  const { title: newTitle } = body
 
-  paramSchema.parse({ chapterId })
-
-  const bodySchema = z.object({
-    newChapterTitle: z.string({
-      required_error: throwChapterMessages.idRequired
-    })
-  })
-
-  const { newChapterTitle } = bodySchema.parse({ newChapterTitle: newTitle })
-
-  const existingChapter = await getChapterById(chapterId)
-
-  const { patchChapterTitle } = ChapterEntitie({
-    ...existingChapter,
-    chapterTitle: newChapterTitle,
-    updatedAt: new Date()
-  })
-
-  const patchedChapter = await patchChapterTitle(newChapterTitle)
+  const patchedChapter = await patchChapterTitle(chapterId, newTitle)
 
   return patchedChapter
 }

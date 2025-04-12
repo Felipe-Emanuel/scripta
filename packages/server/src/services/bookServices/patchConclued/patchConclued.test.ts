@@ -1,8 +1,8 @@
-import { bookEntitieMock } from '@entities/Book/mocks'
 import { IPatchConcluedBookServiceRequest, PatchConcluedBookService } from '.'
-import { throwBookMessages } from '@entities/Book/utils'
 import { inMemoryBooksRepository } from '@repositories'
 import { CreateBookService, TCreateBookServiceRequest } from '../create'
+import { throwBookMessages } from '@utils'
+import { bookEntitieMock } from '~/src/shared/mocks'
 
 describe('PatchConcluedBookService', () => {
   const { toggleConcluedBook, createBook, getAllBooks } = inMemoryBooksRepository()
@@ -29,7 +29,7 @@ describe('PatchConcluedBookService', () => {
     const newBook = await CreateBookService({
       actions: createBookAction,
       book: bookEntitieMock,
-      userEmail: bookEntitieMock.userEmail
+      authorId: bookEntitieMock.userId
     })
 
     const sut = await PatchConcluedBookService({

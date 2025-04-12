@@ -1,13 +1,20 @@
 import { Feedback } from '@prisma/client'
 import { IFeedbackRepository } from '../FeedbackRepository'
+import { TCreateFeedback } from '@services'
 
 let feedbacks: Feedback[] = []
 
 export const inMemoryFeedbackRepository = (): IFeedbackRepository => {
-  const createFeedback = async (feedBack: Feedback): Promise<Feedback[]> => {
-    const updatedFeedback = (feedbacks = [{ ...feedbacks, ...feedBack }])
+  const createFeedback = async (feedBack: TCreateFeedback): Promise<Feedback> => {
+    const updatedFeedback = (feedbacks = [
+      ...feedbacks,
+      {
+        ...feedbacks[0],
+        ...feedBack
+      }
+    ])
 
-    return updatedFeedback
+    return updatedFeedback[0]
   }
 
   const getFeedbacks = async (): Promise<Feedback[]> => feedbacks

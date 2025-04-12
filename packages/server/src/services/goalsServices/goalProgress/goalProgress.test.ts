@@ -1,13 +1,13 @@
 import { inMemoryGoalsRepository } from '@repositories'
 import { GoalProgressService, TGoalProgressServiceRequest } from '.'
-import { mockGoal } from '@entities/Goals/mocks'
 import { CreateGoalsService, TCreateGoalsRequest } from '../create'
+import { mockGoal } from '~/src/shared/mocks'
 
 describe('GoalProgressService', () => {
-  const { getTodayGoalProgress, createGoals } = inMemoryGoalsRepository()
+  const { getLastGoal, createGoals } = inMemoryGoalsRepository()
 
   const action: TGoalProgressServiceRequest['action'] = {
-    getTodayGoalProgress
+    getLastGoal
   }
   const createGoalAction: TCreateGoalsRequest['action'] = {
     createGoals
@@ -16,21 +16,20 @@ describe('GoalProgressService', () => {
   it('should return the daily goal progress', async () => {
     await CreateGoalsService({
       action: createGoalAction,
-      email: mockGoal.email,
+      userId: mockGoal.userId,
       goals: {
         goal: {
           goal: mockGoal.goal,
           goalComplete: mockGoal.goalComplete,
           goalCompletePercent: mockGoal.goalCompletePercent,
           words: mockGoal.words
-        },
-        email: mockGoal.email
+        }
       }
     })
 
     const sut = await GoalProgressService({
       action,
-      userEmail: mockGoal.email
+      userId: mockGoal.userId
     })
 
     expect(sut.goalCompletePercent).toBe(80)

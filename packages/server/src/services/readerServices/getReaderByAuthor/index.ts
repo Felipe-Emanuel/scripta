@@ -1,23 +1,30 @@
-import { throwReaderMessages } from '@entities/Reader/utils'
-import { Reader } from '@prisma/client'
 import { IReaderRepository } from '@repositories'
+import { TGetReaderByAuthorSchemaResponse } from '@schemas'
+import { throwReaderMessages } from '@utils'
 
 export type TGetReaderByAuthorRequest = {
   action: Pick<IReaderRepository, 'getAllReadersByAuthor'>
-  authorEmail: string
+  userId: string
 }
 
-type TGetReaderByAuthorResponse = Reader[]
+type TGetReaderByAuthorResponse = TGetReaderByAuthorSchemaResponse
 
 export const GetReaderByAuthorService = async ({
   action,
-  authorEmail,
+  userId
 }: TGetReaderByAuthorRequest): Promise<TGetReaderByAuthorResponse> => {
   const { getAllReadersByAuthor } = action
 
-  if (!authorEmail) throw new Error(throwReaderMessages.invalidEmail)
+  if (!userId) throw new Error(throwReaderMessages.invalidUser)
 
-  const readers = await getAllReadersByAuthor(authorEmail)
+  const readers = await getAllReadersByAuthor(userId)
 
-  return readers
+  const formattedReadersByAuthor: TGetReaderByAuthorSchemaResponse = readers?.map((reader) => ({
+    latitude: reader.latitude,
+    longitude: reader.longitude,
+    picture: reader?.picture,
+    userName: reader?.userName
+  }))
+
+  return formattedReadersByAuthor
 }

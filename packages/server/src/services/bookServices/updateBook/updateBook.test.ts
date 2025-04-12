@@ -5,8 +5,8 @@ import {
   TUpdateBookServiceRequest,
   UpdateBookService
 } from '..'
-import { bookEntitieMock } from '@entities/Book/mocks'
-import { throwBookMessages } from '@entities/Book/utils'
+import { bookEntitieMock } from '~/src/shared/mocks'
+import { throwBookMessages } from '@utils'
 
 describe('UpdateBookService', () => {
   const { updateBook, createBook, getAllBooks } = inMemoryBooksRepository()
@@ -23,7 +23,7 @@ describe('UpdateBookService', () => {
     const sut = UpdateBookService({
       action,
       bookId: '',
-      book: {
+      updatedBook: {
         ...bookEntitieMock
       }
     })
@@ -35,13 +35,13 @@ describe('UpdateBookService', () => {
     const existentBook = await CreateBookService({
       actions: createBookAction,
       book: bookEntitieMock,
-      userEmail: bookEntitieMock.userEmail
+      authorId: bookEntitieMock.userId
     })
 
     const updatedBook = await UpdateBookService({
       action,
       bookId: existentBook.id,
-      book: {
+      updatedBook: {
         ...existentBook,
         title: 'updated book'
       }

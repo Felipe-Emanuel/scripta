@@ -1,10 +1,17 @@
-import { Goal } from '@prisma/client'
-import { TGetTodayGoalProgressResponse } from '@types'
+import { TCreateGoalResponseSchema, TGetDailyProgressSchemaResponse } from '@schemas'
+import { TGoalEntitie } from '@services'
 
 export interface IGoalRepository {
-  createGoals: (goal: Goal) => Promise<Goal[]>
-  getGoalsByFilter: (email: string, startGoalFilter: Date, endGoalFilter: Date) => Promise<Goal[]>
-  updateGoal: (userEmail: string, newWords: number, goal?: number) => Promise<Goal>
-  getLastGoal: (email: string) => Promise<Goal | null>
-  getTodayGoalProgress: (userEmail: string) => Promise<TGetTodayGoalProgressResponse>
+  createGoals: (goal: TGoalEntitie) => Promise<TCreateGoalResponseSchema>
+  getGoalsByFilter: (
+    userId: string,
+    startGoalFilter: Date,
+    endGoalFilter: Date
+  ) => Promise<TCreateGoalResponseSchema[]>
+  updateGoal: (
+    userId: string,
+    newWords: number,
+    goal?: number
+  ) => Promise<TCreateGoalResponseSchema>
+  getLastGoal: (userId: string) => Promise<TGetDailyProgressSchemaResponse | null>
 }

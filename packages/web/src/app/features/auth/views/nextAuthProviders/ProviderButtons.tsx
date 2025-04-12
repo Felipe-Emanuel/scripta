@@ -17,13 +17,13 @@ export const ProviderButtons = () => {
           buttonStyle="provider"
           type="button"
           radius="full"
-          onClick={() => logInWithProviders('google')}
+          onPress={() => logInWithProviders('google')}
         >
           <Button.icon icon={BsGoogle} color="white" />
           <Button.label text="Continuar com o Google" />
         </Button.root>
-      ),
-    },
+      )
+    }
   ]
 
   return (

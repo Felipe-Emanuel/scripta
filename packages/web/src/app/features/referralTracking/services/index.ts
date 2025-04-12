@@ -3,16 +3,11 @@ import { TGetGoalRequest, TGoalResponse } from '@shared/types'
 import { defaultErrorMessages } from '@shared/utils/constants/defaultErrorMessages'
 import { AxiosError } from 'axios'
 
-export const getGoalByFilter = async ({
-  email,
-  endGoalFilter,
-  startGoalFilter
-}: TGetGoalRequest) => {
+export const getGoalByFilter = async ({ endGoalFilter, startGoalFilter }: TGetGoalRequest) => {
   try {
     const endpoint = '/getGoals'
 
     const body: TGetGoalRequest = {
-      email,
       startGoalFilter,
       endGoalFilter
     }

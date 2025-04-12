@@ -1,27 +1,25 @@
-import { throwBookMessages } from '@entities/Book/utils'
-import { Book, Chapter } from '@prisma/client'
 import { IBooksRepository } from '@repositories'
+import { TGetAllBooksSchemaResponse } from '@schemas'
+import { throwBookMessages } from '@utils'
 
 export type TGetAllBooksServiceRequest = {
   action: Pick<IBooksRepository, 'getAllBooks'>
-  userEmail: string
+  userid: string
   onlyFirstChapter: boolean
 }
 
-export type BookWithChapters = Book & { chapters?: Chapter[] }
-
-export type TGetAllBooksServiceResponse = BookWithChapters[]
+export type TGetAllBooksServiceResponse = TGetAllBooksSchemaResponse[]
 
 export const GetAllBooksService = async ({
   action,
-  userEmail,
+  userid,
   onlyFirstChapter = false
 }: TGetAllBooksServiceRequest): Promise<TGetAllBooksServiceResponse> => {
   const { getAllBooks } = action
 
-  if (!userEmail) throw new Error(throwBookMessages.emailMissing)
+  if (!userid) throw new Error(throwBookMessages.missingAuthor)
 
-  const books = await getAllBooks(userEmail, onlyFirstChapter)
+  const books = await getAllBooks(userid, onlyFirstChapter)
 
   return books || []
 }

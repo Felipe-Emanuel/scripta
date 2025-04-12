@@ -1,5 +1,3 @@
-import { mockGoal } from '@entities/Goals/mocks'
-import { throwGoalsMessages } from '@entities/Goals/utils'
 import { inMemoryGoalsRepository } from '@repositories'
 import {
   CreateGoalsService,
@@ -7,6 +5,8 @@ import {
   TUpdateGoalRequest,
   UpdateGoalService
 } from '@services'
+import { mockGoal, userEntitieMock } from '~/src/shared/mocks'
+import { throwGoalsMessages } from '@utils'
 
 describe('UpdateGoalService', () => {
   const { getGoalsByFilter, updateGoal, createGoals } = inMemoryGoalsRepository()
@@ -23,7 +23,11 @@ describe('UpdateGoalService', () => {
   it('should throw excpetion about goal not found', () => {
     const sut = UpdateGoalService({
       actions,
-      updatedGoal: mockGoal
+      userId: undefined,
+      updatedGoal: {
+        ...mockGoal,
+        createdAt: mockGoal.createdAt.toISOString()
+      }
     })
 
     expect(sut).rejects.toThrow(throwGoalsMessages.goalNotFound)
@@ -32,22 +36,20 @@ describe('UpdateGoalService', () => {
   it('should update a existent goal', async () => {
     const existentGoal = await CreateGoalsService({
       action: createGoalsAction,
-      email: mockGoal.email,
+      userId: userEntitieMock.id,
       goals: {
         goal: {
-          goal: mockGoal.goal,
-          goalComplete: mockGoal.goalComplete,
-          goalCompletePercent: mockGoal.goalCompletePercent,
-          words: mockGoal.words
-        },
-        email: mockGoal.email
+          ...mockGoal
+        }
       }
     })
 
     const sut = await UpdateGoalService({
       actions,
+      userId: mockGoal.userId,
       updatedGoal: {
-        ...existentGoal[0],
+        ...existentGoal,
+        createdAt: mockGoal.createdAt.toISOString(),
         words: 2500
       }
     })

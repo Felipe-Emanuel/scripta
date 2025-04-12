@@ -1,4 +1,4 @@
-import { globalErrorMessage } from '@utils'
+import { globalErrorMessage, validateUserByBookId, verifyToken } from '@utils'
 import { TFastifyInstance } from '@types'
 import { databaseBookRepository } from '@repositories'
 import { authorization } from 'src/middlewares'
@@ -17,7 +17,8 @@ import {
   TUpdateBookServiceRequest,
   GetBookByIdService,
   PatchConcluedBookService,
-  IPatchConcluedBookServiceRequest
+  IPatchConcluedBookServiceRequest,
+  TGetBookByIdServiceRequest
 } from '@services'
 
 import {
@@ -36,7 +37,8 @@ export async function bookController(app: TFastifyInstance): Promise<void> {
     deleteBook,
     toggleIsActiveBook,
     toggleConcluedBook,
-    updateBook
+    updateBook,
+    getBookById
   } = databaseBookRepository()
 
   const actionGetAllBooks: TGetAllBooksServiceRequest['action'] = {
@@ -64,99 +66,91 @@ export async function bookController(app: TFastifyInstance): Promise<void> {
     updateBook
   }
 
+  const getBookByIdAction: TGetBookByIdServiceRequest['action'] = {
+    getBookById
+  }
+
   app.get(
-    '/allBooks/:userEmail/:onlyFirstChapter',
+    '/allBooks/:onlyFirstChapter',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: getAllBooksSchema.schema
     },
-    async (req, apply) => {
-      const { userEmail, onlyFirstChapter } = req.params
+    async (req, reply) => {
+      const decoded = await verifyToken(req.headers.authorization)
+
+      const { onlyFirstChapter } = req.params
 
       const isFirstChapterOnly = onlyFirstChapter === 'true'
 
       const books = await GetAllBooksService({
         action: actionGetAllBooks,
-        userEmail,
+        userid: decoded?.id,
         onlyFirstChapter: isFirstChapterOnly
       })
 
-      const booksWithDateStrings = books.map((book) => ({
-        ...book,
-        createdAt: book.createdAt.toISOString(),
-        updatedAt: book.updatedAt.toISOString(),
-        ...(book.chapters && {
-          chapters: book.chapters.map((chapter) => ({
-            ...chapter,
-            createdAt: chapter.createdAt.toISOString(),
-            updatedAt: chapter.updatedAt.toISOString()
-          }))
-        })
-      }))
-
       try {
-        apply.send(booksWithDateStrings)
+        reply.send(books)
       } catch (err) {
-        console.error('Error in response:', err)
-        apply.status(500).send({ message: globalErrorMessage.unexpected })
+        reply.status(500).send({ message: globalErrorMessage.unexpected })
       }
     }
   )
 
-  app.get('/books/:userEmail/:bookId', getBookByIdSchema, async (req, apply) => {
-    const { userEmail, bookId } = req.params
-
-    const books = await GetBookByIdService({
-      action: actionGetAllBooks,
-      paramUserEmail: userEmail,
-      paramBookId: bookId
-    })
+  app.get('/books/:bookId', getBookByIdSchema, async (req, reply) => {
     try {
-      apply.status(200).send(books)
+      const { bookId } = req.params
+
+      const books = await GetBookByIdService({
+        action: getBookByIdAction,
+        bookId
+      })
+
+      reply.status(200).send(books)
     } catch {
-      apply.status(500).send({ message: globalErrorMessage.unexpected })
+      reply.status(500).send({ message: globalErrorMessage.unexpected })
     }
   })
 
   app.post(
-    '/books/:userEmail',
+    '/books',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: createBookSchema.schema
     },
-    async (req, apply) => {
-      const { userEmail } = req.params
-      const { book } = req.body
+    async (req, reply) => {
+      try {
+        const decoded = await verifyToken(req.headers.authorization)
 
-      let newBook = book
+        const { book } = req.body
 
-      if (book.heroPathUrl) {
-        const base64Data = book.heroPathUrl.replace(/^data:image\/[a-z]+;base64,/, '')
-        const bookCover = await CreateBookCoverService({
-          base64Image: base64Data
+        let heroPathUrl = book.heroPathUrl
+
+        if (heroPathUrl) {
+          const base64Data = heroPathUrl.replace(/^data:image\/[a-z]+;base64,/, '')
+          const bookCover = await CreateBookCoverService({ base64Image: base64Data })
+          heroPathUrl = bookCover
+        }
+
+        const newBook = await CreateBookService({
+          actions: actionCreateBook,
+          book: { ...book, heroPathUrl },
+          authorId: decoded?.id
         })
 
-        newBook.heroPathUrl = bookCover
-      }
+        if (!newBook) {
+          throw new Error('CreateBookService retornou undefined')
+        }
 
-      newBook = await CreateBookService({
-        actions: actionCreateBook,
-        book,
-        userEmail
-      })
-
-      try {
-        apply.send(newBook)
-      } catch {
-        apply.status(500).send({ message: globalErrorMessage.unexpected })
+        reply.status(201).send(newBook)
+      } catch (e) {
+        reply.status(500).send({ message: e.message || globalErrorMessage.unexpected })
       }
     }
   )
@@ -165,55 +159,76 @@ export async function bookController(app: TFastifyInstance): Promise<void> {
     '/books/:bookId',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: deleteBookSchema.schema
     },
-    async (req, apply) => {
-      const { bookId } = req.params as Partial<TDeleteBookServiceRequest>
-
-      const deletedBook = await DeleteBookService({
-        action: deleteBookAction,
-        bookId
-      })
-
-      if (!deletedBook) apply.status(404).send({ message: globalErrorMessage.unableToDelete })
-
+    async (req, reply) => {
       try {
-        apply.status(202).send({
+        const decoded = await verifyToken(req.headers.authorization)
+
+        const { bookId } = req.params
+
+        await validateUserByBookId({
+          action: {
+            getBookById
+          },
+          bookId,
+          decoded,
+          reply
+        })
+
+        const deletedBook = await DeleteBookService({
+          action: deleteBookAction,
+          bookId
+        })
+
+        if (!deletedBook)
+          return reply.status(404).send({ message: globalErrorMessage.unableToDelete })
+
+        reply.status(202).send({
           message: globalErrorMessage.successfullyDeleted,
           deletedBook
         })
       } catch {
-        apply.status(500).send({ message: globalErrorMessage.unexpected })
+        reply.status(500).send({ message: globalErrorMessage.unexpected })
       }
     }
   )
 
-  app.put(
+  app.patch(
     '/books/:bookId',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: updateBoolsBookInfoSchema.schema
     },
-    async (req, apply) => {
-      const { bookId } = req.params
-      const { where } = req.body
-
+    async (req, reply) => {
       try {
+        const decoded = await verifyToken(req.headers.authorization)
+
+        const { bookId } = req.params
+        const { where } = req.body
+
+        await validateUserByBookId({
+          action: {
+            getBookById
+          },
+          bookId,
+          decoded,
+          reply
+        })
+
         if (where === 'isActive') {
           const patchedIsActiveBook = await PatchActiveBookService({
             action: patchActiveBookAction,
             bookId
           })
 
-          return apply.status(200).send(patchedIsActiveBook)
+          return reply.status(200).send(patchedIsActiveBook)
         }
 
         if (where === 'conclued') {
@@ -222,10 +237,10 @@ export async function bookController(app: TFastifyInstance): Promise<void> {
             bookId
           })
 
-          return apply.status(200).send(patchedConcluedBook)
+          return reply.status(202).send(patchedConcluedBook)
         }
       } catch {
-        apply.status(500).send({ message: globalErrorMessage.unexpected })
+        reply.status(500).send({ message: globalErrorMessage.unexpected })
       }
     }
   )
@@ -234,59 +249,36 @@ export async function bookController(app: TFastifyInstance): Promise<void> {
     '/updateBook/:bookId',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: updateBookInfoSchema.schema
     },
-    async (req, apply) => {
-      const { bookId } = req.params
-      const { book } = req.body
-
-      const {
-        Gender,
-        Theme,
-        conclued,
-        createdAt,
-        description,
-        heroPathUrl,
-        hits,
-        id,
-        isActive,
-        socialLink,
-        title,
-        totalWords,
-        updatedAt,
-        userEmail
-      } = book
-
-      const newBook = await UpdateBookService({
-        action: updateBookAction,
-        bookId,
-        book: {
-          Gender,
-          Theme,
-          conclued,
-          createdAt: new Date(createdAt),
-          description,
-          heroPathUrl,
-          hits,
-          id,
-          isActive,
-          socialLink,
-          title,
-          totalWords,
-          updatedAt: new Date(updatedAt),
-          userEmail
-        }
-      })
-
+    async (req, reply) => {
       try {
-        apply.status(200).send(newBook)
+        const decoded = await verifyToken(req.headers.authorization)
+
+        const { bookId } = req.params
+        const { book } = req.body
+
+        await validateUserByBookId({
+          action: {
+            getBookById
+          },
+          bookId,
+          decoded,
+          reply
+        })
+
+        const newBook = await UpdateBookService({
+          action: updateBookAction,
+          bookId,
+          updatedBook: book
+        })
+
+        reply.status(200).send(newBook)
       } catch {
-        apply.status(500).send({ message: globalErrorMessage.unexpected })
-        console.log(new Date())
+        reply.status(500).send({ message: globalErrorMessage.unexpected })
       }
     }
   )

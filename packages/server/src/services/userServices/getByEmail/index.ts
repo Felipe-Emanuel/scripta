@@ -1,7 +1,6 @@
 import { TGetUserByEmailServiceResponse } from '@types'
-import { UserEntitie } from 'src/entities/User'
-import { throwUserMessages } from 'src/entities/User/utils'
-import { IUserRepository } from 'src/repositories/UserRepository'
+import { IUserRepository } from '@repositories'
+import { throwUserMessages } from '@utils'
 
 export type TGetByEmailRequest = {
   email: string
@@ -14,7 +13,7 @@ export const GetUserByEmailService = async ({
   email,
   action,
   includeBook,
-  includeReaders,
+  includeReaders
 }: TGetByEmailRequest): Promise<TGetUserByEmailServiceResponse> => {
   const { getUserByEmail } = action
   if (!email) throw new Error(throwUserMessages.wrongEmailOrPassword)
@@ -23,9 +22,5 @@ export const GetUserByEmailService = async ({
 
   if (!existingUser) throw new Error(throwUserMessages.userNotFound)
 
-  const { getUserByEmail: getByEmail } = UserEntitie(existingUser)
-
-  const user = await getByEmail(email)
-
-  return user
+  return existingUser
 }

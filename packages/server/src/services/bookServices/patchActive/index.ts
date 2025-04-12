@@ -1,13 +1,13 @@
-import { throwBookMessages } from '@entities/Book/utils'
-import { Book } from '@prisma/client'
 import { IBooksRepository } from '@repositories'
+import { TUpdateBoolsBookInfoSchemaResponse } from '@schemas'
+import { throwBookMessages } from '@utils'
 
 export type IPatchActiveBookServiceRequest = {
   action: Pick<IBooksRepository, 'toggleIsActiveBook'>
   bookId: string
 }
 
-type IPatchActiveBookServiceResponse = Book
+type IPatchActiveBookServiceResponse = TUpdateBoolsBookInfoSchemaResponse
 
 export const PatchActiveBookService = async ({
   action,
@@ -17,7 +17,21 @@ export const PatchActiveBookService = async ({
 
   if (!bookId) throw new Error(throwBookMessages.missingBookId)
 
-  const patchedBook = toggleIsActiveBook(bookId)
+  const patchedBook = await toggleIsActiveBook(bookId)
 
-  return patchedBook
+  const formattedPatchedBook: TUpdateBoolsBookInfoSchemaResponse = {
+    title: patchedBook.title,
+    description: patchedBook.description,
+    id: patchedBook.id,
+    socialLink: patchedBook.socialLink,
+    heroPathUrl: patchedBook.heroPathUrl,
+    conclued: patchedBook.conclued,
+    isActive: patchedBook.isActive,
+    Gender: patchedBook.Gender,
+    Theme: patchedBook.Theme,
+    hits: patchedBook.hits,
+    totalWords: patchedBook.totalWords
+  }
+
+  return formattedPatchedBook
 }

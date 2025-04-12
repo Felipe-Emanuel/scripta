@@ -1,1 +1,0 @@
-export { throwGoalsMessages } from './throwGoalsMessages'

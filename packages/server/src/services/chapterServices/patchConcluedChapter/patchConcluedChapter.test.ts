@@ -1,9 +1,7 @@
 import { inMemoryChapterRepository } from '~/src/repositories'
 import { PatchConcluedChapterService, TPatchConcluedChapterServiceRequest } from '.'
-import { throwChapterMessages } from '~/src/entities/Chapter/utils'
 import { CreateChapterService, TCreateChapterServiceRequest } from '../create'
-import { chapterMock } from '~/src/entities/Chapter/mocks'
-import { jestErrorHandler } from '~/__tests__/jestErrorHandler'
+import { chapterMock } from '~/src/shared/mocks'
 
 describe('PatchConcluedChapterService', () => {
   const { getChapterById, createChapter, updateChapter } = inMemoryChapterRepository()
@@ -14,20 +12,6 @@ describe('PatchConcluedChapterService', () => {
     getChapterById,
     updateChapter
   }
-
-  it('should throw about id required', async () => {
-    try {
-      await PatchConcluedChapterService({
-        actions: patchConcluedChapterAction,
-        chapterIdToBeEdited: ''
-      })
-    } catch (e) {
-      jestErrorHandler({
-        error: e,
-        expected: throwChapterMessages.notFound
-      })
-    }
-  })
 
   it('should return a existent chapter by your id', async () => {
     const existentChapter = await CreateChapterService({

@@ -1,11 +1,10 @@
 import { inMemoryBooksRepository, inMemoryChapterRepository } from '~/src/repositories'
 import { DeleteChapterService, TDeleteChapterServiceRequest } from '.'
 import { jestErrorHandler } from '~/__tests__/jestErrorHandler'
-import { throwChapterMessages } from '~/src/entities/Chapter/utils'
-import { bookEntitieMock } from '~/src/entities/Book/mocks'
 import { CreateBookService, TCreateBookServiceRequest } from '../../bookServices'
 import { CreateChapterService, TCreateChapterServiceRequest } from '../create'
-import { chapterMock } from '~/src/entities/Chapter/mocks'
+import { throwChapterMessages } from '~/src/shared/utils'
+import { bookEntitieMock, chapterMock } from '~/src/shared/mocks'
 
 describe('DeleteChapterService', () => {
   const { deleteChapter, getChapterById, createChapter } = inMemoryChapterRepository()
@@ -57,7 +56,7 @@ describe('DeleteChapterService', () => {
     CreateBookService({
       actions: createBookActions,
       book: bookEntitieMock,
-      userEmail: bookEntitieMock.userEmail
+      authorId: bookEntitieMock.userId
     })
 
     const existentChapter = await CreateChapterService({

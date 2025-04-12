@@ -1,6 +1,8 @@
 export type TCreateUserRequest = {
-  name: string
-  email: string
-  password: string
-  hasProvider: boolean
+  user?: {
+    name: string
+    email: string
+    password: string
+  }
+  token?: string
 }

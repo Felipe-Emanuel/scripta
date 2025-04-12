@@ -1,4 +1,4 @@
 export * from './create'
 export * from './getByEmail'
-export * from './patch'
-export * from './mock'
+export * from './checkUserIsValid'
+export * from './getByUserId'

@@ -1,5 +1,4 @@
 import { getGoalByFilter } from '@features/referralTracking/services'
-import { useUser } from '@shared/hooks/useUser'
 import {
   TGetGoalRequest,
   TGoalFiltersOptions,
@@ -34,9 +33,6 @@ import { queryClient } from '~/src/app/shared/services/reactQuery'
 let id = 0
 
 export const useReferralTrackingController = () => {
-  const { sessionCustomer } = useUser()
-
-  // const [formattedGoals, setFormattedGoals] = useState<TGoalResponse[]>([])
   const [filterOption, setFilterOption] = useState<TGoalFiltersOptions>(defaultFilterOption)
 
   const weekSlug = () => {
@@ -89,22 +85,19 @@ export const useReferralTrackingController = () => {
 
   const getGoals = useCallback(
     async (options: TGoalFiltersOptions): Promise<TGoalResponse[] | undefined> => {
-      if (sessionCustomer) {
-        const param = options.startGoalFilter ? options : filterOption
-        const { endGoalFilter, startGoalFilter } = param
+      const param = options.startGoalFilter ? options : filterOption
+      const { endGoalFilter, startGoalFilter } = param
 
-        const body: TGetGoalRequest = {
-          email: sessionCustomer?.email,
-          endGoalFilter,
-          startGoalFilter
-        }
-
-        const goals = await getGoalByFilter(body)
-
-        return goals
+      const body: TGetGoalRequest = {
+        endGoalFilter,
+        startGoalFilter
       }
+
+      const goals = await getGoalByFilter(body)
+
+      return goals
     },
-    [sessionCustomer, filterOption]
+    [filterOption]
   )
 
   const { data: goals } = useQuery({

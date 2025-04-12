@@ -1,8 +1,8 @@
+import { throwChapterMessages } from '@utils'
 import { GetChapterByIdService, TGetChapterByIdServiceRequest } from '.'
 import { CreateChapterService, TCreateChapterServiceRequest } from '../create'
 import { inMemoryChapterRepository } from '@repositories'
-import { throwChapterMessages } from '@entities/Chapter/utils'
-import { chapterMock } from '@entities/Chapter/mocks'
+import { chapterMock } from '~/src/shared/mocks'
 
 describe('GetChapterByIdService', () => {
   const { getChapterById, createChapter } = inMemoryChapterRepository()

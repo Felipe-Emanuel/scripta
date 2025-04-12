@@ -1,23 +1,36 @@
 import { Book } from '@prisma/client'
 import { IBooksRepository } from '../BooksRepository'
 import { TUpdateBookService } from '@types'
-import { TGetAllBooksServiceResponse, BookWithChapters } from '~/src/services'
+import { TGetAllBooksServiceResponse } from '@services'
+import {
+  TGetAllBooksSchemaResponse,
+  TreateBookBodySchemaReponse,
+  TreateBookBodySchemaRequest
+} from '@schemas'
 
 let books: Book[] = []
 
 export const inMemoryBooksRepository = (): IBooksRepository => {
-  const createBook = async (book: Book): Promise<Book[]> => {
-    const updatedBooks = (books = [{ ...books, ...book }])
-    return updatedBooks
+  const createBook = async (
+    book: TreateBookBodySchemaRequest['book']
+  ): Promise<TreateBookBodySchemaReponse> => {
+    books = [
+      ...books,
+      {
+        ...books[0],
+        ...book
+      }
+    ]
+    return book
   }
 
   const getAllBooks = async (
-    userEmail: string,
+    authorId: string,
     onlyFirstChapter = false
   ): Promise<TGetAllBooksServiceResponse> => {
     const allBooks = books.filter(
-      (book) => book.userEmail === userEmail
-    ) as unknown as BookWithChapters[]
+      (book) => book.userId === authorId
+    ) as unknown as TGetAllBooksSchemaResponse[]
 
     if (onlyFirstChapter) {
       return allBooks.map((book) => ({
@@ -63,12 +76,17 @@ export const inMemoryBooksRepository = (): IBooksRepository => {
     }
   }
 
+  const getBookById = async (bookId: string): Promise<Book | null> => {
+    return books.find((book) => book.id === bookId) || null
+  }
+
   return {
     createBook,
     getAllBooks,
     deleteBook,
     toggleIsActiveBook,
     toggleConcluedBook,
-    updateBook
+    updateBook,
+    getBookById
   }
 }

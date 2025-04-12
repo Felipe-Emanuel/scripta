@@ -1,7 +1,7 @@
 import { inMemoryReaderRepository } from '@repositories'
 import { CreateReaderService, TCreateReaderRequest } from '.'
-import { mockReader } from '@entities/Reader/mocks'
-import { throwReaderMessages } from '@entities/Reader/utils'
+import { throwReaderMessages } from '@utils'
+import { bookEntitieMock, mockReader, userEntitieMock } from '~/src/shared/mocks'
 
 describe('CreateReaderService', () => {
   const { createReader } = inMemoryReaderRepository()
@@ -10,20 +10,23 @@ describe('CreateReaderService', () => {
     createReader
   }
 
-  const { longitude, latitude, userEmail } = mockReader
+  const { longitude, latitude } = mockReader
 
-  it('should throw about missing email', () => {
+  it('should throw about missing readerId', () => {
     const sut = CreateReaderService({
       action,
-      userEmail: '',
-      location: {
-        longitude,
-        latitude
+      authorId: bookEntitieMock.id,
+      body: {
+        bookId: bookEntitieMock.id,
+        location: {
+          latitude,
+          longitude
+        }
       },
-      authorEmail: mockReader.authorEmail,
-      picture: mockReader.picture,
-      portfolioUrl: mockReader.portfolioUrl,
-      userName: mockReader.userName
+      reader: {
+        ...userEntitieMock,
+        id: undefined
+      }
     })
 
     expect(sut).rejects.toThrow(throwReaderMessages.invalidUser)
@@ -32,12 +35,15 @@ describe('CreateReaderService', () => {
   it('should be able to return a created reader', async () => {
     const sut = await CreateReaderService({
       action,
-      userEmail,
-      location: {
-        longitude,
-        latitude
+      authorId: bookEntitieMock.id,
+      body: {
+        bookId: bookEntitieMock.id,
+        location: {
+          latitude,
+          longitude
+        }
       },
-      ...mockReader
+      reader: userEntitieMock
     })
 
     expect(sut.latitude).toBe(mockReader.latitude)

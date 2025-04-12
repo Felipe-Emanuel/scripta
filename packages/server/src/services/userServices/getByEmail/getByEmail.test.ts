@@ -1,56 +1,56 @@
-import { throwUserMessages } from '@entities/User/utils'
 import { inMemoryUserRepository } from '@repositories'
-import {
-  userMock,
-  GetUserByEmailService,
-  CreateUserService,
-  TCreateUserServiceRequest,
-} from '@services'
+import { GetUserByEmailService, TGetByEmailRequest } from '@services'
+import { throwUserMessages } from '@utils'
+import { userEntitieMock } from '~/src/shared/mocks'
 
 describe('GetUserByEmailService', () => {
-  const { createUser, getUserByEmail } = inMemoryUserRepository()
+  const { getUserByEmail, createUser } = inMemoryUserRepository()
 
-  it('should be able to return an exists user by ID', async () => {
-    const actions: TCreateUserServiceRequest['actions'] = {
-      createUser,
-      getUserByEmail,
-    }
+  const baseAction: TGetByEmailRequest['action'] = {
+    getUserByEmail
+  }
 
-    await CreateUserService({
-      actions,
-      hasProvider: false,
-      ...userMock,
-    })
-
-    const sut = await GetUserByEmailService({
-      email: userMock.email,
-      action: {
-        getUserByEmail,
-      },
-    })
-
-    expect(sut.email).toEqual(userMock.email)
+  beforeEach(async () => {
+    await createUser(userEntitieMock)
   })
 
-  it('should throw exception about unexistent ID', async () => {
+  it('should throw if email is not provided', async () => {
     const sut = GetUserByEmailService({
       email: '',
-      action: {
-        getUserByEmail,
-      },
+      action: baseAction
     })
 
-    expect(sut).rejects.toThrow(throwUserMessages.wrongEmailOrPassword)
+    await expect(sut).rejects.toThrow(throwUserMessages.wrongEmailOrPassword)
   })
 
-  it('should throw exception about user not found', async () => {
+  it('should throw if user does not exist', async () => {
     const sut = GetUserByEmailService({
-      email: 'invalidEmail@test.com',
-      action: {
-        getUserByEmail,
-      },
+      email: 'notfound@email.com',
+      action: baseAction
     })
 
-    expect(sut).rejects.toThrow(throwUserMessages.userNotFound)
+    await expect(sut).rejects.toThrow(throwUserMessages.userNotFound)
+  })
+
+  it('should return the user if found', async () => {
+    const sut = await GetUserByEmailService({
+      email: userEntitieMock.email,
+      action: baseAction
+    })
+
+    expect(sut).toBeDefined()
+    expect(sut.email).toBe(userEntitieMock.email)
+    expect(sut.name).toBe(userEntitieMock.name)
+  })
+
+  it('should support optional includeBook and includeReaders', async () => {
+    const sut = await GetUserByEmailService({
+      email: userEntitieMock.email,
+      action: baseAction,
+      includeBook: true,
+      includeReaders: true
+    })
+
+    expect(sut).toHaveProperty('email', userEntitieMock.email)
   })
 })

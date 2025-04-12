@@ -1,12 +1,14 @@
 import { User } from '@prisma/client'
+import { TCreateUserResponseSchema } from '@schemas'
+import { TUserEntitie } from '@services'
 
 export interface IUserRepository {
-  createUser: (user: User) => Promise<User[]>
-  patchUserPicture: (email: string, picture: string) => Promise<User | null>
+  createUser: (user: TUserEntitie) => Promise<TCreateUserResponseSchema[]>
   getUserByEmail: (
     email: string,
     includeBook?: boolean,
-    includeReaders?: boolean,
+    includeReaders?: boolean
   ) => Promise<User | null>
+  getByUserId: (userId: string) => Promise<User | null>
   getAllUsers: () => Promise<User[]>
 }

@@ -1,9 +1,5 @@
 import { UpdateChapterService, TUpdateChapterServiceRequest } from '.'
 import { CreateChapterService, TCreateChapterServiceRequest } from '../create'
-import { jestErrorHandler } from '~/__tests__/jestErrorHandler'
-import { chapterMock } from '@entities/Chapter/mocks'
-import { bookEntitieMock } from '@entities/Book/mocks'
-import { throwChapterMessages } from '@entities/Chapter/utils'
 import { CreateBookService, TCreateBookServiceRequest } from '@services'
 import {
   inMemoryBooksRepository,
@@ -11,6 +7,8 @@ import {
   inMemoryGoalsRepository
 } from '@repositories'
 import { Chapter } from '@prisma/client'
+import { bookEntitieMock, chapterMock } from '~/src/shared/mocks'
+import { throwChapterMessages } from '@utils'
 
 describe('UpdateChapterService', () => {
   const { createChapter, getChapterById, updateChapter } = inMemoryChapterRepository()
@@ -44,34 +42,17 @@ describe('UpdateChapterService', () => {
     const sut = UpdateChapterService({
       actions,
       updatedChapter: updateChapter,
-      userEmail: bookEntitieMock.userEmail
+      userid: bookEntitieMock.userId
     })
 
     expect(sut).rejects.toThrow(throwChapterMessages.wrongId)
-  })
-
-  it('should throw about required email', async () => {
-    try {
-      const inexistentUserEmail = 'unexpexted email'
-
-      await UpdateChapterService({
-        actions,
-        updatedChapter: { ...chapterMock },
-        userEmail: inexistentUserEmail
-      })
-    } catch (e) {
-      jestErrorHandler({
-        error: e,
-        expected: throwChapterMessages.invalidEmail
-      })
-    }
   })
 
   it('should update a existent Chapter', async () => {
     const existentBook = await CreateBookService({
       actions: createBookActions,
       book: bookEntitieMock,
-      userEmail: bookEntitieMock.userEmail
+      authorId: bookEntitieMock.userId
     })
 
     const existentChapter = await CreateChapterService({
@@ -95,7 +76,7 @@ describe('UpdateChapterService', () => {
     const sut = await UpdateChapterService({
       actions,
       updatedChapter: updatedChapter,
-      userEmail: bookEntitieMock.userEmail
+      userid: bookEntitieMock.userId
     })
 
     expect(sut.chapterTitle).toEqual(chapterTitle)

@@ -1,5 +1,4 @@
-import { globalErrorMessage } from '@utils'
-import { isToday } from 'date-fns'
+import { globalErrorMessage, verifyToken } from '@utils'
 import { TFastifyInstance } from '@types'
 
 import { databaseChapterRepository, databaseGoalsRepository } from '@repositories'
@@ -7,11 +6,11 @@ import { databaseChapterRepository, databaseGoalsRepository } from '@repositorie
 import { authorization } from 'src/middlewares'
 
 import {
-  createGoalSchema,
   goalByFilterSchema,
   updateGoalsSchema,
   getCurrentGoalSchema,
-  getDailyProgressSchema
+  getDailyProgressSchema,
+  TGetCurrentGoalSchema
 } from '@schemas'
 
 import {
@@ -23,15 +22,14 @@ import {
   UpdateGoalService,
   TGetLastGoalRequest,
   GetLastGoalService,
-  GetAllChaptersByUserEmailService,
-  TGetAllChaptersByUserEmailRequest,
+  GetAllChaptersByUserIdService,
+  TGetAllChaptersByUserIdRequest,
   TGoalProgressServiceRequest,
   GoalProgressService
 } from '@services'
 
 export async function goalsController(app: TFastifyInstance): Promise<void> {
-  const { getGoalsByFilter, createGoals, updateGoal, getLastGoal, getTodayGoalProgress } =
-    databaseGoalsRepository()
+  const { getGoalsByFilter, createGoals, updateGoal, getLastGoal } = databaseGoalsRepository()
 
   const { getAllUpdatedChapters } = databaseChapterRepository()
 
@@ -53,58 +51,32 @@ export async function goalsController(app: TFastifyInstance): Promise<void> {
     updateGoal
   }
 
-  const getAllChaptersByUserEmailAction: TGetAllChaptersByUserEmailRequest['action'] = {
+  const getAllChaptersByUserIdAction: TGetAllChaptersByUserIdRequest['action'] = {
     getAllUpdatedChapters
   }
 
   const progressAction: TGoalProgressServiceRequest['action'] = {
-    getTodayGoalProgress
+    getLastGoal
   }
-
-  app.post('/goals', createGoalSchema, async (req, apply) => {
-    const { email, goal } = req.body
-
-    const existentGoal = await getLastGoal(email)
-
-    if (existentGoal) {
-      const lastGoal = existentGoal.createdAt
-
-      if (isToday(lastGoal)) return
-    }
-
-    const newGoal = await CreateGoalsService({
-      action: createGoalAction,
-      email,
-      goals: {
-        goal,
-        email
-      }
-    })
-
-    try {
-      apply.status(201).send(newGoal)
-    } catch {
-      apply.status(500).send({ message: globalErrorMessage.unexpected })
-    }
-  })
 
   app.post(
     '/getGoals',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
 
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: goalByFilterSchema.schema
     },
     async (req, apply) => {
-      const { email, endGoalFilter, startGoalFilter } = req.body
+      const decoded = await verifyToken(req.headers.authorization)
+
+      const { endGoalFilter, startGoalFilter } = req.body
 
       const goals = await GetGoalsByFilterService({
         actions: getByFilterGoalAction,
-        email,
+        userId: decoded?.id,
         endGoalFilter: new Date(endGoalFilter),
         startGoalFilter: new Date(startGoalFilter)
       })
@@ -121,29 +93,29 @@ export async function goalsController(app: TFastifyInstance): Promise<void> {
     '/updateGoals',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
 
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: updateGoalsSchema.schema
     },
     async (req, apply) => {
+      const decoded = await verifyToken(req.headers.authorization)
+
       const { updatedGoal } = req.body
 
-      const { email, goal, goalComplete, goalCompletePercent, id, words } = updatedGoal
+      const { goal, goalComplete, goalCompletePercent, id, words, createdAt } = updatedGoal
 
       const updateGoal = await UpdateGoalService({
         actions: updateGoalActions,
+        userId: decoded?.id,
         updatedGoal: {
-          email,
           goal,
           goalComplete,
           goalCompletePercent,
           id,
           words,
-          createdAt: new Date(updatedGoal.createdAt),
-          updatedAt: new Date(updatedGoal.updatedAt)
+          createdAt
         }
       })
 
@@ -156,29 +128,55 @@ export async function goalsController(app: TFastifyInstance): Promise<void> {
   )
 
   app.get(
-    '/getLastGoal/:userEmail',
+    '/getLastGoal',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
 
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: getCurrentGoalSchema.schema
     },
     async (req, apply) => {
-      const { userEmail } = req.params
+      const decoded = await verifyToken(req.headers.authorization)
 
-      const chapters = await GetAllChaptersByUserEmailService({
-        action: getAllChaptersByUserEmailAction,
-        paramUserEmail: userEmail
+      let lastGoal: TGetCurrentGoalSchema = {}
+
+      const chapters = await GetAllChaptersByUserIdService({
+        action: getAllChaptersByUserIdAction,
+        userId: decoded?.id
       })
 
-      const lastGoal = await GetLastGoalService({
+      const lastExistentGoal = await GetLastGoalService({
         action: getLastGoalAction,
-        paramUserEmail: userEmail,
+        userId: decoded?.id,
         chapters
       })
+
+      lastGoal = {
+        goal: lastExistentGoal.goal,
+        goalComplete: lastExistentGoal?.goalComplete,
+        goalCompletePercent: lastExistentGoal.goalCompletePercent,
+        id: lastExistentGoal.id,
+        words: lastExistentGoal.words
+      }
+
+      if (!lastGoal) {
+        const newGoal = await CreateGoalsService({
+          action: createGoalAction,
+          userId: decoded?.id,
+          goals: {
+            goal: {
+              goal: 500, // valor pré definido, validar após o MVP se é viável,
+              goalComplete: false,
+              goalCompletePercent: 0,
+              words: 0
+            }
+          }
+        })
+
+        lastGoal = newGoal
+      }
 
       try {
         apply.status(201).send(lastGoal)
@@ -189,22 +187,21 @@ export async function goalsController(app: TFastifyInstance): Promise<void> {
   )
 
   app.get(
-    '/getGoalProgress/:userEmail',
+    '/getGoalProgress',
     {
       preHandler: async (req, reply) => {
-        const provider = req.headers.provider
         const accessToken = req.headers.authorization
 
-        await authorization(provider, accessToken, reply)
+        await authorization(accessToken, reply)
       },
       schema: getDailyProgressSchema.schema
     },
     async (req, apply) => {
-      const { userEmail } = req.params
+      const decoded = await verifyToken(req.headers.authorization)
 
       const progress = await GoalProgressService({
         action: progressAction,
-        userEmail
+        userId: decoded?.id
       })
 
       try {

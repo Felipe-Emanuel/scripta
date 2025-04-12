@@ -1,20 +1,27 @@
 import { IGoalRepository } from '@repositories'
-import { TGetTodayGoalProgressResponse } from '@types'
+import { TGetDailyProgressSchemaResponse } from '@schemas'
 
 export type TGoalProgressServiceRequest = {
-  action: Pick<IGoalRepository, 'getTodayGoalProgress'>
-  userEmail: string
+  action: Pick<IGoalRepository, 'getLastGoal'>
+  userId: string
 }
 
-type TGoalProgressServiceResponse = TGetTodayGoalProgressResponse
+type TGoalProgressServiceResponse = TGetDailyProgressSchemaResponse
 
 export const GoalProgressService = async ({
   action,
-  userEmail
+  userId
 }: TGoalProgressServiceRequest): Promise<TGoalProgressServiceResponse> => {
-  const { getTodayGoalProgress } = action
+  const { getLastGoal } = action
 
-  const todayGoalProgress = getTodayGoalProgress(userEmail)
+  const todayGoalProgress = await getLastGoal(userId)
 
-  return todayGoalProgress
+  return {
+    goal: todayGoalProgress.goal,
+    goalComplete: todayGoalProgress.goalComplete,
+    goalCompletePercent: todayGoalProgress.goalCompletePercent,
+    id: todayGoalProgress.id,
+    words: todayGoalProgress.words,
+    createdAt: todayGoalProgress.createdAt
+  }
 }

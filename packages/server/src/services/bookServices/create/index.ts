@@ -1,56 +1,46 @@
-import { BookEntitie } from '@entities/Book'
 import { IBooksRepository } from '@repositories'
-import { Book } from '@prisma/client'
-import { v4 as uuiv4 } from 'uuid'
-import { throwBookMessages } from '@entities/Book/utils'
-import { TreateBookBodySchema } from '@schemas'
+import { TreateBookBodySchemaRequest, TreateBookBodySchemaReponse } from '@schemas'
+import { throwBookMessages } from '@utils'
 
 export type TCreateBookServiceRequest = {
   actions: Pick<IBooksRepository, 'createBook' | 'getAllBooks'>
-  book: TreateBookBodySchema['book']
-  userEmail: string
+  book: TreateBookBodySchemaRequest['book']
+  authorId: string
 }
 
-type TCreateBookServiceResponse = Book
+type TCreateBookServiceResponse = TreateBookBodySchemaReponse
 
 export const CreateBookService = async ({
   actions,
   book,
-  userEmail
+  authorId
 }: TCreateBookServiceRequest): Promise<TCreateBookServiceResponse> => {
   const { createBook, getAllBooks } = actions
 
   const onlyFirstChapter = false
-  const allBooks = await getAllBooks(userEmail, onlyFirstChapter)
+  const allBooks = await getAllBooks(authorId, onlyFirstChapter)
 
-  const alreadyExists = allBooks.find((b) => b.title === book.title)
+  const alreadyExists = allBooks.find((existentBook) => existentBook.title === book.title)
 
   if (alreadyExists) {
     throw new Error(throwBookMessages.alreadyExists)
   }
 
-  const { Gender, Theme, conclued, description, heroPathUrl, isActive, socialLink, title } = book
+  const createdBook = await createBook(book, authorId)
 
-  const { setBook } = BookEntitie({
-    conclued,
-    description,
-    Gender,
-    heroPathUrl,
-    isActive,
-    socialLink,
-    Theme,
-    title,
-    userEmail,
-    id: uuiv4(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    hits: 0,
-    totalWords: 0
-  })
+  if (!createdBook?.id) {
+    throw new Error(throwBookMessages.uncreatedBook)
+  }
 
-  const newBook = await setBook()
+  const recordBook: TCreateBookServiceResponse & { userId: string } = {
+    ...book,
+    userId: authorId,
+    id: createdBook.id,
+    conclued: createdBook.conclued,
+    isActive: createdBook.isActive,
+    totalWords: createdBook.totalWords,
+    hits: createdBook.hits
+  }
 
-  await createBook(newBook, userEmail)
-
-  return newBook
+  return recordBook
 }

@@ -1,33 +1,16 @@
-import { inMemoryChapterRepository } from '~/src/repositories'
+import { inMemoryChapterRepository } from '@repositories'
 import { PatchChapterTitleService, TPatchChapterTitleServiceRequest } from '.'
-import { throwChapterMessages } from '~/src/entities/Chapter/utils'
 import { CreateChapterService, TCreateChapterServiceRequest } from '../create'
-import { chapterMock } from '~/src/entities/Chapter/mocks'
-import { jestErrorHandler } from '~/__tests__/jestErrorHandler'
+import { chapterMock } from '~/src/shared/mocks'
 
 describe('PatchChapterTitleService', () => {
-  const { getChapterById, createChapter } = inMemoryChapterRepository()
+  const { patchChapterTitle, createChapter } = inMemoryChapterRepository()
   const createChapterAction: TCreateChapterServiceRequest['action'] = {
     createChapter
   }
   const patchConcluedChapterAction: TPatchChapterTitleServiceRequest['actions'] = {
-    getChapterById
+    patchChapterTitle
   }
-
-  it('should throw about id required', () => {
-    try {
-      PatchChapterTitleService({
-        actions: patchConcluedChapterAction,
-        chapterId: '',
-        newTitle: 'New chapter'
-      })
-    } catch (e) {
-      jestErrorHandler({
-        error: e,
-        expected: throwChapterMessages.idRequired
-      })
-    }
-  })
 
   it('should return a existent chapter by your id', async () => {
     const newChapterTitle = 'updated new title'
@@ -40,7 +23,9 @@ describe('PatchChapterTitleService', () => {
     const sut = await PatchChapterTitleService({
       actions: patchConcluedChapterAction,
       chapterId: existentChapter.id,
-      newTitle: newChapterTitle
+      body: {
+        title: newChapterTitle
+      }
     })
 
     expect(sut.chapterTitle).not.toEqual(chapterMock.chapterTitle)

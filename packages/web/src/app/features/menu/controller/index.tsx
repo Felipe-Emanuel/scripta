@@ -85,10 +85,10 @@ export const useMenuController = () => {
   }, [clearing])
 
   const handleUserClick = () =>
-    sessionCustomer?.email ? logOut() : push(APP_ROUTES.public.auth.name)
+    sessionCustomer?.accessToken ? logOut() : push(APP_ROUTES.public.auth.name)
 
   const actions = menuActions({
-    isAuthenticated: !!sessionCustomer?.email,
+    isAuthenticated: !!sessionCustomer?.accessToken,
     handleNotificationClick: () => console.log('Notificação'),
     handleSettingsClick: () => console.log('Configs'),
     handleUserClick

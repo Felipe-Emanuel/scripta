@@ -1,31 +1,27 @@
 import { IBooksRepository } from '@repositories'
-import { bookByIdSchema } from '@schemas'
-import { BookWithChapters } from '../getAllBooks'
+import { TGetBookByIdSchemaResponse } from '@schemas'
 
 export type TGetBookByIdServiceRequest = {
-  action: Pick<IBooksRepository, 'getAllBooks'>
-  paramUserEmail: string
-  paramBookId: string
+  action: Pick<IBooksRepository, 'getBookById'>
+  bookId: string
+  shouldReturnAuthorId?: boolean
 }
 
-export type TGetBookByIdServiceResponse = BookWithChapters
+export type TGetBookByIdServiceResponse = TGetBookByIdSchemaResponse & { userId?: string }
 
 export const GetBookByIdService = async ({
   action,
-  paramBookId,
-  paramUserEmail
+  bookId,
+  shouldReturnAuthorId = false
 }: TGetBookByIdServiceRequest): Promise<TGetBookByIdServiceResponse> => {
-  const { getAllBooks } = action
+  const { getBookById } = action
 
-  const { userEmail, bookId } = bookByIdSchema.parse({
-    userEmail: paramUserEmail,
-    bookId: paramBookId
-  })
+  const existentBook = await getBookById(bookId)
 
-  const onlyFirstChapter = true
-  const books = await getAllBooks(userEmail, onlyFirstChapter)
+  const existentBookWithAuthorId = {
+    ...existentBook,
+    userId: existentBook.userId
+  }
 
-  const existentBook = books?.find((book) => book.id === bookId)
-
-  return existentBook
+  return shouldReturnAuthorId ? existentBookWithAuthorId : existentBook
 }

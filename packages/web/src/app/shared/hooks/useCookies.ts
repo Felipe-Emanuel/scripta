@@ -1,4 +1,4 @@
-import { setCookie, destroyCookie } from 'nookies'
+import { setCookie, destroyCookie, parseCookies } from 'nookies'
 
 export interface CreateSession {
   cookieName: string
@@ -14,6 +14,7 @@ export interface CreateSession {
  */
 
 export const useCookie = () => {
+  const cookies = parseCookies()
   const maxAge = process.env.NEXT_PUBLIC_MAX_AGE_IN_SECONDS
 
   const createSession = ({ cookieName, value }: CreateSession) =>
@@ -22,6 +23,8 @@ export const useCookie = () => {
       path: '/'
     })
 
+  const getCookie = (cookieName: string) => cookies[cookieName]
+
   const deleteCookie = (cookieName: string) =>
     destroyCookie(null, cookieName, {
       cookieName
@@ -29,6 +32,7 @@ export const useCookie = () => {
 
   return {
     createSession,
-    deleteCookie
+    deleteCookie,
+    getCookie
   }
 }

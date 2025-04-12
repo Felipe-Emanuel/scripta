@@ -1,6 +1,6 @@
-import { throwFeedbackMessages } from '@entities/Feedback/utils'
 import { Feedback } from '@prisma/client'
 import { IFeedbackRepository } from '@repositories'
+import { throwFeedbackMessages } from '@utils'
 
 export type TGetFeedbackServiceRequest = {
   action: Pick<IFeedbackRepository, 'getFeedbacks'>

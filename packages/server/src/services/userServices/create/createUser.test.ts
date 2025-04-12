@@ -1,52 +1,67 @@
-import { User } from '@prisma/client'
-import { randomUUID } from 'crypto'
-import { throwUserMessages } from 'src/entities/User/utils'
-import { inMemoryUserRepository } from 'src/repositories/inMemory/inMemoryUserRepository'
-import {
-  CreateUserService,
-  TCreateUserServiceRequest,
-  expirationTime,
-} from 'src/services/userServices/create'
+import { inMemoryUserRepository } from '@repositories'
+import { CreateUserService, TCreateUserServiceRequest, expirationTime } from '@services'
+import { userEntitieMock } from '~/src/shared/mocks'
 
-describe('CreateUser', () => {
-  const { createUser, getUserByEmail, patchUserPicture } =
-    inMemoryUserRepository()
+describe('CreateUserService', () => {
+  const { createUser, getUserByEmail } = inMemoryUserRepository()
 
-  const actions = {
-    createUser,
-    getUserByEmail,
-    patchUserPicture,
+  const actions: TCreateUserServiceRequest['actions'] = {
+    createUser
   }
 
-  const body: TCreateUserServiceRequest = {
-    email: 'body@gmail.com',
-    name: 'John Doe John Doe',
-    password: 'A@a12345',
-    actions,
-    hasProvider: false,
+  const baseUser = {
+    id: userEntitieMock.id,
+    email: userEntitieMock.email,
+    name: userEntitieMock.name,
+    password: userEntitieMock.password,
+    picture: userEntitieMock.picture
   }
 
-  it('should create a new user', async () => {
-    const newUser: User = {
-      ...body,
-      portfolioUrl: '',
-      id: randomUUID(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      expirationTime,
-      picture: '',
-      rule: 'client',
-      accessToken:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBQDIxMTFhLmNvbSIsImlhdCI6MTcwNzc4Nzc3MSwiZXhwIjoxNzA3NzkxMzcxfQ.sKCOMzclUWkUm5NIAtn6bqo19bZCKPiyld5RBAICTtw',
-    }
-    const sut = await CreateUserService(body)
+  it('should create a user and return expected fields with generated access token', async () => {
+    const sut = await CreateUserService({
+      actions,
+      newUser: baseUser
+    })
 
-    expect(sut.name).toEqual(newUser.name)
+    expect(sut).toEqual({
+      accessToken: expect.any(String),
+      expirationTime: expirationTime.toISOString(),
+      name: baseUser.name,
+      picture: baseUser.picture
+    })
+
+    const created = await getUserByEmail(baseUser.email)
+    expect(created).toBeDefined()
+    expect(created?.name).toBe(baseUser.name)
   })
 
-  it('should throw error by existing user', async () => {
-    const sut = CreateUserService(body)
+  it('should use the provided accessToken if one is passed', async () => {
+    const customToken = 'custom.token.string'
 
-    expect(sut).rejects.toThrow(throwUserMessages.userAlreadyExist)
+    const sut = await CreateUserService({
+      actions,
+      newUser: {
+        ...baseUser,
+        email: 'token@email.com',
+        accessToken: customToken
+      }
+    })
+
+    expect(sut.accessToken).toBe(customToken)
+  })
+
+  it('should accept user creation without picture or id', async () => {
+    const sut = await CreateUserService({
+      actions,
+      newUser: {
+        email: 'nopicture@email.com',
+        name: 'No Pic',
+        password: 'test-password'
+      }
+    })
+
+    expect(sut.name).toBe('No Pic')
+    expect(sut.picture).toBeUndefined()
+    expect(sut.accessToken).toBeDefined()
   })
 })

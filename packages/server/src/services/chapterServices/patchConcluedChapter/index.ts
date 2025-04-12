@@ -1,13 +1,12 @@
-import { Chapter } from '@prisma/client'
 import { IChapterRepository } from '@repositories'
-import { chapterByIdSchema } from '@entities/Chapter/chaptersSchema'
+import { TChapterConluedSchemaResponse } from '@schemas'
 
 export type TPatchConcluedChapterServiceRequest = {
   chapterIdToBeEdited: string
   actions: Pick<IChapterRepository, 'getChapterById' | 'updateChapter'>
 }
 
-type TPatchConcluedChapterServiceResponse = Chapter
+type TPatchConcluedChapterServiceResponse = TChapterConluedSchemaResponse
 
 export const PatchConcluedChapterService = async ({
   chapterIdToBeEdited,
@@ -15,9 +14,7 @@ export const PatchConcluedChapterService = async ({
 }: TPatchConcluedChapterServiceRequest): Promise<TPatchConcluedChapterServiceResponse> => {
   const { getChapterById, updateChapter } = actions
 
-  const { chapterId } = chapterByIdSchema.parse({ chapterId: chapterIdToBeEdited })
-
-  const existingChapter = await getChapterById(chapterId)
+  const existingChapter = await getChapterById(chapterIdToBeEdited)
 
   const patchedChapter = { ...existingChapter, isConclued: !existingChapter.isConclued }
 

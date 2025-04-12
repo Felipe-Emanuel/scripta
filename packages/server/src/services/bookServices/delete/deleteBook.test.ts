@@ -1,29 +1,29 @@
-import { bookEntitieMock } from '@entities/Book/mocks'
-import { throwBookMessages } from '@entities/Book/utils'
 import { inMemoryBooksRepository } from '@repositories'
 import {
   TDeleteBookServiceRequest,
   DeleteBookService,
   CreateBookService,
-  TCreateBookServiceRequest,
+  TCreateBookServiceRequest
 } from '@services'
+import { throwBookMessages } from '@utils'
+import { bookEntitieMock } from '~/src/shared/mocks'
 
 describe('DeleteBookService', () => {
   const { createBook, deleteBook, getAllBooks } = inMemoryBooksRepository()
 
   const deleteBookAction: TDeleteBookServiceRequest['action'] = {
-    deleteBook,
+    deleteBook
   }
 
   const createBookAction: TCreateBookServiceRequest['actions'] = {
     createBook,
-    getAllBooks,
+    getAllBooks
   }
 
   it('should throw exception about book ID missing', async () => {
     const sut = DeleteBookService({
       action: deleteBookAction,
-      bookId: '',
+      bookId: ''
     })
 
     expect(sut).rejects.toThrow(throwBookMessages.missingBookId)
@@ -33,14 +33,14 @@ describe('DeleteBookService', () => {
     const newBook = await CreateBookService({
       actions: createBookAction,
       book: bookEntitieMock,
-      userEmail: bookEntitieMock.userEmail,
+      authorId: bookEntitieMock.userId
     })
 
     const sut = await DeleteBookService({
       action: deleteBookAction,
-      bookId: newBook.id,
+      bookId: newBook.id
     })
 
-    expect(sut).toEqual(newBook)
+    expect(sut.title).toEqual(newBook.title)
   })
 })

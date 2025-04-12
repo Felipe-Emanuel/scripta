@@ -1,8 +1,8 @@
 import { inMemoryReaderRepository } from '@repositories'
 import { GetReaderByAuthorService, TGetReaderByAuthorRequest } from '.'
-import { throwReaderMessages } from '@entities/Reader/utils'
+import { throwReaderMessages } from '@utils'
 import { CreateReaderService, TCreateReaderRequest } from '../create'
-import { mockReader } from '@entities/Reader/mocks'
+import { bookEntitieMock, mockReader, userEntitieMock } from '~/src/shared/mocks'
 
 describe('GetReaderByAuthorService', () => {
   const { getAllReadersByAuthor, createReader } = inMemoryReaderRepository()
@@ -18,23 +18,31 @@ describe('GetReaderByAuthorService', () => {
   it('should throw exception about ausent invalidEmail', async () => {
     const sut = GetReaderByAuthorService({
       action,
-      authorEmail: ''
+      userId: undefined
     })
 
-    expect(sut).rejects.toThrow(throwReaderMessages.invalidEmail)
+    expect(sut).rejects.toThrow(throwReaderMessages.invalidUser)
   })
 
+  const { longitude, latitude } = mockReader
+
   it('should be able to return a existent reader list', async () => {
-    const newReader = await CreateReaderService({
+    CreateReaderService({
       action: createReaderAction,
-      userEmail: mockReader.userEmail,
-      location: mockReader,
-      ...mockReader
+      authorId: userEntitieMock.id,
+      body: {
+        bookId: bookEntitieMock.id,
+        location: {
+          longitude,
+          latitude
+        }
+      },
+      reader: userEntitieMock
     })
 
     const sut = await GetReaderByAuthorService({
       action,
-      authorEmail: newReader.userEmail
+      userId: userEntitieMock.id
     })
 
     expect(sut).toHaveLength(1)

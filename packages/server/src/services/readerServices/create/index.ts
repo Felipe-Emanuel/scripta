@@ -1,53 +1,55 @@
-import { ReaderEntitie } from '@entities/Reader'
-import { throwReaderMessages } from '@entities/Reader/utils'
-import { Reader } from '@prisma/client'
+import { User } from '@prisma/client'
 import { IReaderRepository } from '@repositories'
-import { v4 as uuidv4 } from 'uuid'
-
-type TReaderLocation = Pick<Reader, 'latitude' | 'longitude'>
+import { TCreateReaderSchemaRequest, TCreateReaderSchemaResponse } from '@schemas'
+import { throwReaderMessages } from '@utils'
 
 export type TCreateReaderRequest = {
   action: Pick<IReaderRepository, 'createReader'>
-  location: TReaderLocation
-  userEmail: string
-  authorEmail: string
-  picture: string
-  portfolioUrl: string
-  userName: string
+  reader: User
+  authorId: string
+  body: TCreateReaderSchemaRequest
 }
 
-type TCreateReaderResponse = Reader
+type TCreateReaderResponse = TCreateReaderSchemaResponse
+
+export type TCreateReaderEntitie = {
+  id: string // deve ser o id do usuário logado (leitor)
+  picture: string
+  bookId: string
+  userId: string
+  userName: string
+  latitude?: number
+  longitude?: number
+}
 
 export const CreateReaderService = async ({
   action,
-  location,
-  userEmail,
-  authorEmail,
-  picture,
-  portfolioUrl,
-  userName
+  reader,
+  authorId,
+  body
 }: TCreateReaderRequest): Promise<TCreateReaderResponse> => {
   const { createReader } = action
 
-  if (!userEmail) throw new Error(throwReaderMessages.invalidUser)
+  if (!reader?.id) throw new Error(throwReaderMessages.invalidUser)
 
-  const creatingReader: Reader = {
-    ...location,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    id: uuidv4(),
-    userEmail,
-    picture,
-    portfolioUrl,
-    userName,
-    authorEmail
+  const { bookId, location } = body
+
+  const recordingReader: TCreateReaderEntitie = {
+    id: reader.id,
+    bookId,
+    picture: reader.picture,
+    userId: authorId,
+    userName: reader.name,
+    ...location
   }
 
-  const { createReader: create } = ReaderEntitie(creatingReader, authorEmail)
+  const newReader = await createReader(recordingReader)
 
-  const newReader = await create()
-
-  await createReader(newReader)
-
-  return newReader
+  return {
+    bookId: newReader.bookId,
+    latitude: newReader.latitude,
+    longitude: newReader.longitude,
+    picture: newReader.picture,
+    userName: newReader.userName
+  }
 }

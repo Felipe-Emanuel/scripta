@@ -1,63 +1,53 @@
-import { mockGoal } from '@entities/Goals/mocks'
 import { inMemoryGoalsRepository } from '@repositories'
-import {
-  CreateGoalsService,
-  TCreateGoalsRequest,
-  GetGoalsByFilterService,
-  TGetGoalsByFilterServiceRequest
-} from '@services'
+import { GetGoalsByFilterService, TGetGoalsByFilterServiceRequest } from '@services'
+import { throwGoalsMessages } from '@utils'
+import { mockGoal, userEntitieMock } from '~/src/shared/mocks'
 
 describe('GetGoalsByFilterService', () => {
   const { getGoalsByFilter, createGoals } = inMemoryGoalsRepository()
 
-  const actions: TGetGoalsByFilterServiceRequest['actions'] = {
+  const action: TGetGoalsByFilterServiceRequest['actions'] = {
     getGoalsByFilter
   }
 
-  const createGoalActions: TCreateGoalsRequest['action'] = {
-    createGoals
-  }
+  const startDate = new Date()
+  const endDate = new Date()
 
-  const { email } = mockGoal
+  beforeEach(async () => {
+    await createGoals(mockGoal)
+  })
 
-  const startGoalFilter = mockGoal.createdAt
-  const endGoalFilter = mockGoal.createdAt
+  it('should throw if userId is missing', async () => {
+    const sut = GetGoalsByFilterService({
+      actions: action,
+      userId: '',
+      startGoalFilter: startDate,
+      endGoalFilter: endDate
+    })
 
-  it('should not broken and return a empty array', async () => {
+    await expect(sut).rejects.toThrow(throwGoalsMessages.missingGoaluserId)
+  })
+
+  it('should return empty array if no goals match the filter', async () => {
     const sut = await GetGoalsByFilterService({
-      actions,
-      email,
-      startGoalFilter,
-      endGoalFilter
+      actions: action,
+      userId: 'wrong-id',
+      startGoalFilter: startDate,
+      endGoalFilter: endDate
     })
 
     expect(sut).toEqual([])
   })
 
-  it('should return a existent goal', async () => {
-    const newGoal = await CreateGoalsService({
-      action: createGoalActions,
-      email,
-      goals: {
-        goal: {
-          goal: mockGoal.goal,
-          goalComplete: mockGoal.goalComplete,
-          goalCompletePercent: mockGoal.goalCompletePercent,
-          words: mockGoal.words
-        },
-        email: mockGoal.email
-      }
-    })
-
-    const { createdAt, email: newEmail, goalComplete } = newGoal[0]
-
+  it('should return goals that match goalComplete and date range', async () => {
     const sut = await GetGoalsByFilterService({
-      actions,
-      email: newEmail,
-      startGoalFilter: createdAt,
-      endGoalFilter: createdAt
+      actions: action,
+      userId: userEntitieMock.id,
+      startGoalFilter: mockGoal.createdAt,
+      endGoalFilter: mockGoal.createdAt
     })
 
-    expect(sut[0].goalComplete).toEqual(goalComplete)
+    expect(sut).not.toHaveLength(0)
+    expect(sut[0].goalComplete).toBe(mockGoal.goalComplete)
   })
 })

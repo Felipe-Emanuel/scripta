@@ -3,3 +3,4 @@ dist
 yarn-error.log
 
 todo.md
+.early.coverage

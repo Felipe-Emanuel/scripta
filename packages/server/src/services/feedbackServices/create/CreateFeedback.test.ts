@@ -1,6 +1,6 @@
 import { inMemoryFeedbackRepository } from '@repositories'
 import { CreateFeedbackService, TCreateFeedbackServiceRequest } from '.'
-import { feedbackEntitieMock } from '@entities/Feedback/mocks'
+import { feedbackEntitieMock, userEntitieMock } from '~/src/shared/mocks'
 
 describe('CreateFeedbackService', () => {
   const { createFeedback } = inMemoryFeedbackRepository()
@@ -12,9 +12,10 @@ describe('CreateFeedbackService', () => {
   it('should correctly create a new feedback', async () => {
     const sut = await CreateFeedbackService({
       action,
+      userId: userEntitieMock.id,
       feedback: feedbackEntitieMock
     })
 
-    expect(sut.feedback).toEqual(feedbackEntitieMock.feedback)
+    expect(sut.message).toEqual('Feedback enviado com sucesso!')
   })
 })

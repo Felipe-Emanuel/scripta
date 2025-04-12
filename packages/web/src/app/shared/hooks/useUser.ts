@@ -3,7 +3,7 @@ import { parseCookies } from 'nookies'
 
 export const useUser = () => {
   const cookies = parseCookies()
-  const stringfyiedSessionCustomer = cookies._scripta_
+  const stringfyiedSessionCustomer = cookies._sst
   const sessionCustomer: TSessionCustomer =
     stringfyiedSessionCustomer && JSON.parse(stringfyiedSessionCustomer)
 

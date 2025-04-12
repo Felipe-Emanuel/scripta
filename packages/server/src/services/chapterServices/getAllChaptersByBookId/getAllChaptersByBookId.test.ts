@@ -1,7 +1,7 @@
-import { inMemoryChapterRepository } from '~/src/repositories'
+import { inMemoryChapterRepository } from '@repositories'
 import { GetAllChaptersByBookIdService, TGetAllChaptersByBookIdServiceRequest } from '.'
 import { CreateChapterService, TCreateChapterServiceRequest } from '../create'
-import { chapterMock } from '~/src/entities/Chapter/mocks'
+import { chapterMock } from '~/src/shared/mocks'
 
 describe('GetAllChaptersByBookIdService', () => {
   const { getAllChapters, createChapter } = inMemoryChapterRepository()

@@ -1,21 +1,16 @@
 import { api } from '@shared/services/axios/api'
-import {
-  TGetReaderByBookRequest,
-  TReader,
-  TReaderResponse,
-} from '@shared/types'
+import { TGetReaderByBookRequest, TReader, TReaderResponse } from '@shared/types'
 import { AxiosError } from 'axios'
 
-export const getReadersByEmail = async (authorEmail: string) => {
+export const getReadersById = async () => {
   try {
-    const endPoint = `getReaders/${authorEmail}`
+    const endPoint = `/getReaders`
 
     const { data } = await api.get<TReaderResponse[]>(endPoint)
 
     return data
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error('Falha ao recuperar leitores')
+    if (error instanceof AxiosError) throw new Error('Falha ao recuperar leitores')
   }
 }
 
@@ -28,18 +23,13 @@ export const getOnlyReaderByEmail = async (readerEmail: string) => {
 
     return data
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(`Falha ao recuperar o leitor ${readerEmail}`)
+    if (error instanceof AxiosError) throw new Error(`Falha ao recuperar o leitor ${readerEmail}`)
   }
 }
 
-export const getReaderByBook = async ({
-  authorEmail,
-  bookId,
-}: TGetReaderByBookRequest) => {
-  if (!authorEmail) return
+export const getReaderByBook = async ({ bookId }: TGetReaderByBookRequest) => {
   try {
-    const endPoint = `reader/${authorEmail}/${bookId}`
+    const endPoint = `reader/${bookId}`
 
     const { data } = await api.get<TReaderResponse[]>(endPoint)
     return data

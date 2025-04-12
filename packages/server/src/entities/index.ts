@@ -1,6 +1,0 @@
-export * from './Book'
-export * from './Goals'
-export * from './User'
-export * from './Reader'
-export * from './Feedback'
-export * from './Chapter'

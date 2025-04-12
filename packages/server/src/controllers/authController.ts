@@ -1,7 +1,6 @@
 import { databaseUserRepository } from '@repositories'
 import { GetUserByEmailService } from '@services'
-import { generateToken } from '@utils'
-import { throwUserMessages } from '@entities/User/utils'
+import { generateToken, throwUserMessages } from '@utils'
 import { TFastifyInstance } from '@types'
 import { authUserSchema } from '@schemas'
 
@@ -26,19 +25,10 @@ export async function authController(app: TFastifyInstance): Promise<void> {
       return apply.status(401).send({ message: throwUserMessages.userNotFound })
     }
 
-    const payload = {
-      sub: email
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: pass, ...userWithoutPassword } = user
-
-    return apply.status(201).send({
-      ...userWithoutPassword,
-      createdAt: userWithoutPassword.createdAt.toISOString(),
-      updatedAt: userWithoutPassword.updatedAt.toISOString(),
-      expirationTime: userWithoutPassword.expirationTime.toISOString(),
-      accessToken: generateToken(payload)
+    return apply.status(200).send({
+      accessToken: generateToken(user),
+      name: user.name,
+      picture: user.picture
     })
   })
 }

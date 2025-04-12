@@ -13,14 +13,12 @@ export const api: AxiosInstance = axios.create({
 
 api.interceptors.request.use(async (config) => {
   const cookies = parseCookies()
-  const stringfyiedSessionCustomer = cookies._scripta_
-  const sessionCustomer: Pick<TSessionCustomer, 'provider' | 'accessToken'> =
+  const stringfyiedSessionCustomer = cookies._sst
+  const sessionCustomer: Pick<TSessionCustomer, 'accessToken'> =
     stringfyiedSessionCustomer && JSON.parse(stringfyiedSessionCustomer)
 
   if (sessionCustomer?.accessToken) {
     config.headers.Authorization = sessionCustomer?.accessToken
-  } else if (sessionCustomer?.provider) {
-    config.headers.provider = sessionCustomer.provider
   }
 
   return config

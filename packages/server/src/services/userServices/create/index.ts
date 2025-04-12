@@ -1,65 +1,53 @@
-import { User } from '@prisma/client'
-import { generateStrongPass } from '@utils'
-import { UserEntitie } from 'src/entities/User'
-import { throwUserMessages } from 'src/entities/User/utils'
-import { IUserRepository } from 'src/repositories/UserRepository'
-import { generateToken } from 'src/shared/utils/tokens'
-import { v4 as uuidv4 } from 'uuid'
+import { TGenerateToken } from '@utils'
+import { IUserRepository } from '@repositories'
+import { generateToken } from '@utils'
+import { TCreateUserBodySchema, TCreateUserResponseSchema } from '@schemas'
 
-export type TCreateUserServiceRequest = {
-  name: string
+export type TUserEntitie = {
+  id: string
   email: string
-  hasProvider: boolean
+  name: string
   password: string
-  actions: Pick<IUserRepository, 'createUser' | 'getUserByEmail'>
 }
 
-type TCreateUserServiceResponse = Omit<User, 'password'>
+export type TCreateUserServiceRequest = {
+  newUser: TCreateUserBodySchema['user'] & {
+    accessToken?: string
+    picture?: string
+    id?: string
+  }
+  actions: Pick<IUserRepository, 'createUser'>
+}
 
-export const threeDays = 3 * 24 * 60 * 60 * 1000 // 3 dias
-export const expirationTime = new Date(Date.now() + threeDays)
+type TCreateUserServiceResponse = TCreateUserResponseSchema
+
+export const oneDay = 1 * 24 * 60 * 60 * 1000 // 1 dia
+export const expirationTime = new Date(Date.now() + oneDay)
 
 export const CreateUserService = async ({
-  email,
-  name,
-  hasProvider,
-  password,
-  actions
+  actions,
+  newUser
 }: TCreateUserServiceRequest): Promise<TCreateUserServiceResponse> => {
-  const { createUser, getUserByEmail } = actions
+  const { createUser } = actions
+  const { email, name, password, picture, id } = newUser
 
-  if (hasProvider) password = generateStrongPass()
-
-  const existingUser = await getUserByEmail(email)
-
-  if (existingUser && !hasProvider) throw new Error(throwUserMessages.userAlreadyExist)
-
-  if (existingUser && hasProvider) return
-
-  const payload = {
-    sub: email
+  const payload: TGenerateToken = {
+    id
   }
 
-  const { setUser } = UserEntitie({
-    id: uuidv4(),
-    portfolioUrl: '',
+  const verifedAccessToken = newUser.accessToken ?? generateToken(payload)
+
+  await createUser({
+    id,
     email,
     name,
-    password,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    picture: '',
-    rule: 'client',
-    expirationTime,
-    accessToken: generateToken(payload)
+    password
   })
 
-  const newUser = await setUser(hasProvider)
-
-  await createUser(newUser)
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { password: pass, ...userWithoutPassword } = newUser
-
-  return userWithoutPassword
+  return {
+    accessToken: verifedAccessToken,
+    expirationTime: expirationTime.toISOString(),
+    name: newUser.name,
+    picture
+  }
 }

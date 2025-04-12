@@ -1,11 +1,11 @@
-import { bookEntitieMock } from '@entities/Book/mocks'
-import { throwBookMessages } from '@entities/Book/utils'
 import { inMemoryBooksRepository } from '@repositories'
 import { CreateBookService, TCreateBookServiceRequest } from 'src/services/bookServices/create'
 import {
   GetAllBooksService,
   TGetAllBooksServiceRequest
 } from 'src/services/bookServices/getAllBooks'
+import { bookEntitieMock } from '~/src/shared/mocks'
+import { throwBookMessages } from '@utils'
 
 describe('GetAllBooksService', () => {
   const { getAllBooks, createBook } = inMemoryBooksRepository()
@@ -22,26 +22,26 @@ describe('GetAllBooksService', () => {
   it('should throw a exception about user id missing', () => {
     const sut = GetAllBooksService({
       action,
-      userEmail: '',
+      userid: '',
       onlyFirstChapter: false
     })
 
-    expect(sut).rejects.toThrow(throwBookMessages.emailMissing)
+    expect(sut).rejects.toThrow(throwBookMessages.missingAuthor)
   })
 
   it('should return a existent list of books', async () => {
     const newBook = await CreateBookService({
       actions: createBookActions,
       book: bookEntitieMock,
-      userEmail: bookEntitieMock.userEmail
+      authorId: bookEntitieMock.userId
     })
 
     const sut = await GetAllBooksService({
       action,
-      userEmail: bookEntitieMock.userEmail,
+      userid: bookEntitieMock.userId,
       onlyFirstChapter: true
     })
 
-    expect(sut[0].userEmail).toEqual(newBook.userEmail)
+    expect(sut[0].title).toEqual(newBook.title)
   })
 })

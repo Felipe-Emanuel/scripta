@@ -1,59 +1,62 @@
 import { Goal } from '@prisma/client'
 import { IGoalRepository } from '@repositories'
-import { TGetTodayGoalProgressResponse } from '@types'
+import { TGoalEntitie } from '@services'
+import { TCreateGoalResponseSchema, TGetDailyProgressSchemaResponse } from '@schemas'
+import { mockGoal } from '~/src/shared/mocks'
 
 export const inMemoryGoalsRepository = (): IGoalRepository => {
-  let userGoals: Goal[] = []
+  let userGoals: Goal[] = [mockGoal]
 
-  const createGoals = async (goals: Goal): Promise<Goal[]> => {
-    const updatedGoals = (userGoals = [...userGoals, goals])
+  const createGoals = async (goals: TGoalEntitie): Promise<TCreateGoalResponseSchema> => {
+    userGoals = [
+      ...userGoals,
+      {
+        ...userGoals[0],
+        ...goals
+      }
+    ]
 
-    return updatedGoals
+    return goals
   }
 
   const getGoalsByFilter = async (
-    email: string,
+    userId: string,
     startGoalFilter: Date,
     endGoalFilter: Date
-  ): Promise<Goal[]> => {
+  ): Promise<TCreateGoalResponseSchema[]> => {
     const existentGoals = userGoals.filter(
       (goal) =>
-        goal.email === email &&
-        goal.createdAt === startGoalFilter &&
-        goal.createdAt === endGoalFilter
+        goal.userId === userId &&
+        goal.createdAt.toISOString() === startGoalFilter.toISOString() &&
+        goal.createdAt.toISOString() === endGoalFilter.toISOString()
     )
 
     return existentGoals || []
   }
 
-  const updateGoal = async (userEmail: string, newWords: number, goal = 500): Promise<Goal> => {
-    const goalByUserEmail = userGoals.find((goal) => goal.email === userEmail)
+  const updateGoal = async (
+    userId: string,
+    newWords: number,
+    goal = 500
+  ): Promise<TCreateGoalResponseSchema> => {
+    const goalByUserId = userGoals.find((goal) => goal.userId === userId)
 
     const updatedGoal: Goal = {
-      ...goalByUserEmail,
-      words: goalByUserEmail.words + newWords,
+      ...goalByUserId,
+      words: goalByUserId.words + newWords,
       goal
     }
 
-    return { ...goalByUserEmail, ...updatedGoal }
+    return { ...goalByUserId, ...updatedGoal }
   }
 
-  const getLastGoal = async (email: string): Promise<Goal | null> =>
-    userGoals.find((goals) => goals.email === email) || null
-
-  const getTodayGoalProgress = async (
-    userEmail: string
-  ): Promise<TGetTodayGoalProgressResponse> => {
-    const dailyGoal = userGoals.find((goal) => goal.email === userEmail)
-
-    return dailyGoal
-  }
+  const getLastGoal = async (userId: string): Promise<TGetDailyProgressSchemaResponse | null> =>
+    userGoals.find((goals) => goals.userId === userId) || null
 
   return {
     createGoals,
     getGoalsByFilter,
     updateGoal,
-    getLastGoal,
-    getTodayGoalProgress
+    getLastGoal
   }
 }

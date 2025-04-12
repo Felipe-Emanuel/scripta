@@ -1,13 +1,12 @@
-import { Chapter } from '@prisma/client'
-import { ChapterEntitie } from '@entities/Chapter'
 import { IChapterRepository } from '@repositories'
+import { TCreateChapterSchemaBody, TCreateChapterSchemaResponse } from '@schemas'
 
 export type TCreateChapterServiceRequest = {
   action: Pick<IChapterRepository, 'createChapter'>
-  chapter: Chapter
+  chapter: TCreateChapterSchemaBody['chapter']
 }
 
-type TCreateChapterServiceResponse = Chapter
+type TCreateChapterServiceResponse = TCreateChapterSchemaResponse
 
 export const CreateChapterService = async ({
   action,
@@ -15,16 +14,10 @@ export const CreateChapterService = async ({
 }: TCreateChapterServiceRequest): Promise<TCreateChapterServiceResponse> => {
   const { createChapter } = action
 
-  const { createChapter: create } = ChapterEntitie({
+  const newChapter = await createChapter({
     ...chapter,
-    createdAt: new Date(),
-    updatedAt: new Date(),
     chapterTitle: 'Novo capítulo'
   })
-
-  const newChapter = await create()
-
-  await createChapter(newChapter)
 
   return newChapter
 }
